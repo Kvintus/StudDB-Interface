@@ -55,7 +55,7 @@ def index():
     with urllib.request.urlopen(ourUrl) as url:
         response = json.loads(url.read().decode())
     
-    return render_template('listStudents.html',by = orderBy, ala=response['students'])
+    return render_template('listStudents.html',by = orderBy, ala=response['students'], current = 'students')
 
 # index 
 @app.route('/login', methods=["POST", "GET"])
