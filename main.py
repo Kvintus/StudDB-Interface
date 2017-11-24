@@ -25,6 +25,7 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+@login_required
 @app.route('/')
 def index():
     return "sup"
