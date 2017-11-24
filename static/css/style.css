@@ -8,7 +8,7 @@ body {
 
 .table-header {
     border: 0;
-    padding-top: 10px;
+    padding-top: 15px;
     background-color: white;
     border-bottom: 1.5px solid rgb(155, 154, 154);
 }
@@ -43,6 +43,12 @@ table>thead>tr>th>div {
     text-align: center;
     display: inline-block;
     height: auto;
+}
+
+.user-icon {
+    font-size: 30px;
+    color: white; 
+    margin-right: 15px;
 }
 
 
