@@ -46,10 +46,16 @@ def register():
 @login_required
 def index():
     response = None
-    with urllib.request.urlopen("https://stud-db-api.herokuapp.com/api/students") as url:
+    
+    orderBy = request.args.get('orderBy')
+    if orderBy is None:
+        orderBy = 'id'
+    ourUrl = "https://stud-db-api.herokuapp.com/api/students?orderBy={}".format(orderBy)
+    print(ourUrl)
+    with urllib.request.urlopen(ourUrl) as url:
         response = json.loads(url.read().decode())
     
-    return render_template('listStudents.html', ala=response['students'])
+    return render_template('listStudents.html',by = orderBy, ala=response['students'])
 
 # index 
 @app.route('/login', methods=["POST", "GET"])
