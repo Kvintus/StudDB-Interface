@@ -65,5 +65,3 @@ def login():
     else:
         return render_template("login.html")
 
-
-app.run(host='0.0.0.0', port=8080, debug=True)
