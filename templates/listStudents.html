@@ -63,19 +63,6 @@
             mainSorter.ID = caller.getAttribute('data-sorterID');
             mainSorter.order = 'desc';
 
-            /*
-
-            //Zmenit znaky na vsetkych ostatnych
-            ostatne = document.getElementsByClassName('sorter');
-            console.log('ostatne len: ' + ostatne.length);
-            for (var i = 0; i < ostatne.length; i++) {
-                ostatne[i].src = "%% url_for('static', filename='images/icons/no.png')%%";
-            }
-
-            //Nastavit svoju ikonku
-            caller.src = "%% url_for('static', filename='images/icons/desc.png') %%";
-            */
-
         } else {
             //Nerobime nic s ostatnymi
             //Zmenime mainSorter order
@@ -100,6 +87,8 @@
                 ostatne[i].src = "%% url_for('static', filename='images/icons/desc.png') %%";
             }
         }
+
+        $('#nav-' + '%% current %%').addClass('active');
     })
 </script>
 
