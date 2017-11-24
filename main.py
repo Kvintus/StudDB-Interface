@@ -27,7 +27,7 @@ def login_required(f):
 
 @app.route('/')
 def index():
-    return render_template('listStudents.html')
+    return "sup"
 
 # index 
 @app.route('/login')
