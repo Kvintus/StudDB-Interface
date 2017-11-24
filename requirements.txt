@@ -1,3 +1,7 @@
 Flask
 gunicorn
-json
+flask_sqlalchemy
+bs4
+passlib
+flask_session
+functools
