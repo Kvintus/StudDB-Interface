@@ -5,3 +5,4 @@ bs4
 passlib
 flask_session
 functools
+setuptools
