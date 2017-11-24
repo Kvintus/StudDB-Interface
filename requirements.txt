@@ -1,0 +1,7 @@
+Flask
+gunicorn
+flask_sqlalchemy
+bs4
+passlib
+flask_session
+setuptools
