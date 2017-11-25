@@ -1,5 +1,6 @@
 from flask import Flask, flash, redirect, render_template, request, session, url_for, jsonify, make_response, Response
 from passlib.hash import pbkdf2_sha256 as sha256
+from urllib.parse import urlencode, quote_plus
 from sqlalchemy.sql.functions import func
 from flask_sqlalchemy import SQLAlchemy
 from assets.custom import CustomFlask 
@@ -46,16 +47,20 @@ def register():
 @login_required
 def index():
     response = None
+    params = {
+        'orderBy': request.args.get('orderBy')
+    }
     
-    orderBy = request.args.get('orderBy')
-    if orderBy is None:
-        orderBy = 'id'
-    ourUrl = "https://stud-db-api.herokuapp.com/api/students?orderBy={}".format(orderBy)
+    if params['orderBy'] is None:
+        params['orderBy'] = 'id'
+    
+    
+    ourUrl = "https://stud-db-api.herokuapp.com/api/students?" + urlencode(params, quote_via=quote_plus)
     print(ourUrl)
     with urllib.request.urlopen(ourUrl) as url:
         response = json.loads(url.read().decode())
     
-    return render_template('listStudents.html',by = orderBy, ala=response['students'], current = 'students')
+    return render_template('listStudents.html',by = params['orderBy'], ala=response['students'], current = 'students', order = request.args.get('order'))
 
 # index 
 @app.route('/login', methods=["POST", "GET"])
