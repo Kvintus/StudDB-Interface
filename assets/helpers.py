@@ -2,11 +2,9 @@ import icu
 from operator import itemgetter
 
 def sortIt(arrayToSort, key):
-    """ Sorts an array """
+    """Sorts an array by the parameter specified"""
 
     collator = icu.Collator.createInstance(icu.Locale('sk_SK.UTF-8'))
-
-    #Using if beacause you cannot pass an argument into the funtion 
     if key == 'id':
         return arrayToSort.sort(key=itemgetter('id'))
     elif key == 'name':
