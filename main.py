@@ -67,7 +67,7 @@ def index():
     if request.args.get('order') == 'asc':
         sortedArray = sorted(response.get('students'), key=itemgetter(params.get('orderBy')))
     else:
-        sortedArray = sorted(response.get('students'), key=itemgetter(params.get('orderBy')).decode('utf-8'), reverse=True)
+        sortedArray = sorted(response.get('students'), key=itemgetter(params.get('orderBy')), reverse=True)
     
     return render_template('listStudents.html',by = params['orderBy'], ala=response['students'], current = 'students', order = request.args.get('order'))
 
