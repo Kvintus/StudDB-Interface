@@ -9,10 +9,9 @@ from operator import itemgetter
 from tempfile import mkdtemp
 from functools import wraps
 import urllib.request
-import locale
 import json
+from assets.helpers import *
 
-locale.setlocale(category = locale.LC_ALL, locale = 'Slovak')
 
 db = SQLAlchemy()
 app = CustomFlask(__name__)
@@ -50,24 +49,25 @@ def register():
 @app.route('/')
 @login_required
 def index():
-    response = None
+    
+    # Store all the parameters from user in one variable
     params = {
         'orderBy': request.args.get('orderBy')
     }
     
+    # Set default sorting to id
     if params['orderBy'] is None:
         params['orderBy'] = 'id'
     
-    
+    # Fetch all the students from the API
+    response = None
     ourUrl = "https://stud-db-api.herokuapp.com/api/students?" + urlencode(params, quote_via=quote_plus)
     print(ourUrl)
     with urllib.request.urlopen(ourUrl) as url:
         response = json.loads(url.read().decode())
-    
-    if request.args.get('order') == 'asc':
-        sortedArray = sorted(response.get('students'), key=itemgetter(params.get('orderBy')))
-    else:
-        sortedArray = sorted(response.get('students'), key=itemgetter(params.get('orderBy')), reverse=True)
+
+    # Sort the array based on the parameter provided by user
+    sortedArray = sortIt(response.get('students'), params.get('orderBy'))
     
     return render_template('listStudents.html',by = params['orderBy'], ala=response['students'], current = 'students', order = request.args.get('order'))
 
