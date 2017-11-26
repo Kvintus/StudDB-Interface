@@ -1,32 +1,40 @@
 <% extends "skeleton.html" %>
-<% block body %>
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-moj">
-    <a class="navbar-brand" href="#"><img style="width: 130px; border-radius: 50%;" src=" %% url_for('static', filename='images/logo.png') %%" alt=""></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
-        aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav mr-auto">
-            <li id="nav-students" class="nav-item">
-                <a class="nav-link" href="#">Students
-                </a>
-            </li>
-            <li id="nav-classes" class="nav-item">
-                <a class="nav-link" href="#">Classes</a>
-            </li>
-            <li id="nav-professors" class="nav-item">
-                <a class="nav-link" href="#">Professors</a>
-            </li>
-            <li id="nav-parents" class="nav-item">
-                    <a class="nav-link" href="#">Parents</a>
-            </li>
-        </ul>
-        <i class="fa fa-user user-icon" aria-hidden="true"></i>        
-    </div>
-</nav>
+    <% block body %>
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-moj">
+            <a class="navbar-brand" href="#">
+                <img style="width: 130px; border-radius: 50%;" src=" %% url_for('static', filename='images/logo.png') %%" alt="">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li id="nav-students" class="nav-item">
+                        <a class="nav-link" href="#">Students
+                        </a>
+                    </li>
+                    <li id="nav-classes" class="nav-item">
+                        <a class="nav-link" href="#">Classes</a>
+                    </li>
+                    <li id="nav-professors" class="nav-item">
+                        <a class="nav-link" href="#">Professors</a>
+                    </li>
+                    <li id="nav-parents" class="nav-item">
+                        <a class="nav-link" href="#">Parents</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav navbar-right">
+                    <div onclick="console.log('Hi');" class="user-container">
+                        <p class="user-name">%% userName %%</p>
+                        <i class="fa fa-user user-icon" aria-hidden="true"></i>
+                    </div>
+                </ul>
+            </div>
+        </nav>
 
-<main role="main" class="container-fluid">
-    <% block content %><% endblock %>
-</main>
-<% endblock %>
+        <main role="main" class="container-fluid">
+            <% block content %>
+                <% endblock %>
+        </main>
+        <% endblock %>

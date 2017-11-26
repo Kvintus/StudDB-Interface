@@ -51,4 +51,17 @@ table>thead>tr>th>div {
     margin-right: 15px;
 }
 
+.user-name {
+    display: inline;
+    color: white;
+    margin-right: 10px;
+    font-size: 24px;
+}
+
+.user-container {
+    cursor: pointer;
+}
+
+
+
 

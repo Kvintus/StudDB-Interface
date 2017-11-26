@@ -69,7 +69,7 @@ def index():
     # Sort the array based on the parameter provided by user
     sortedArray = sortIt(response.get('students'), params.get('orderBy'))
     
-    return render_template('listStudents.html',by = params['orderBy'], ala=response['students'], current = 'students', order = request.args.get('order'))
+    return render_template('listStudents.html', userName = session['user']['username'],by = params['orderBy'], ala=response['students'], current = 'students', order = request.args.get('order'))
 
 # index 
 @app.route('/login', methods=["POST", "GET"])
