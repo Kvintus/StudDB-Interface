@@ -69,10 +69,6 @@
         order: '%% order %%'
     }
 
-    if (!mainSorter.order) {
-        mainSorter.order = "desc";
-    }
-
     function switchB(caller) {
         if (caller.getAttribute('data-sorterID') != mainSorter.ID) {
             //Zmenit mainSorter
@@ -80,21 +76,21 @@
             mainSorter.order = 'desc';
 
         } else {
-            //Nerobime nic s ostatnymi
-            console.log('to iste')
             //Zmenime mainSorter order
             if (mainSorter.order === 'asc') {
                 mainSorter.order = 'desc';
-                caller.src = "%% url_for('static', filename='images/icons/desc.png') %%";
             } else {
                 mainSorter.order = 'asc';
-                caller.src = "%% url_for('static', filename='images/icons/asc.png') %%";
             }
         }
         window.location.replace('%% url_for("index")%%' + '?orderBy=' + mainSorter.ID + '&order=' + mainSorter.order)
     }
 
     $(() => {
+
+        if (mainSorter.order === "None") {
+            mainSorter.order = "desc";
+        }
         //Zmenit znaky na vsetkych ostatnych
         ostatne = document.getElementsByClassName('sorter');
         console.log('ostatne len: ' + ostatne.length);

@@ -5,10 +5,14 @@ from sqlalchemy.sql.functions import func
 from flask_sqlalchemy import SQLAlchemy
 from assets.custom import CustomFlask 
 from flask_session import Session
+from operator import itemgetter
 from tempfile import mkdtemp
 from functools import wraps
 import urllib.request
+import locale
 import json
+
+locale.setlocale(category = locale.LC_ALL, locale = 'Slovak')
 
 db = SQLAlchemy()
 app = CustomFlask(__name__)
@@ -59,6 +63,11 @@ def index():
     print(ourUrl)
     with urllib.request.urlopen(ourUrl) as url:
         response = json.loads(url.read().decode())
+    
+    if request.args.get('order') == 'asc':
+        sortedArray = sorted(response.get('students'), key=itemgetter(params.get('orderBy')))
+    else:
+        sortedArray = sorted(response.get('students'), key=itemgetter(params.get('orderBy')).decode('utf-8'), reverse=True)
     
     return render_template('listStudents.html',by = params['orderBy'], ala=response['students'], current = 'students', order = request.args.get('order'))
 
