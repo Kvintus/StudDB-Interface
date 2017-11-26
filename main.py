@@ -1,13 +1,17 @@
 from flask import Flask, flash, redirect, render_template, request, session, url_for, jsonify, make_response, Response
 from passlib.hash import pbkdf2_sha256 as sha256
+from urllib.parse import urlencode, quote_plus
 from sqlalchemy.sql.functions import func
 from flask_sqlalchemy import SQLAlchemy
 from assets.custom import CustomFlask 
 from flask_session import Session
+from operator import itemgetter
 from tempfile import mkdtemp
 from functools import wraps
 import urllib.request
 import json
+from assets.helpers import *
+
 
 db = SQLAlchemy()
 app = CustomFlask(__name__)
@@ -45,17 +49,27 @@ def register():
 @app.route('/')
 @login_required
 def index():
-    response = None
     
-    orderBy = request.args.get('orderBy')
-    if orderBy is None:
-        orderBy = 'id'
-    ourUrl = "https://stud-db-api.herokuapp.com/api/students?orderBy={}".format(orderBy)
+    # Store all the parameters from user in one variable
+    params = {
+        'orderBy': request.args.get('orderBy')
+    }
+    
+    # Set default sorting to id
+    if params['orderBy'] is None:
+        params['orderBy'] = 'id'
+    
+    # Fetch all the students from the API
+    response = None
+    ourUrl = "https://stud-db-api.herokuapp.com/api/students?" + urlencode(params, quote_via=quote_plus)
     print(ourUrl)
     with urllib.request.urlopen(ourUrl) as url:
         response = json.loads(url.read().decode())
+
+    # Sort the array based on the parameter provided by user
+    sortedArray = sortIt(response.get('students'), params.get('orderBy'))
     
-    return render_template('listStudents.html',by = orderBy, ala=response['students'], current = 'students')
+    return render_template('listStudents.html',by = params['orderBy'], ala=response['students'], current = 'students', order = request.args.get('order'))
 
 # index 
 @app.route('/login', methods=["POST", "GET"])

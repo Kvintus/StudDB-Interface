@@ -39,22 +39,34 @@
         </tr>
     </thead>
     <tbody>
-        <% for student in ala %>
-        <tr>
-            <td>%% student['id']%%</td>
-            <td>%% student['name'] %%</td>
-            <td>%% student['surname'] %%</td>
-            <td>%% student['email'] %%</td>
-            <td>%% student['phone'] %%</td>
-        </tr>
-        <% endfor %>
+        <% if order == 'asc' %>
+            <% for student in ala | reverse %>
+            <tr>
+                <td>%% student['id']%%</td>
+                <td>%% student['name'] %%</td>
+                <td>%% student['surname'] %%</td>
+                <td>%% student['email'] %%</td>
+                <td>%% student['phone'] %%</td>
+            </tr>
+            <% endfor %>
+        <% else %>
+            <% for student in ala %>
+            <tr>
+                <td>%% student['id']%%</td>
+                <td>%% student['name'] %%</td>
+                <td>%% student['surname'] %%</td>
+                <td>%% student['email'] %%</td>
+                <td>%% student['phone'] %%</td>
+            </tr>
+            <% endfor %>
+        <% endif %>
     </tbody>
 </table>
 
 <script>
     mainSorter = {
         ID: '%% by %%',
-        order: 'desc'
+        order: '%% order %%'
     }
 
     function switchB(caller) {
@@ -64,27 +76,32 @@
             mainSorter.order = 'desc';
 
         } else {
-            //Nerobime nic s ostatnymi
             //Zmenime mainSorter order
             if (mainSorter.order === 'asc') {
                 mainSorter.order = 'desc';
-                caller.src = "%% url_for('static', filename='images/icons/desc.png') %%";
             } else {
                 mainSorter.order = 'asc';
-                caller.src = "%% url_for('static', filename='images/icons/asc.png') %%";
             }
         }
-        window.location.replace('%% url_for("index")%%' + '?orderBy=' + mainSorter.ID)
+        window.location.replace('%% url_for("index")%%' + '?orderBy=' + mainSorter.ID + '&order=' + mainSorter.order)
     }
 
     $(() => {
+
+        if (mainSorter.order === "None") {
+            mainSorter.order = "desc";
+        }
         //Zmenit znaky na vsetkych ostatnych
         ostatne = document.getElementsByClassName('sorter');
         console.log('ostatne len: ' + ostatne.length);
         for (var i = 0; i < ostatne.length; i++) {
             ostatne[i].src = "%% url_for('static', filename='images/icons/no.png')%%";
             if (ostatne[i].getAttribute('data-sorterID') == mainSorter.ID){
-                ostatne[i].src = "%% url_for('static', filename='images/icons/desc.png') %%";
+                if (mainSorter.order === 'desc') {
+                    ostatne[i].src = "%% url_for('static', filename='images/icons/desc.png') %%";
+                }else {
+                    ostatne[i].src = "%% url_for('static', filename='images/icons/asc.png') %%";
+                }
             }
         }
 
