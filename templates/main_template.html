@@ -25,10 +25,18 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav navbar-right">
-                    <div onclick="console.log('Hi');" class="user-container">
-                        <p class="user-name">%% userName %%</p>
-                        <i class="fa fa-user user-icon" aria-hidden="true"></i>
-                    </div>
+                    <li class="nav-item dropdown">
+                        <div onclick="console.log('Hi');" class="user-container nav-link" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            <p class="user-name">%% userName %%</p>
+                            <i class="fa fa-user user-icon" aria-hidden="true"></i>
+                        </div>
+                        <div class="dropdown-menu drp" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="#">Profile</a>
+                            <div class="dropdown-divider"></div>
+                            <a style="color:rgb(123, 123, 123);" class="dropdown-item" href="%% url_for('login') %%">Logout <i class="fa fa-sign-out" aria-hidden="true"></i></a>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </nav>

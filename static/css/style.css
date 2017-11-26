@@ -48,7 +48,6 @@ table>thead>tr>th>div {
 .user-icon {
     font-size: 30px;
     color: white; 
-    margin-right: 15px;
 }
 
 .user-name {
@@ -60,6 +59,14 @@ table>thead>tr>th>div {
 
 .user-container {
     cursor: pointer;
+}
+
+.fa-sign-out {
+    float: right;
+}
+
+.drp {
+    margin-left: -35px;
 }
 
 
