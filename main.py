@@ -12,6 +12,8 @@ import urllib.request
 import json
 from assets.helpers import *
 
+api_server = "127.0.0.1:5000"
+
 
 db = SQLAlchemy()
 app = CustomFlask(__name__)
@@ -36,7 +38,12 @@ def login_required(f):
 @app.route('/viewStudent', methods=['GET'])
 @login_required
 def viewStudent():
-    return render_template('viewStudent.html')
+    reJson = request.get_json(_)
+
+    r = requests.get(
+      "{}{}".format(api_server, "/api/students/get"),
+      params=reJson)
+    return render_template('viewStudent.html', userName = session['user']['username'])
 
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -49,7 +56,6 @@ def register():
             return render_template('apology.html', message = "We are sorry but you don't have a permission to access this site.")
     elif request.method == 'POST':
         # TODO bude treba spravit checking
-        print(request.form.get('password'))
         db.engine.execute('INSERT INTO users("username", "hash", "privilege") VALUES(:username, :hashh, :privilege)', {'username' : request.form.get('username'), 'hashh': sha256.hash(request.form.get('password')), 'privilege': request.form.get('privilege')})
         return redirect( url_for('login') )
 
