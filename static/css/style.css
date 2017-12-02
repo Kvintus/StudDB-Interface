@@ -137,3 +137,12 @@ table>thead>tr>th>div {
 .drp {
     margin-left: -35px;
 }
+
+.display-row {
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+}
+
+.display-row:hover {
+    background-color: #f1fbff;;
+}

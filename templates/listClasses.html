@@ -34,7 +34,7 @@
     <tbody>
         <% if orderDirection == 'asc' %>
             <% for class in data | reverse %>
-            <tr>
+            <tr class="display-row">
                 <td>%% class['id']%%</td>
                 <td>
                     <% if 'altname' in class%>
@@ -49,7 +49,7 @@
             <% endfor %>
         <% else %>
             <% for class in data %>
-            <tr>
+            <tr class="display-row">
                 <td>%% class['id']%%</td>
                 <td>
                     <% if 'altname' in class%>
