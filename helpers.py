@@ -11,6 +11,7 @@ from functools import wraps
 import urllib.request
 import json
 import icu
+import sys
 
 
 
@@ -33,7 +34,7 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-def sortIt(arrayToSort, key):
+def sortDataOnUnicodeKey(arrayToSort, key):
     """Sorts an array by the parameter specified"""
 
     collator = icu.Collator.createInstance(icu.Locale('sk_SK.UTF-8'))
@@ -43,6 +44,10 @@ def sortIt(arrayToSort, key):
         return arrayToSort.sort(key=lambda x: collator.getSortKey(x['name']))
     elif key == 'surname':
         return arrayToSort.sort(key=lambda x: collator.getSortKey(x['surname']))
+    elif key == 'start':
+        return arrayToSort.sort(key=itemgetter('start'))
+    elif key == 'room':
+        return arrayToSort.sort(key=lambda x: collator.getSortKey(x['room']))
     else:
         return -1
 

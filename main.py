@@ -1,6 +1,7 @@
 from helpers import *
 
-api_server = "127.0.0.1:5000"
+api_server = "https://stud-db-api.herokuapp.com"
+#api_server = "127.0.0.1:5000"
 
 # Index
 @app.route('/')
@@ -83,17 +84,59 @@ def students():
     # Fetch all the students from the API
     response = None
     try:
-        ourUrl = "https://stud-db-api.herokuapp.com/api/students?" + urlencode(params, quote_via=quote_plus)
+        ourUrl = api_server + "/api/students?" + urlencode(params, quote_via=quote_plus)
 
         with urllib.request.urlopen(ourUrl) as url:
             response = json.loads(url.read().decode())
 
         # Sort the array based on the parameter provided by user
-        sortedArray = sortIt(response.get('students'), params.get('orderBy'))
+        sortedArray = sortDataOnUnicodeKey(response.get('students'), params.get('orderBy'))
         
-        return render_template('listStudents.html', userName = session['user']['username'],by = params['orderBy'], ala=response['students'], current = 'students', order = request.args.get('order'))
+        return render_template('listStudents.html', userName = session['user']['username'],orderBy = params['orderBy'], data=response['students'], current = 'students', orderDirection = request.args.get('order'))
     except:
         return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down')
+        
+# Class table
+@app.route('/classes')
+@login_required
+def classes():
+    
+    # Store all the parameters from user in one variable
+    params = {
+        'orderBy': request.args.get('orderBy')
+    }
+    
+    # Set default sorting to id
+    if params['orderBy'] is None:
+        params['orderBy'] = 'id'
+    
+    # Fetch all the classes from the API
+    response = None
+    try:
+        ourUrl = api_server + "/api/classes?"
+
+        with urllib.request.urlopen(ourUrl) as url:
+            response = json.loads(url.read().decode())
+
+        # Sort the array based on the parameter provided by user
+        sortedArray = sortDataOnUnicodeKey(response.get('classes'), params.get('orderBy'))
+        
+        print(response)
+        return render_template('listClasses.html', userName = session['user']['username'],orderBy = params['orderBy'], data=response['classes'], current = 'classes', orderDirection = request.args.get('order'))
+    except:
+        raise
+        return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down')
+
+@app.route('/professors')
+@login_required
+def professors():
+    return "work in progress"
+
+@app.route('/parents')
+@login_required
+def parents():
+    return "work in progress"
+
 
 ################################################
 # DIPLAY ONE
