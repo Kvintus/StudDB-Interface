@@ -41,7 +41,7 @@
     <tbody>
         <% if orderDirection == 'asc' %>
             <% for student in data | reverse %>
-            <tr>
+            <tr class="student-row">
                 <td>%% student['id']%%</td>
                 <td>%% student['name'] %%</td>
                 <td>%% student['surname'] %%</td>
@@ -51,7 +51,7 @@
             <% endfor %>
         <% else %>
             <% for student in data %>
-            <tr>
+            <tr class="student-row">
                 <td>%% student['id']%%</td>
                 <td>%% student['name'] %%</td>
                 <td>%% student['surname'] %%</td>
