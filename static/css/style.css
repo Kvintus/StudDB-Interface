@@ -97,11 +97,11 @@ table.floatThead-table {
     background-color: #fff;
 }
 
-.sipka,
-.placeholderDiv {
+.sipka {
     filter: opacity(60%);
     display: inline-block;
     width: 20px;
+    cursor: pointer;
 }
 
 table>thead>tr>th {
@@ -145,4 +145,8 @@ table>thead>tr>th>div {
 
 .display-row:hover {
     background-color: #f1fbff;;
+}
+
+.sipka-hide {
+    visibility: hidden;
 }
