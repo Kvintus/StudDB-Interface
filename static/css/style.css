@@ -2,6 +2,10 @@ body {
     padding-top: 3.1rem;
 }
 
+#vs-info-wrap {
+    text-align: right;
+}
+
 .bg-moj {
     background-color: #385777;
 }
@@ -17,12 +21,65 @@ body {
     border-bottom: 1.5px solid rgb(201, 201, 201);
 }
 
-.table-header:focus{
+.table-header:focus {
     border-color: rgb(102, 102, 102);
     outline: 0;
     -webkit-box-shadow: none;
     box-shadow: none;
 }
+
+/* DROPDOWN */
+.no-hover {
+    background-image: none;
+    background-color: rgba(255, 255, 255, 0) !important;
+}
+
+.dropdown-item {
+    padding: 12px;
+}
+
+.dropdown-menu {
+    padding: 0;
+}
+
+.dropdown-divider {
+    margin: 0;
+}
+
+.logout {
+    display: inline;
+    text-decoration: none !important;
+}
+
+.logout-con {
+    color: #999;
+}
+
+.logout-con:hover {
+    color: gray;
+}
+
+
+.dropdown-item-first {
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+}
+
+.dropdown-item-last {
+    border-bottom-left-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(233, 233, 233, 0.39);
+}
+
+.fa-sign-out {
+    margin-top: 3px;
+    margin-right: 5px;
+}
+
+/* END DROPDOWN */
 
 table.floatThead-table {
     border-top: none;
@@ -30,11 +87,13 @@ table.floatThead-table {
     background-color: #fff;
 }
 
-.sipka, .placeholderDiv {
+.sipka,
+.placeholderDiv {
     filter: opacity(60%);
-    display: inline-block;    
+    display: inline-block;
     width: 20px;
 }
+
 table>thead>tr>th {
     text-align: left;
 }
@@ -47,7 +106,7 @@ table>thead>tr>th>div {
 
 .user-icon {
     font-size: 30px;
-    color: white; 
+    color: white;
 }
 
 .user-name {
@@ -68,7 +127,3 @@ table>thead>tr>th>div {
 .drp {
     margin-left: -35px;
 }
-
-
-
-

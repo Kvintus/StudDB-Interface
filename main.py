@@ -24,6 +24,7 @@ app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
 
 # to login
+
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -31,6 +32,12 @@ def login_required(f):
             return redirect(url_for('login', next=request.url))
         return f(*args, **kwargs)
     return decorated_function
+
+@app.route('/viewStudent', methods=['GET'])
+@login_required
+def viewStudent():
+    return render_template('viewStudent.html')
+
 
 @app.route('/register', methods=['POST', 'GET'])
 @login_required
