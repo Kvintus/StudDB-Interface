@@ -108,6 +108,9 @@
         }
 
         $('#nav-' + '%% current %%').addClass('active');
+        cur = "%% current %%";
+        cur = cur[0].toUpperCase() + cur.slice(1);
+        document.title = cur;
     })
 </script>
 

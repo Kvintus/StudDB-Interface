@@ -41,7 +41,7 @@
     <tbody>
         <% if orderDirection == 'asc' %>
             <% for student in data | reverse %>
-            <tr class="student-row">
+            <tr class="display-row">
                 <td>%% student['id']%%</td>
                 <td>%% student['name'] %%</td>
                 <td>%% student['surname'] %%</td>
@@ -51,7 +51,7 @@
             <% endfor %>
         <% else %>
             <% for student in data %>
-            <tr class="student-row">
+            <tr class="display-row">
                 <td>%% student['id']%%</td>
                 <td>%% student['name'] %%</td>
                 <td>%% student['surname'] %%</td>
@@ -105,6 +105,9 @@
         }
 
         $('#nav-' + '%% current %%').addClass('active');
+        cur = "%% current %%";
+        cur = cur[0].toUpperCase() + cur.slice(1);
+        document.title = cur;
     })
 </script>
 
