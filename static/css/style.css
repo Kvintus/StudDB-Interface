@@ -44,6 +44,10 @@ body {
     background-color: rgba(255, 255, 255, 0) !important;
 }
 
+.table thead th {
+    vertical-align: top;
+}
+
 .dropdown-item {
     padding: 12px;
 }
