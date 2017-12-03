@@ -11,30 +11,35 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
                     <li id="nav-students" class="nav-item">
-                        <a class="nav-link" href="#">Students
+                        <a class="nav-link" href="%% url_for('students') %%">Students
                         </a>
                     </li>
                     <li id="nav-classes" class="nav-item">
-                        <a class="nav-link" href="#">Classes</a>
+                        <a class="nav-link" href="%% url_for('classes') %%">Classes</a>
                     </li>
                     <li id="nav-professors" class="nav-item">
-                        <a class="nav-link" href="#">Professors</a>
+                        <a class="nav-link" href="%% url_for('professors') %%">Professors</a>
                     </li>
                     <li id="nav-parents" class="nav-item">
-                        <a class="nav-link" href="#">Parents</a>
+                        <a class="nav-link" href="%% url_for('parents') %%">Parents</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav navbar-right">
                     <li class="nav-item dropdown">
-                        <div onclick="console.log('Hi');" class="user-container nav-link" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
+                        <div onclick="console.log('Hi');" class="user-container nav-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <p class="user-name">%% userName %%</p>
                             <i class="fa fa-user user-icon" aria-hidden="true"></i>
                         </div>
                         <div class="dropdown-menu drp" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="#">Profile</a>
+                            <a style="color: #6f6f6f" class="dropdown-item dropdown-item-first" href="#">Profile</a>
                             <div class="dropdown-divider"></div>
-                            <a style="color:rgb(123, 123, 123);" class="dropdown-item" href="%% url_for('login') %%">Logout <i class="fa fa-sign-out" aria-hidden="true"></i></a>
+
+                            <a class="logout" href="%% url_for('login') %%">
+                                <div class="dropdown-item dropdown-item-last logout-con">
+                                    <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                    Logout
+                                </div>
+                            </a>
                         </div>
                     </li>
                 </ul>

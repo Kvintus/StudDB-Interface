@@ -1,4 +1,5 @@
 Flask
+pyicu
 gunicorn
 flask_sqlalchemy
 bs4
