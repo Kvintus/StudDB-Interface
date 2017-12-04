@@ -51,5 +51,5 @@ def sortDataOnUnicodeKey(arrayToSort, key):
     else:
         return -1
 
-def apology(message, title):
+def apology(message='Error', title='Error'):
     return render_template('apology.html', message=message, title=title)

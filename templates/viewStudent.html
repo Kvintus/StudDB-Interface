@@ -2,15 +2,15 @@
     <% block content %>
         <div class="container vs-main-con">
             <div class="row">
-                <div class="col">
-                    <p>Meno</p>
-                    <p>Priezv</p>
-                    <p>Start</p>
+                <div class="col prof-image-con">
+                    <img src="%% url_for('static', filename='images/prof_placeholder.jpg') %%" alt="">
                 </div>
-                <div class="col">
-                    <p>Meno</p>
-                    <p>Priezv</p>
-                    <p>Start</p>
+                <div class="col vs-text-con">
+                    <div>
+                        <p>%% student['name'] %%</p>
+                        <p>%% student['surname'] %%</p>
+                        <p>%% student['id'] %%</p>
+                    </div>
                 </div>
             </div>
         </div>

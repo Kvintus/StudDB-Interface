@@ -61,7 +61,8 @@ def login():
         # redirect user to home page
         return redirect(url_for("index"))
     else:
-        return render_template("login.html")
+        nextt = request.args.get('next')
+        return render_template("login.html", ne = nextt)
 
 ##########################################################
 # MAIN TABLES
@@ -110,10 +111,10 @@ def classes():
     if params['orderBy'] is None:
         params['orderBy'] = 'id'
     
-    # Fetch all the classes from the API
+    # Fetch all the professors from the API
     response = None
     try:
-        ourUrl = api_server + "/api/classes?"
+        ourUrl = api_server + "/api/classes"
 
         with urllib.request.urlopen(ourUrl) as url:
             response = json.loads(url.read().decode())
@@ -121,16 +122,38 @@ def classes():
         # Sort the array based on the parameter provided by user
         sortedArray = sortDataOnUnicodeKey(response.get('classes'), params.get('orderBy'))
         
-        print(response)
         return render_template('listClasses.html', userName = session['user']['username'],orderBy = params['orderBy'], data=response['classes'], current = 'classes', orderDirection = request.args.get('order'))
     except:
         raise
         return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down')
 
+# Professors table
 @app.route('/professors')
 @login_required
 def professors():
-    return "work in progress"
+        # Store all the parameters from user in one variable
+    params = {
+        'orderBy': request.args.get('orderBy')
+    }
+    
+    # Set default sorting to id
+    if params['orderBy'] is None:
+        params['orderBy'] = 'id'
+    
+    # Fetch all the students from the API
+    response = None
+    try:
+        ourUrl = api_server + "/api/professors"
+
+        with urllib.request.urlopen(ourUrl) as url:
+            response = json.loads(url.read().decode())
+
+        # Sort the array based on the parameter provided by user
+        sortedArray = sortDataOnUnicodeKey(response.get('professors'), params.get('orderBy'))
+        
+        return render_template('listProfessors.html', userName = session['user']['username'],orderBy = params['orderBy'], data=response['professors'], current = 'professors', orderDirection = request.args.get('order'))
+    except:
+        return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down')
 
 @app.route('/parents')
 @login_required
@@ -144,18 +167,25 @@ def parents():
 
 # viewStudent
 @app.route('/students/viewStudent', methods=['GET'])
-
 @login_required
 def viewStudent():
-    reJson = request.get_json()
+    ourId = None
     r = None
+    
+    # Getting the id of the student we should display
+    try:
+        ourId = request.args.get('id')
+    except:
+        apology(message="No user specified", title="No user")
     
     # Getting the student's info
     try:
-        r = requests.get(
-        "{}{}".format(api_server, "/api/students/getOne"),
-        params=reJson)
+        ourUrl = api_server + "/api/students/getOne?id={}".format(ourId)
+        with urllib.request.urlopen(ourUrl) as url:
+            r = json.loads(url.read().decode())
+
     except:
+        raise
         return apology(message="We are sorry the API server is down.",title='Server Down')
     
-    return render_template('viewStudent.html', userName = session['user']['username'])
+    return render_template('viewStudent.html', userName = session['user']['username'], student=r['student'])

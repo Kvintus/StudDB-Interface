@@ -1,0 +1,209 @@
+<% extends "main_template.html" %> <% block content %>
+<table id="tabulka" class="table sticky-header">
+    <thead class="table-header">
+        <tr>
+            <th data-tsorter="numeric">
+                <div>
+                    <input id="inputID" onkeyup="filterByID()" class="table-header" type="text" placeholder="#">
+                    <img onclick="switchB(this)" data-sorterID="id" class="sipka sorter" src="%% url_for('static', filename='images/icons/desc.png') %%"
+                        alt="" srcset="">
+                </div>
+            </th>
+            <th data-tsorter="numeric">
+                    <div>
+                        <input id="inputTitle" onkeyup="titleFilter()" class="table-header" type="text" placeholder="Title">
+                        <img data-sorterID="title" class="sipka sorter sipka-hide" src="%% url_for('static', filename='images/icons/desc.png') %%"
+                            alt="" srcset="">
+                    </div>
+                </th>
+            <th>
+                <div>
+                    <input id="inputName" onkeyup="menaFilter()" class="table-header" type="text" placeholder="Meno">
+                    <img onclick="switchB(this)" data-sorterID="name" class="sipka sorter" src="%% url_for('static', filename='images/icons/no.png') %%"
+                        alt="" srcset="">
+                </div>
+            </th>
+
+            <th>
+                <div>
+                    <input id="inputSurname" onkeyup="priezvFilter()" class="table-header" type="text" placeholder="Priezvisko">
+                    <img onclick="switchB(this)" data-sorterID="surname" class="sipka sorter" src="%% url_for('static', filename='images/icons/no.png') %%"
+                        alt="" srcset="">
+                </div>
+            </th>
+            <th>
+                <div>
+                    <input class="table-header dis" type="text" placeholder="Email" disabled>
+                    <img  class="sipka sorter sipka-hide" src="%% url_for('static', filename='images/icons/desc.png') %%"
+                    alt="" srcset="">
+                </div>
+            </th>
+            <th>
+                <div>
+                    <input class="table-header dis" type="text" placeholder="Telefon" disabled>
+                    <img  class="sipka sorter sipka-hide" src="%% url_for('static', filename='images/icons/desc.png') %%"
+                    alt="" srcset="">
+                </div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if orderDirection == 'asc' %>
+            <% for professor in data | reverse %>
+            <tr class="display-row">
+                <td>%% professor['id']%%</td>
+                <td>%% professor['title']%%</td>
+                <td>%% professor['name'] %%</td>
+                <td>%% professor['surname'] %%</td>
+                <td>%% professor['email'] %%</td>
+                <td>%% professor['phone'] %%</td>
+            </tr>
+            <% endfor %>
+        <% else %>
+            <% for professor in data %>
+            <tr class="display-row">
+                <td>%% professor['id']%%</td>
+                <td>%% professor['title']%%</td>
+                <td>%% professor['name'] %%</td>
+                <td>%% professor['surname'] %%</td>
+                <td>%% professor['email'] %%</td>
+                <td>%% professor['phone'] %%</td>
+            </tr>
+            <% endfor %>
+        <% endif %>
+    </tbody>
+</table>
+
+<script>
+    mainSorter = {
+        ID: '%% orderBy %%',
+        order: '%% orderDirection %%'
+    }
+
+    function switchB(caller) {
+        if (caller.getAttribute('data-sorterID') != mainSorter.ID) {
+            //Zmenit mainSorter
+            mainSorter.ID = caller.getAttribute('data-sorterID');
+            mainSorter.order = 'desc';
+
+        } else {
+            //Zmenime mainSorter order
+            if (mainSorter.order === 'asc') {
+                mainSorter.order = 'desc';
+            } else {
+                mainSorter.order = 'asc';
+            }
+        }
+        window.location.replace('%% url_for("professors")%%' + '?orderBy=' + mainSorter.ID + '&order=' + mainSorter.order)
+    }
+
+    $(() => {
+
+        if (mainSorter.order === "None") {
+            mainSorter.order = "desc";
+        }
+        //Zmenit znaky na vsetkych ostatnych
+        ostatne = document.getElementsByClassName('sorter');
+        for (var i = 0; i < ostatne.length; i++) {
+            ostatne[i].src = "%% url_for('static', filename='images/icons/no.png')%%";
+            if (ostatne[i].getAttribute('data-sorterID') == mainSorter.ID){
+                if (mainSorter.order === 'desc') {
+                    ostatne[i].src = "%% url_for('static', filename='images/icons/desc.png') %%";
+                }else {
+                    ostatne[i].src = "%% url_for('static', filename='images/icons/asc.png') %%";
+                }
+            }
+        }
+
+        $('#nav-' + '%% current %%').addClass('active');
+        cur = "%% current %%";
+        cur = cur[0].toUpperCase() + cur.slice(1);
+        document.title = cur;
+    })
+</script>
+
+
+<script>
+    var nameFilter = '';
+var surnameFilter = '';
+
+function mainFilter() {
+    var td;
+    var table = document.getElementById('tabulka');
+    tr = table.getElementsByTagName('tr');
+
+    for (var i = 0; i < tr.length; i++) {
+        nameCol = tr[i].getElementsByTagName('td')[2];
+        surnameCol = tr[i].getElementsByTagName('td')[3];
+
+        //Checks if both column are populted
+        if (nameCol && surnameCol) {
+            if (nameCol.innerHTML.toUpperCase().indexOf(nameFilter) > -1 && surnameCol.innerHTML.toUpperCase().indexOf(surnameFilter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+    window.scrollTo(0,0);
+}
+
+
+
+function filterByID() {
+    var td;
+    var table = document.getElementById('tabulka');
+    filterID = document.getElementById('inputID').value.toUpperCase();
+    tr = table.getElementsByTagName('tr');
+
+    for (var i = 0; i < tr.length; i++) {
+        id_Col = tr[i].getElementsByTagName('td')[0];
+
+        if (id_Col) {
+            if (id_Col.innerHTML.toUpperCase() == filterID || filterID == "") {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
+
+function titleFilter() {
+    var td;
+    var table = document.getElementById('tabulka');
+    filterTitle = document.getElementById('inputTitle').value.toUpperCase();
+    tr = table.getElementsByTagName('tr');
+
+    for (var i = 0; i < tr.length; i++) {
+        title_Col = tr[i].getElementsByTagName('td')[1];
+
+        if (title_Col) {
+            if (title_Col.innerHTML.toUpperCase().indexOf(filterTitle) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
+
+
+function deleteIDFilter() {
+    document.getElementById('inputID').value = "";
+}
+
+function menaFilter() {
+    nameFilter = document.getElementById('inputName').value.toUpperCase();
+    deleteIDFilter();
+    mainFilter();
+}
+
+function priezvFilter() {
+    surnameFilter = document.getElementById('inputSurname').value.toUpperCase();
+    deleteIDFilter();
+    mainFilter();
+}
+</script>
+<script src="%%url_for('static',filename='js/stickyTableHeader.js', v='0.15')%%"></script>
+<% endblock %>
