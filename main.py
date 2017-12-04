@@ -61,7 +61,8 @@ def login():
         # redirect user to home page
         return redirect(url_for("index"))
     else:
-        return render_template("login.html")
+        nextt = request.args.get('next')
+        return render_template("login.html", ne = nextt)
 
 ##########################################################
 # MAIN TABLES
@@ -166,18 +167,25 @@ def parents():
 
 # viewStudent
 @app.route('/students/viewStudent', methods=['GET'])
-
 @login_required
 def viewStudent():
-    reJson = request.get_json()
+    ourId = None
     r = None
+    
+    # Getting the id of the student we should display
+    try:
+        ourId = request.args.get('id')
+    except:
+        apology(message="No user specified", title="No user")
     
     # Getting the student's info
     try:
-        r = requests.get(
-        "{}{}".format(api_server, "/api/students/getOne"),
-        params=reJson)
+        ourUrl = api_server + "/api/students/getOne?id={}".format(ourId)
+        with urllib.request.urlopen(ourUrl) as url:
+            r = json.loads(url.read().decode())
+
     except:
+        raise
         return apology(message="We are sorry the API server is down.",title='Server Down')
     
-    return render_template('viewStudent.html', userName = session['user']['username'])
+    return render_template('viewStudent.html', userName = session['user']['username'], student=r['student'])

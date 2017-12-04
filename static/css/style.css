@@ -9,8 +9,30 @@ body {
 
 .vs-main-con {
     margin-top: 50px;
-    width: 70%;
-    background-color: lightgrey;
+    width: 50%;
+    min-width: 220px;
+    padding: 12px;
+    background-color: rgba(255, 252, 252, 0.1);
+    box-shadow: 0px 1px 12px 2px rgba(140,140,140,0.75);
+    -webkit-box-shadow: 0px 1px 12px 2px rgba(140,140,140,0.75);
+    -moz-box-shadow: 0px 1px 12px 2px rgba(140,140,140,0.75);
+}
+
+.vs-text-con {
+    font-size: 22px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.prof-image-con {
+    text-align: center;
+    margin-bottom: 18px;
+}
+
+.prof-image-con > img {
+    border-radius: 50%;
+    width: 200px;
 }
 
 /* end viewStudent*/
