@@ -1,7 +1,7 @@
 from helpers import *
 
-api_server = "https://stud-db-api.herokuapp.com"
-#api_server = "127.0.0.1:5000"
+#api_server = "https://stud-db-api.herokuapp.com"
+api_server = "http://127.0.0.1:5000"
 
 # Index
 @app.route('/')
@@ -95,6 +95,7 @@ def students():
         
         return render_template('listStudents.html', userName = session['user']['username'],orderBy = params['orderBy'], data=response['students'], current = 'students', orderDirection = request.args.get('order'))
     except:
+        raise
         return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down')
         
 # Class table
@@ -164,6 +165,7 @@ def parents():
 ################################################
 # DIPLAY ONE
 ################################################
+    
 
 # viewStudent
 @app.route('/students/viewStudent', methods=['GET'])
@@ -181,11 +183,17 @@ def viewStudent():
     # Getting the student's info
     try:
         ourUrl = api_server + "/api/students/getOne?id={}".format(ourId)
+        
         with urllib.request.urlopen(ourUrl) as url:
             r = json.loads(url.read().decode())
 
+        return render_template('viewStudent.html', userName = session['user']['username'], student=r['student'])
     except:
         raise
         return apology(message="We are sorry the API server is down.",title='Server Down')
-    
-    return render_template('viewStudent.html', userName = session['user']['username'], student=r['student'])
+
+# viewParent
+@app.route('/parents/viewParent', methods=['GET'])
+@login_required
+def viewParent():
+    return 'work in progress'

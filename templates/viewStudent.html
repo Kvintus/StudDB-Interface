@@ -7,11 +7,94 @@
                 </div>
                 <div class="col vs-text-con">
                     <div>
-                        <p>%% student['name'] %%</p>
-                        <p>%% student['surname'] %%</p>
-                        <p>%% student['id'] %%</p>
+                        <table>
+                            <tr>
+                                <td style="padding-right: 80px;" class="vs-table-info">
+                                    <p>Name:</p>
+                                </td>
+                                <td>
+                                    <p>%% student['name'] %%</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="vs-table-info">
+                                    <p>Surname: </p>
+                                </td>
+                                <td>
+                                    <p>%% student['surname'] %%</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="vs-table-info">
+                                    <p>ID:</p>
+                                </td>
+                                <td>
+                                    <p>%% student['id'] %%</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div style="margin-left: 20px; display:flex;align-items: center;" class="col">
+                    <table>
+                        <tr>
+                            <td style="padding-right: 50px;" class="vs-table-info">
+                                <p>
+                                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                                </p>
+                            </td>
+                            <td>
+                                <p>%% student['email'] %%</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vs-table-info">
+                                <p>
+                                    <i class="fa fa-phone" aria-hidden="true"></i>
+                                </p>
+                            </td>
+                            <td>
+                                <p>%% student['phone'] %%</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vs-table-info">
+                                <p class="no-bottom-margin">
+                                    <i class="fa fa-home" aria-hidden="true"></i>
+                                </p>
+                            </td>
+                            <td>
+                                <p class="no-bottom-margin">%% student['adress'] %%</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col">
+                    <div>
+                        <p class="view-rel-headline">Parents</p>
+                        <div class="parents-con">
+                            <% for parent in student['parents'] %>
+                                <a class="parent-ref" data-parentID="%% parent['id'] %%" href="#">%% parent['wholeName'] %%</a><br>
+                            <% endfor %>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
+
+        <script>
+            $(function () {
+                parents = document.getElementsByClassName('parent-ref');
+
+                for (let index = 0; index < parents.length; index++) {
+                    let adress = "%% url_for('viewParent') %%" + '?id=' + parents[index].getAttribute('data-parentID');
+                    parents[index].setAttribute('href', adress);
+                }
+            })
+        </script>
+
         <% endblock %>

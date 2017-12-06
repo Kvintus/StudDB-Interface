@@ -103,6 +103,12 @@
                 }
             }
         }
+        
+
+        $('.display-row').on('click', (event)=>{
+            idOfThisRow = event.currentTarget.firstElementChild.innerHTML;
+            window.location.href = "%% url_for('viewStudent')%%" + '?id=' + idOfThisRow;
+        })
 
         $('#nav-' + '%% current %%').addClass('active');
         cur = "%% current %%";
