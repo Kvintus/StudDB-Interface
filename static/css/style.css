@@ -75,6 +75,14 @@ body {
   display: block;
 }
 
+.manipulate-buttons-con {
+  justify-content: flex-end;
+}
+
+.manipulate-buttons-con button {
+  margin-right: 12px;
+}
+
 /* end viewStudent*/
 .center-items-vertically-flex {
   justify-content: center;
