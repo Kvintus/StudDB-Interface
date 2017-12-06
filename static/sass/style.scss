@@ -1,3 +1,5 @@
+
+
 body {
     padding-top: 3.1rem;
 }
@@ -40,8 +42,47 @@ body {
     color: gray;
 }
 
+.view-rel-headline {
+    color: gray;
+    font-size: 26px;
+    margin-bottom: 5px;
+}
+
+.no-bottom-margin {
+    margin-bottom: 0 !important;
+}
+
+.parents-con {
+    margin-left: 20px;
+
+    a {
+        margin-bottom: 12px;
+        display: inline-block;
+        color: #5a5a5a;
+        padding: 6px;
+        width: 160px;
+        background-color: #f5f5f5;
+        border: 1px solid gray;
+        border-radius: 5px;
+        transition: 200ms ease;
+
+        &:hover {
+            text-decoration: none;
+            background-color: #eaeaea;
+        }
+    }
+}
+
+.parent-ref {
+    display: block;
+}
+
 /* end viewStudent*/
 
+.center-items-vertically-flex {
+    justify-content: center;
+    display: flex;
+}
 
 .bg-moj {
     background-color: #385777;
