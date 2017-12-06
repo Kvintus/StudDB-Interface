@@ -197,3 +197,9 @@ def viewStudent():
 @login_required
 def viewParent():
     return 'work in progress'
+
+# viewClass
+@app.route('/classes/viewClass', methods=['GET'])
+@login_required
+def viewClass():
+    return 'work in progress'

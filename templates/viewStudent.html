@@ -1,4 +1,5 @@
 <% extends "main_template.html" %>
+<% block title %>%% student['surname'] %% %% student['name'] %%<%endblock%>
     <% block content %>
         <div class="container vs-main-con">          
 
@@ -31,6 +32,18 @@
                                 </td>
                                 <td>
                                     <p>%% student['id'] %%</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="vs-table-info">
+                                    <p>Class:</p>
+                                </td>
+                                <td>
+                                    <% if 'altname' in student['class'] %>
+                                        <a class="class-ref" data-classID="%% student['class']['id'] %%" href="#">%% student['class']['altname'] %%</a>
+                                    <% else %>
+                                        <a class="class-ref" data-classID="%% student['class']['id'] %%" href="#">%% student['class']['name'] %%</a>
+                                    <% endif %>
                                 </td>
                             </tr>
                         </table>
@@ -78,7 +91,7 @@
                         <p class="view-rel-headline">Parents</p>
                         <div class="parents-con">
                             <% for parent in student['parents'] %>
-                                <a class="parent-ref" data-parentID="%% parent['id'] %%" href="#">%% parent['wholeName'] %%</a><br>
+                                <a class="parent-ref custom-button" data-parentID="%% parent['id'] %%" href="#">%% parent['wholeName'] %%</a><br>
                             <% endfor %>
                         </div>
 
@@ -86,17 +99,27 @@
                 </div>
             </div>
             <div class="row manipulate-buttons-con">
-                            <button class="btn btn-default">Edit</button>
+                            <button class="btn btn-outline-secondary">Edit</button>
             </div>
         </div>
 
         <script>
             $(function () {
+
+                // Make refs to parent pages
                 parents = document.getElementsByClassName('parent-ref');
 
                 for (let index = 0; index < parents.length; index++) {
                     let adress = "%% url_for('viewParent') %%" + '?id=' + parents[index].getAttribute('data-parentID');
                     parents[index].setAttribute('href', adress);
+                }
+
+                // Make refs to Class page
+                // Doing it dynamically with loop prevents out of index error if there are no class-ref elements
+                classRef = document.getElementsByClassName('class-ref')
+                for (let index = 0; index < classRef.length; index++) {
+                    let adress = "%% url_for('viewClass') %%" + '?id=' + classRef[index].getAttribute('data-classID');
+                    classRef[index].setAttribute('href', adress);
                 }
             })
         </script>

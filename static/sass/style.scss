@@ -12,7 +12,7 @@ body {
 .vs-main-con {
     margin-top: 50px;
     width: 60%;
-    min-width: 240px;
+    min-width: 367px;
     max-width: 865px;
     padding: 20px;
     background-color: rgba(255, 252, 252, 0.1);
@@ -64,8 +64,13 @@ body {
 
 .parents-con {
     margin-left: 20px;
+}
 
-    a {
+.parent-ref {
+    display: block;
+}
+
+.custom-button {
         margin-bottom: 12px;
         display: inline-block;
         color: #5a5a5a;
@@ -78,13 +83,22 @@ body {
 
         &:hover {
             text-decoration: none;
+            color: #5a5a5a;
             background-color: #eaeaea;
         }
-    }
 }
 
-.parent-ref {
+.class-ref{
+    margin-bottom: 1rem;
     display: block;
+    color: #b1b1b1;
+    font-weight: 500;
+    transition: 200ms ease;
+
+    &:hover {
+        text-decoration: none;
+        color: #cacaca;
+    }
 }
 
 .manipulate-buttons-con {
