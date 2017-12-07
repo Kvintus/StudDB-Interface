@@ -1,4 +1,6 @@
-<% extends "main_template.html" %> <% block content %>
+<% extends "main_template.html" %>
+<% block title %> Classes <% endblock %>
+<% block content %>
 <table id="tabulka" class="table sticky-header">
     <thead class="table-header">
         <tr>
@@ -108,9 +110,6 @@
         }
 
         $('#nav-' + '%% current %%').addClass('active');
-        cur = "%% current %%";
-        cur = cur[0].toUpperCase() + cur.slice(1);
-        document.title = cur;
     })
 </script>
 
