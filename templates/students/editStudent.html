@@ -1,0 +1,197 @@
+<% extends "main_template.html" %>
+    <% block title %>%% student['surname'] %% %% student['name'] %%
+        <%endblock%>
+            <% block content %>
+
+                <div class="container vs-main-con">
+                    <div id="alertMessage" style="margin-bottom: 20px; display:none;" class="alert alert-danger alert-dismissible fade show"
+                        role="alert">
+                        <button type="button" class="close" id="alertDismiss" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        Alert
+                    </div>
+                    <div class="row">
+                        <div class="col prof-image-con">
+                            <img src="%% url_for('static', filename='images/prof_placeholder.jpg') %%" alt="">
+                        </div>
+                        <div class="col vs-text-con">
+                            <div>
+
+                                <table>
+                                    <tr>
+                                        <td style="padding-right: 80px;" class="vs-table-info">
+                                            <p>Name:</p>
+                                        </td>
+                                        <td>
+                                            <# <p>%% student['name'] %%</p> #>
+                                                <div style="margin-bottom:1rem;" class="col-sm-10">
+                                                    <input id="nameInput" class="form-control" value="%% student['name'] %%" placeholder="%% student['name'] %%" type="text"
+                                                        oninvalid="this.setCustomValidity('This field cannot be blank!')" oninput="setCustomValidity('')"
+                                                        required>
+                                                </div>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="vs-table-info">
+                                            <p>Surname: </p>
+                                        </td>
+                                        <td>
+                                            <div style="margin-bottom:1rem;" class="col-sm-10">
+                                                <input id="surnameInput" class="form-control" value="%% student['surname'] %%" placeholder="%% student['surname'] %%">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="vs-table-info">
+                                            <p>ID:</p>
+                                        </td>
+                                        <td>
+                                            <p style="color: rgb(206, 206, 206)">%% student['id'] %%</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="vs-table-info">
+                                            <p>Class ID: </p>
+                                        </td>
+                                        <td>
+                                            <div style="margin-bottom:1rem;" class="col-sm-10">
+                                                <input id="classIDInput" class="form-control" value="%% student['class']['id'] %%" placeholder="remove">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div style="margin-left: 20px; display:flex;align-items: center;" class="col">
+                            <table>
+                                <tr>
+                                    <td style="padding-right: 50px;" class="vs-table-info">
+                                        <p>
+                                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <div style="margin-bottom:1rem;" class="col-sm-12">
+                                            <input id="emailInput" class="form-control" value="%% student['email'] %%" type="text">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="vs-table-info">
+                                        <p>
+                                            <i class="fa fa-phone" aria-hidden="true"></i>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <div style="margin-bottom:1rem;" class="col-sm-12">
+                                            <input id="phoneInput" class="form-control" value="%% student['phone'] %%" placeholder="%% student['phone']%%">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="vs-table-info">
+                                        <p class="no-bottom-margin">
+                                            <i class="fa fa-home" aria-hidden="true"></i>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <div class="col-sm-12">
+                                            <input id="phoneInput" class="form-control" value="%% student['adress'] %%" placeholder="%% student['adress']%%">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col main-parent-con">
+                            <div>
+                                <p class="view-rel-headline">Parents</p>
+                                <div class="parents-con">
+                                    <% for parent in student['parents'] %>
+                                        <div class="col-sm-10">
+                                            <input class="form-control parentIDInput" value="%% parent['id'] %%" placeholder="remove">
+                                        </div>
+                                        <% endfor %>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row manipulate-buttons-con">
+                        <button id="updateStudent" class="btn btn-outline-primary">Save</button>
+                        <button class="btn btn-outline-danger">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+
+                <script>
+                    $(function () {
+
+                        // Make refs to parent pages
+                        parents = document.getElementsByClassName('parent-ref');
+
+                        for (let index = 0; index < parents.length; index++) {
+                            let adress = "%% url_for('viewParent') %%" + '?id=' + parents[index].getAttribute(
+                                'data-parentID');
+                            parents[index].setAttribute('href', adress);
+                        }
+
+                        // Make refs to Class page
+                        // Doing it dynamically with loop prevents out of index error if there are no class-ref elements
+                        classRef = document.getElementsByClassName('class-ref')
+                        for (let index = 0; index < classRef.length; index++) {
+                            let adress = "%% url_for('viewClass') %%" + '?id=' + classRef[index].getAttribute(
+                                'data-classID');
+                            classRef[index].setAttribute('href', adress);
+                        }
+
+                        $('#alertDismiss').on('click', () => {
+                            $('#alertMessage').hide();
+                        })
+
+                        $("#updateStudent").on('click', () => {
+                            // Creating a student to post
+                            postStudent = {
+                                'name': $('#nameInput').val(),
+                                'id': parseInt("%% student['id'] %%"),
+                                'surname': $('#surnameInput').val(),
+                                'classID': parseInt($('#classIDInput').val()),
+                                'email': $('#emailInput').val(),
+                                'phone': $('#phoneInput').val(),
+                                'adress': $('#phoneInput').val(),
+                                'parents': []
+                            };
+
+                            // Appending all the parents found
+                            $('.parentIDInput').each(function () {
+                                postStudent['parents'].push(parseInt($(this).val()));
+                            });
+
+                            //$('#alertMessage').show();
+
+                            // Posting
+                            $.ajax({
+                                type: "post",
+                                url: "%% url_for('updateStudentRoute') %%",
+                                // The key needs to match your method's input parameter (case-sensitive).
+                                data: JSON.stringify(postStudent),
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                success: function (data) {
+                                    console.log( data )
+                                },
+                                failure: function (errMsg) {
+                                    alert(errMsg);
+                                }
+                            });
+                        })
+                    })
+                </script>
+
+                <% endblock %>

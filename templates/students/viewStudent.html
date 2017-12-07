@@ -99,7 +99,7 @@
                 </div>
             </div>
             <div class="row manipulate-buttons-con">
-                            <button class="btn btn-outline-secondary">Edit</button>
+                            <button id="editStudentButton" class="btn btn-outline-secondary">Edit</button>
             </div>
         </div>
 
@@ -121,6 +121,12 @@
                     let adress = "%% url_for('viewClass') %%" + '?id=' + classRef[index].getAttribute('data-classID');
                     classRef[index].setAttribute('href', adress);
                 }
+
+                // Setting up the editButton
+                $('#editStudentButton').on('click', () => {
+                    let adress = "%% url_for('editStudent') %%" + '?id=' + "%% student['id'] %%";
+                    window.location.href = adress;
+                })
             })
         </script>
 
