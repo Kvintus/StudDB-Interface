@@ -93,7 +93,7 @@ def students():
         # Sort the array based on the parameter provided by user
         sortedArray = sortDataOnUnicodeKey(response.get('students'), params.get('orderBy'))
         
-        return render_template('listStudents.html', userName = session['user']['username'],orderBy = params['orderBy'], data=response['students'], current = 'students', orderDirection = request.args.get('order'))
+        return render_template('students/listStudents.html', userName = session['user']['username'],orderBy = params['orderBy'], data=response['students'], current = 'students', orderDirection = request.args.get('order'))
     except:
         raise
         return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down')
@@ -123,7 +123,7 @@ def classes():
         # Sort the array based on the parameter provided by user
         sortedArray = sortDataOnUnicodeKey(response.get('classes'), params.get('orderBy'))
         
-        return render_template('listClasses.html', userName = session['user']['username'],orderBy = params['orderBy'], data=response['classes'], current = 'classes', orderDirection = request.args.get('order'))
+        return render_template('classes/listClasses.html', userName = session['user']['username'],orderBy = params['orderBy'], data=response['classes'], current = 'classes', orderDirection = request.args.get('order'))
     except:
         raise
         return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down')
@@ -152,7 +152,7 @@ def professors():
         # Sort the array based on the parameter provided by user
         sortedArray = sortDataOnUnicodeKey(response.get('professors'), params.get('orderBy'))
         
-        return render_template('listProfessors.html', userName = session['user']['username'],orderBy = params['orderBy'], data=response['professors'], current = 'professors', orderDirection = request.args.get('order'))
+        return render_template('professors/listProfessors.html', userName = session['user']['username'],orderBy = params['orderBy'], data=response['professors'], current = 'professors', orderDirection = request.args.get('order'))
     except:
         return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down')
 
@@ -187,7 +187,7 @@ def viewStudent():
         with urllib.request.urlopen(ourUrl) as url:
             r = json.loads(url.read().decode())
 
-        return render_template('viewStudent.html', userName = session['user']['username'], student=r['student'])
+        return render_template('students/viewStudent.html', userName = session['user']['username'], student=r['student'])
     except:
         raise
         return apology(message="We are sorry the API server is down.",title='Server Down')
