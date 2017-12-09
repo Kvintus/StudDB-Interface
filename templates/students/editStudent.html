@@ -198,9 +198,10 @@
                             }
                         });
                     }
-
+ 
                     function hideParent(thiso) {
                         $(thiso).parent().fadeOut(100);
+                        $(thiso).parent().remove();
                     }
 
 
