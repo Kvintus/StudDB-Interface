@@ -102,9 +102,11 @@
                     </div>
                 </div>
             </div>
-            <div class="row manipulate-buttons-con">
+            <% if userPrivilege >= 3 %>
+                <div class="row manipulate-buttons-con">
                             <button id="editStudentButton" class="btn btn-outline-secondary">Edit</button>
-            </div>
+                </div>
+            <% endif %>
         </div>
 
         <script>

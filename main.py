@@ -19,7 +19,7 @@ def register():
         if session['user']['privilege'] == 5:
             return render_template('register.html')
         else:
-            return apology(message = "We are sorry but you don't have a permission to access this site.", title="Permision denied")
+            return apology(message = "We are sorry but you do not have a permission to register new users.", title="Permision denied")
     elif request.method == 'POST':
         # TODO bude treba spravit checking
         db.engine.execute('INSERT INTO users("username", "hash", "privilege") VALUES(:username, :hashh, :privilege)', {'username' : request.form.get('username'), 'hashh': sha256.hash(request.form.get('password')), 'privilege': request.form.get('privilege')})
@@ -192,7 +192,7 @@ def viewStudent():
         if r['student']['surname'][-3:] == "ová":
             isMale = False
 
-        return render_template('students/viewStudent.html', userName = session['user']['username'], student=r['student'], isMale = isMale)
+        return render_template('students/viewStudent.html', userName = session['user']['username'], student=r['student'], isMale = isMale, userPrivilege = session['user']['privilege'])
     except:
         return apology(message="We are sorry the API server is down. Or the ID you provided is non-existent",title='Server Down')
 
@@ -200,26 +200,29 @@ def viewStudent():
 @app.route('/students/editStudent', methods=['GET'])
 @login_required
 def editStudent():
-    ourId = None
-    r = None
-    
-    # Getting the id of the student we should display
-    try:
-        ourId = request.args.get('id')
-    except:
-        apology(message="No user specified", title="No user")
-    
-    # Getting the student's info
-    try:
-        ourUrl = api_server + "/api/students/getOne?id={}".format(ourId)
+    if session['user']['privilege'] == 5:
+        ourId = None
+        r = None
         
-        with urllib.request.urlopen(ourUrl) as url:
-            r = json.loads(url.read().decode())
+        # Getting the id of the student we should display
+        try:
+            ourId = request.args.get('id')
+        except:
+            apology(message="No user specified", title="No user")
+        
+        # Getting the student's info
+        try:
+            ourUrl = api_server + "/api/students/getOne?id={}".format(ourId)
+            
+            with urllib.request.urlopen(ourUrl) as url:
+                r = json.loads(url.read().decode())
 
-        return render_template('students/editStudent.html', userName = session['user']['username'], student=r['student'], server = api_server)
-    except:
-        raise
-        return apology(message="We are sorry the API server is down.",title='Server Down')
+            return render_template('students/editStudent.html', userName = session['user']['username'], student=r['student'], server = api_server)
+        except:
+            return apology(message="We are sorry the API server is down.",title='Server Down')
+    else:
+        return apology(message = "We are sorry but you do not have a permission to edit students.", title="Permision denied")
+    
 
 
 
