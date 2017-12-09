@@ -4,7 +4,7 @@
 <table id="tabulka" class="table sticky-header">
     <thead class="table-header">
         <tr>
-            <th data-tsorter="numeric">
+            <th class="student-table-id" data-tsorter="numeric">
                 <div>
                     <input id="inputID" onkeyup="filterByID()" class="table-header" type="text" placeholder="#">
                     <img onclick="switchB(this)" data-sorterID="id" class="sipka sorter" src="%% url_for('static', filename='images/icons/desc.png') %%"
@@ -26,13 +26,13 @@
                         alt="" srcset="">
                 </div>
             </th>
-            <th>
+            <th class="student-table-email">
                 <div>
                     <input class="table-header dis" type="text" placeholder="Email" disabled>
                     <div class="placeholderDiv"></div>
                 </div>
             </th>
-            <th>
+            <th class="student-table-phone">
                 <div>
                     <input class="table-header dis" type="text" placeholder="Telefon" disabled>
                     <div class=""></div>
@@ -44,21 +44,21 @@
         <% if orderDirection == 'asc' %>
             <% for student in data | reverse %>
             <tr class="display-row">
-                <td>%% student['id']%%</td>
+                <td class="student-table-id">%% student['id']%%</td>
                 <td>%% student['name'] %%</td>
                 <td>%% student['surname'] %%</td>
-                <td>%% student['email'] %%</td>
-                <td>%% student['phone'] %%</td>
+                <td class="student-table-email" >%% student['email'] %%</td>
+                <td class="student-table-phone" >%% student['phone'] %%</td>
             </tr>
             <% endfor %>
         <% else %>
             <% for student in data %>
             <tr class="display-row">
-                <td>%% student['id']%%</td>
+                <td class="student-table-id">%% student['id']%%</td>
                 <td>%% student['name'] %%</td>
                 <td>%% student['surname'] %%</td>
-                <td>%% student['email'] %%</td>
-                <td>%% student['phone'] %%</td>
+                <td class="student-table-email">%% student['email'] %%</td>
+                <td class="student-table-phone" >%% student['phone'] %%</td>
             </tr>
             <% endfor %>
         <% endif %>
