@@ -1,18 +1,29 @@
-
-
 body {
     padding-top: 3.1rem;
 }
 
 .add-menu-button {
-    margin-left:50px;
-
-    @media screen and (max-width: 768px){
-        margin-left: 0px; 
+    margin-left: 50px;
+    @media screen and (max-width: 768px) {
+        margin-left: 0px;
     }
 }
 
+#add-parent-button {
+    margin-left: 20px;
+    color: gray;
+    display: inline-block;
+    font-size: 20px;
+    transition: 200ms ease;
+
+    &:hover {
+        color: rgb(82, 82, 82);
+    }
+}
+
+
 /* viewStudent */
+
 #vs-info-wrap {
     text-align: right;
 }
@@ -24,10 +35,9 @@ body {
     max-width: 865px;
     padding: 20px;
     background-color: rgba(255, 252, 252, 0.1);
-    box-shadow: 0px 1px 12px 2px rgba(140,140,140,0.75);
-    -webkit-box-shadow: 0px 1px 12px 2px rgba(140,140,140,0.75);
-    -moz-box-shadow: 0px 1px 12px 2px rgba(140,140,140,0.75);
-
+    box-shadow: 0px 1px 12px 2px rgba(140, 140, 140, 0.75);
+    -webkit-box-shadow: 0px 1px 12px 2px rgba(140, 140, 140, 0.75);
+    -moz-box-shadow: 0px 1px 12px 2px rgba(140, 140, 140, 0.75);
     @media screen and (max-width: 600px) {
         width: 80%;
     }
@@ -35,7 +45,6 @@ body {
 
 .vs-text-con {
     font-size: 22px;
-
     align-items: center;
     display: flex;
     justify-content: center;
@@ -44,7 +53,6 @@ body {
 .prof-image-con {
     text-align: center;
     margin-bottom: 18px;
-
     img {
         border-radius: 50%;
         width: 200px;
@@ -62,6 +70,7 @@ body {
 }
 
 .view-rel-headline {
+    display: inline-block;
     color: gray;
     font-size: 26px;
     margin-bottom: 5px;
@@ -80,30 +89,46 @@ body {
 }
 
 .custom-button {
-        margin-bottom: 12px;
-        display: inline-block;
+    margin-bottom: 12px;
+    display: inline-block;
+    color: #5a5a5a;
+    padding: 6px;
+    width: 160px;
+    background-color: #f5f5f5;
+    border: 1px solid gray;
+    border-radius: 5px;
+    transition: 200ms ease;
+    &:hover {
+        text-decoration: none;
         color: #5a5a5a;
-        padding: 6px;
-        width: 160px;
-        background-color: #f5f5f5;
-        border: 1px solid gray;
-        border-radius: 5px;
-        transition: 200ms ease;
-
-        &:hover {
-            text-decoration: none;
-            color: #5a5a5a;
-            background-color: #eaeaea;
-        }
+        background-color: #eaeaea;
+    }
 }
 
-.class-ref{
+.parent-wrapper {
+    display: table;
+
+    i{
+        padding-left: 12px;
+        color: #ff6767;
+
+        &:hover {
+            color: #f84242;
+            cursor: pointer;
+        }
+    }
+
+    *{
+        display: table-cell;
+    }
+}
+
+.class-ref {
     margin-bottom: 1rem;
     display: block;
     color: #b1b1b1;
     font-weight: 500;
     transition: 200ms ease;
-
     &:hover {
         text-decoration: none;
         color: #cacaca;
@@ -112,11 +137,12 @@ body {
 
 .manipulate-buttons-con {
     justify-content: flex-end;
-
+    margin-top: 18px;
     button {
         margin-right: 12px;
     }
 }
+
 
 /* end viewStudent*/
 
@@ -134,7 +160,6 @@ body {
     padding-top: 15px;
     background-color: white;
     border-bottom: 0.13em solid rgb(155, 154, 154);
-
     &:focus {
         border-color: rgb(102, 102, 102);
         outline: 0;
@@ -149,6 +174,7 @@ body {
 
 
 /* DROPDOWN */
+
 .no-hover {
     background-image: none;
     background-color: rgba(255, 255, 255, 0) !important;
@@ -160,44 +186,34 @@ body {
 
 .dropdown-menu {
     padding: 0;
-
     .dropdown-divider {
         margin: 0;
     }
-
     .dropdown-item {
         padding: 12px;
-        
         &:hover {
             background-color: rgba(233, 233, 233, 0.39);
         }
     }
-
     a:first-child {
         border-top-left-radius: 0.25rem;
         border-top-right-radius: 0.25rem;
     }
-
     a:last-child {
         border-bottom-left-radius: 0.25rem;
         border-bottom-right-radius: 0.25rem;
     }
 }
 
-
-
 .logout {
     display: inline;
     text-decoration: none !important;
-
     .logout-con {
         color: #999;
-    
         &:hover {
             color: gray;
         }
     }
-
     .fa-sign-out {
         margin-top: 3px;
         margin-right: 5px;
@@ -254,13 +270,12 @@ table>thead>tr>th>div {
 .display-row {
     cursor: pointer;
     transition: background-color 0.5s ease;
-
     &:hover {
-        background-color: #f1fbff;;
+        background-color: #f1fbff;
+        ;
     }
 }
 
 .sipka-hide {
     visibility: hidden;
 }
-

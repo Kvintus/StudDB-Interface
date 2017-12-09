@@ -94,7 +94,7 @@ def students():
         # Sort the array based on the parameter provided by user
         sortedArray = sortDataOnUnicodeKey(response.get('students'), params.get('orderBy'))
         
-        return render_template('students/listStudents.html', user = session['user'],orderBy = params['orderBy'], data=response['students'], current = 'students', currentAdd = 'student', orderDirection = request.args.get('order'))
+        return render_template('students/listStudents.html', user = session['user'],orderBy = params['orderBy'], data=response['students'], current = 'students', currentAdd = {'what':'student','where':url_for('addStudent')}, orderDirection = request.args.get('order'))
     except:
         raise
         return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down')
@@ -124,7 +124,7 @@ def classes():
         # Sort the array based on the parameter provided by user
         sortedArray = sortDataOnUnicodeKey(response.get('classes'), params.get('orderBy'))
         
-        return render_template('classes/listClasses.html', user = session['user'],orderBy = params['orderBy'], data=response['classes'], current = 'classes', orderDirection = request.args.get('order'), currentAdd = 'class')
+        return render_template('classes/listClasses.html', user = session['user'],orderBy = params['orderBy'], data=response['classes'], current = 'classes', orderDirection = request.args.get('order'), currentAdd = {'what':'class','where':url_for('addClass')})
     except:
         raise
         return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down')
@@ -153,7 +153,7 @@ def professors():
         # Sort the array based on the parameter provided by user
         sortedArray = sortDataOnUnicodeKey(response.get('professors'), params.get('orderBy'))
         
-        return render_template('professors/listProfessors.html', user = session['user'],orderBy = params['orderBy'], data=response['professors'], current = 'professors', orderDirection = request.args.get('order'), currentAdd = 'professor')
+        return render_template('professors/listProfessors.html', user = session['user'],orderBy = params['orderBy'], data=response['professors'], current = 'professors', orderDirection = request.args.get('order'), currentAdd = {'what':'professor','where':url_for('addProfessor')})
     except:
         return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down')
 
@@ -169,7 +169,7 @@ def parents():
     
 
 # viewStudent
-@app.route('/students/viewStudent', methods=['GET'])
+@app.route('/students/view', methods=['GET'])
 @login_required
 def viewStudent():
     ourId = None
@@ -197,7 +197,7 @@ def viewStudent():
         return apology(message="We are sorry the API server is down. Or the ID you provided is non-existent",title='Server Down')
 
 # editStudent
-@app.route('/students/editStudent', methods=['GET'])
+@app.route('/students/edit', methods=['GET'])
 @login_required
 def editStudent():
     if session['user']['privilege'] >= 3:
@@ -266,3 +266,27 @@ def deleteStudentRoute():
     except:
         raise
         return 'fail'
+
+# viewClass
+@app.route('/classes/add', methods=['GET'])
+@login_required
+def addClass():
+    return 'work in progress'
+
+# viewClass
+@app.route('/students/add', methods=['GET'])
+@login_required
+def addStudent():
+    return 'work in progress'
+
+# viewClass
+@app.route('/professors/add', methods=['GET'])
+@login_required
+def addProfessor():
+    return 'work in progress'
+
+# viewClass
+@app.route('/parents/add', methods=['GET'])
+@login_required
+def addParent():
+    return 'work in progress'

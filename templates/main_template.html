@@ -25,7 +25,7 @@
                     </li>
                     <% if currentAdd %>
                     <li id="nav-parents" class="nav-item">
-                            <a class="add-menu-button btn btn-outline-success" href="%% url_for('parents') %%">Add %% currentAdd %%</a>
+                            <a class="add-menu-button btn btn-outline-success" href="%% currentAdd['where'] %%">Add %% currentAdd['what'] %%</a>
                     </li>
                     <% endif %>
                 </ul>

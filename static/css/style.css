@@ -12,6 +12,18 @@ body {
   }
 }
 
+#add-parent-button {
+  margin-left: 20px;
+  color: gray;
+  display: inline-block;
+  font-size: 20px;
+  transition: 200ms ease;
+}
+
+#add-parent-button:hover {
+  color: #525252;
+}
+
 /* viewStudent */
 #vs-info-wrap {
   text-align: right;
@@ -63,6 +75,7 @@ body {
 }
 
 .view-rel-headline {
+  display: inline-block;
   color: gray;
   font-size: 26px;
   margin-bottom: 5px;
@@ -98,6 +111,24 @@ body {
   background-color: #eaeaea;
 }
 
+.parent-wrapper {
+  display: table;
+}
+
+.parent-wrapper i {
+  padding-left: 12px;
+  color: #ff6767;
+}
+
+.parent-wrapper i:hover {
+  color: #f84242;
+  cursor: pointer;
+}
+
+.parent-wrapper * {
+  display: table-cell;
+}
+
 .class-ref {
   margin-bottom: 1rem;
   display: block;
@@ -113,6 +144,7 @@ body {
 
 .manipulate-buttons-con {
   justify-content: flex-end;
+  margin-top: 18px;
 }
 
 .manipulate-buttons-con button {

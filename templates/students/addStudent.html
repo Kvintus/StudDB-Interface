@@ -1,5 +1,5 @@
 <% extends "main_template.html" %>
-    <% block title %>%% student['surname'] %% %% student['name'] %%
+    <% block title %> Add student
         <%endblock%>
             <% block content %>
 
@@ -15,11 +15,7 @@
                     <form id="validationForm"></form>
                     <div class="row">
                         <div class="col prof-image-con">
-                            <% if isMale %>
-                                <img src="%% url_for('static', filename='images/placeholder_male.jpg') %%" alt="">
-                                <% else %>
-                                    <img src="%% url_for('static', filename='images/placeholder_female.jpg') %%" alt="">
-                                    <% endif %>
+                            <img src="%% url_for('static', filename='images/placeholder_male.jpg') %%" alt="">
                         </div>
                         <div class="col vs-text-con">
                             <div>
@@ -31,8 +27,7 @@
                                         </td>
                                         <td>
                                             <div style="margin-bottom:1rem;" class="col-sm-10">
-                                                <input data-validation="name" id="nameInput" class="form-control" value="%% student['name'] %%" placeholder="%% student['name'] %%"
-                                                    type="text" onkeyup="checkkValidity(event)">
+                                                <input data-validation="name" id="nameInput" placeholder="Name" class="form-control" type="text" onkeyup="checkkValidity(event)">
                                             </div>
 
                                         </td>
@@ -43,17 +38,8 @@
                                         </td>
                                         <td>
                                             <div style="margin-bottom:1rem;" class="col-sm-10">
-                                                <input data-validation="surname" id="surnameInput" class="form-control" value="%% student['surname'] %%" placeholder="%% student['surname'] %%"
-                                                    onkeyup="checkkValidity(event)">
+                                                <input data-validation="surname" id="surnameInput" class="form-control" placeholder="Surname" onkeyup="checkkValidity(event)">
                                             </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="vs-table-info">
-                                            <p>ID:</p>
-                                        </td>
-                                        <td>
-                                            <p style="color: rgb(206, 206, 206)">%% student['id'] %%</p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -62,7 +48,7 @@
                                         </td>
                                         <td>
                                             <div style="margin-bottom:1rem;" class="col-sm-10">
-                                                <input id="classIDInput" class="form-control" value="%% student['class']['id'] %%" placeholder="remove">
+                                                <input id="classIDInput" class="form-control" placeholder="Class ID">
                                             </div>
                                         </td>
                                     </tr>
@@ -83,7 +69,7 @@
                                     </td>
                                     <td>
                                         <div style="margin-bottom:1rem;" class="col-sm-12">
-                                            <input id="emailInput" class="form-control" value="%% student['email'] %%" type="text">
+                                            <input id="emailInput" class="form-control" type="text" placeholder="Email">
                                         </div>
                                     </td>
                                 </tr>
@@ -95,7 +81,7 @@
                                     </td>
                                     <td>
                                         <div style="margin-bottom:1rem;" class="col-sm-12">
-                                            <input id="phoneInput" class="form-control" value="%% student['phone'] %%" placeholder="%% student['phone']%%">
+                                            <input id="phoneInput" class="form-control" placeholder="Phone number">
                                         </div>
                                     </td>
                                 </tr>
@@ -107,7 +93,7 @@
                                     </td>
                                     <td>
                                         <div class="col-sm-12">
-                                            <input id="adressInput" class="form-control" value="%% student['adress'] %%" placeholder="%% student['adress']%%">
+                                            <input id="adressInput" class="form-control" placeholder="Adress">
                                         </div>
                                     </td>
                                 </tr>
@@ -115,28 +101,15 @@
                         </div>
                         <div class="col main-parent-con">
                             <div>
-                                <p class="view-rel-headline">Parents</p>
-                                <p id="add-parent-button">
-                                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                                </p>
+                                <p class="view-rel-headline">Parents</p><button><i class="fa fa-plus" aria-hidden="true"></i>
+                                </button>
                                 <div class="parents-con">
-                                    <% for parent in student['parents'] %>
-                                        <div class="col-sm-10 parent-wrapper">
-                                            <input class="form-control parentIDInput" value="%% parent['id'] %%" placeholder="%% parent['id'] %%">
-                                            <i onclick="hideParent(this)" class="fa fa-times" aria-hidden="true"></i>
-
-                                        </div>
-                                        <% endfor %>
                                 </div>
-
                             </div>
                         </div>
                     </div>
                     <div class="row manipulate-buttons-con">
                         <button id="updateStudent" class="btn btn-outline-primary">Save</button>
-                        <button id="deleteStudent" class="btn btn-outline-danger">
-                            Delete
-                        </button>
                     </div>
                 </div>
 
@@ -145,6 +118,7 @@
                         'name': true,
                         'surname': true
                     }
+
                     // Validation
                     function checkkValidity(event) {
                         let $target = $(event.target);
@@ -197,10 +171,6 @@
                                 alert(errMsg);
                             }
                         });
-                    }
-
-                    function hideParent(thiso) {
-                        $(thiso).parent().fadeOut(100);
                     }
 
 
@@ -268,16 +238,7 @@
                                 $('#alertMessage').find('p').text('All fields in red are required!');
                                 $('#alertMessage').show(200);
                             }
-                        });
-
-                        $parentCon = $('.parents-con').first();
-                        inputParentField =
-                            '<div class="col-sm-10 parent-wrapper"><input class="form-control parentIDInput"><i onclick="hideParent(this)" class="fa fa-times" aria-hidden="true"></i></div>';
-                        $('#add-parent-button').on('click', () => {
-                            $parentCon.append(inputParentField);
-                        });
-
-    
+                        })
                     })
                 </script>
 
