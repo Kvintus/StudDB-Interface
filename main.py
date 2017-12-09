@@ -190,8 +190,7 @@ def viewStudent():
 
         return render_template('students/viewStudent.html', userName = session['user']['username'], student=r['student'])
     except:
-        raise
-        return apology(message="We are sorry the API server is down.",title='Server Down')
+        return apology(message="We are sorry the API server is down. Or the ID you provided is non-existent",title='Server Down')
 
 # editStudent
 @app.route('/students/editStudent', methods=['GET'])
