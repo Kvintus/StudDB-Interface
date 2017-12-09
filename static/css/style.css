@@ -2,6 +2,16 @@ body {
   padding-top: 3.1rem;
 }
 
+.add-menu-button {
+  margin-left: 50px;
+}
+
+@media screen and (max-width: 768px) {
+  .add-menu-button {
+    margin-left: 0px;
+  }
+}
+
 /* viewStudent */
 #vs-info-wrap {
   text-align: right;

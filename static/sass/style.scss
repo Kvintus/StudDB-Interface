@@ -4,6 +4,14 @@ body {
     padding-top: 3.1rem;
 }
 
+.add-menu-button {
+    margin-left:50px;
+
+    @media screen and (max-width: 768px){
+        margin-left: 0px; 
+    }
+}
+
 /* viewStudent */
 #vs-info-wrap {
     text-align: right;
@@ -27,7 +35,7 @@ body {
 
 .vs-text-con {
     font-size: 22px;
-    
+
     align-items: center;
     display: flex;
     justify-content: center;

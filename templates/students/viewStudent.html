@@ -5,7 +5,11 @@
 
             <div class="row">
                 <div class="col prof-image-con">
-                    <img src="%% url_for('static', filename='images/prof_placeholder.jpg') %%" alt="">
+                    <% if isMale %>
+                        <img src="%% url_for('static', filename='images/placeholder_male.jpg') %%" alt="">
+                    <% else %>
+                        <img src="%% url_for('static', filename='images/placeholder_female.jpg') %%" alt="">
+                    <% endif %>
                 </div>
                 <div class="col vs-text-con">
                     <div>
