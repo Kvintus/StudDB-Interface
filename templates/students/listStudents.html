@@ -1,8 +1,10 @@
-<% extends "main_template.html" %> <% block content %>
+<% extends "main_template.html" %> 
+<% block title %> Students <% endblock %>
+<% block content %>
 <table id="tabulka" class="table sticky-header">
     <thead class="table-header">
         <tr>
-            <th data-tsorter="numeric">
+            <th class="student-table-id" data-tsorter="numeric">
                 <div>
                     <input id="inputID" onkeyup="filterByID()" class="table-header" type="text" placeholder="#">
                     <img onclick="switchB(this)" data-sorterID="id" class="sipka sorter" src="%% url_for('static', filename='images/icons/desc.png') %%"
@@ -24,13 +26,13 @@
                         alt="" srcset="">
                 </div>
             </th>
-            <th>
+            <th class="student-table-email">
                 <div>
                     <input class="table-header dis" type="text" placeholder="Email" disabled>
                     <div class="placeholderDiv"></div>
                 </div>
             </th>
-            <th>
+            <th class="student-table-phone">
                 <div>
                     <input class="table-header dis" type="text" placeholder="Telefon" disabled>
                     <div class=""></div>
@@ -39,22 +41,34 @@
         </tr>
     </thead>
     <tbody>
-        <% for student in ala %>
-        <tr>
-            <td>%% student['id']%%</td>
-            <td>%% student['name'] %%</td>
-            <td>%% student['surname'] %%</td>
-            <td>%% student['email'] %%</td>
-            <td>%% student['phone'] %%</td>
-        </tr>
-        <% endfor %>
+        <% if orderDirection == 'asc' %>
+            <% for student in data | reverse %>
+            <tr class="display-row">
+                <td class="student-table-id">%% student['id']%%</td>
+                <td>%% student['name'] %%</td>
+                <td>%% student['surname'] %%</td>
+                <td class="student-table-email" >%% student['email'] %%</td>
+                <td class="student-table-phone" >%% student['phone'] %%</td>
+            </tr>
+            <% endfor %>
+        <% else %>
+            <% for student in data %>
+            <tr class="display-row">
+                <td class="student-table-id">%% student['id']%%</td>
+                <td>%% student['name'] %%</td>
+                <td>%% student['surname'] %%</td>
+                <td class="student-table-email">%% student['email'] %%</td>
+                <td class="student-table-phone" >%% student['phone'] %%</td>
+            </tr>
+            <% endfor %>
+        <% endif %>
     </tbody>
 </table>
 
 <script>
     mainSorter = {
-        ID: '%% by %%',
-        order: 'desc'
+        ID: '%% orderBy %%',
+        order: '%% orderDirection %%'
     }
 
     function switchB(caller) {
@@ -64,29 +78,39 @@
             mainSorter.order = 'desc';
 
         } else {
-            //Nerobime nic s ostatnymi
             //Zmenime mainSorter order
             if (mainSorter.order === 'asc') {
                 mainSorter.order = 'desc';
-                caller.src = "%% url_for('static', filename='images/icons/desc.png') %%";
             } else {
                 mainSorter.order = 'asc';
-                caller.src = "%% url_for('static', filename='images/icons/asc.png') %%";
             }
         }
-        window.location.replace('%% url_for("index")%%' + '?orderBy=' + mainSorter.ID)
+        window.location.replace('%% url_for("students")%%' + '?orderBy=' + mainSorter.ID + '&order=' + mainSorter.order)
     }
 
     $(() => {
+
+        if (mainSorter.order === "None") {
+            mainSorter.order = "desc";
+        }
         //Zmenit znaky na vsetkych ostatnych
         ostatne = document.getElementsByClassName('sorter');
-        console.log('ostatne len: ' + ostatne.length);
         for (var i = 0; i < ostatne.length; i++) {
             ostatne[i].src = "%% url_for('static', filename='images/icons/no.png')%%";
             if (ostatne[i].getAttribute('data-sorterID') == mainSorter.ID){
-                ostatne[i].src = "%% url_for('static', filename='images/icons/desc.png') %%";
+                if (mainSorter.order === 'desc') {
+                    ostatne[i].src = "%% url_for('static', filename='images/icons/desc.png') %%";
+                }else {
+                    ostatne[i].src = "%% url_for('static', filename='images/icons/asc.png') %%";
+                }
             }
         }
+        
+
+        $('.display-row').on('click', (event)=>{
+            let idOfThisRow = event.currentTarget.firstElementChild.innerHTML;
+            window.location.href = "%% url_for('viewStudent')%%" + '?id=' + idOfThisRow;
+        })
 
         $('#nav-' + '%% current %%').addClass('active');
     })

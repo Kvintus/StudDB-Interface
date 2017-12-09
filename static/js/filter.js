@@ -31,7 +31,6 @@ function filterByID() {
     for (var i = 0; i < tr.length; i++) {
         id_Col = tr[i].getElementsByTagName('td')[0];
 
-        //Checks if both column are populted
         if (id_Col) {
             if (id_Col.innerHTML.toUpperCase() == filterID || filterID == "") {
                 tr[i].style.display = "";
@@ -42,6 +41,7 @@ function filterByID() {
     }
 }
 
+
 function deleteIDFilter() {
     document.getElementById('inputID').value = "";
 }
@@ -51,7 +51,6 @@ function menaFilter() {
     deleteIDFilter();
     mainFilter();
 }
-
 
 function priezvFilter() {
     surnameFilter = document.getElementById('inputSurname').value.toUpperCase();

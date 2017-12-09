@@ -1,61 +1,30 @@
-from flask import Flask, flash, redirect, render_template, request, session, url_for, jsonify, make_response, Response
-from passlib.hash import pbkdf2_sha256 as sha256
-from sqlalchemy.sql.functions import func
-from flask_sqlalchemy import SQLAlchemy
-from assets.custom import CustomFlask 
-from flask_session import Session
-from tempfile import mkdtemp
-from functools import wraps
-import urllib.request
-import json
+from helpers import *
+from flask import request
 
-db = SQLAlchemy()
-app = CustomFlask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///assets/users.db'
-db.init_app(app)
+#api_server = "https://stud-db-api.herokuapp.com"
+api_server = "http://127.0.0.1:5000"
 
-app.config["SESSION_FILE_DIR"] = mkdtemp()
-app.secret_key = 'super secret key'
-app.config['SESSION_TYPE'] = 'filesystem'
-Session(app)
+# Index
+@app.route('/')
+def index():
+    return redirect('students')
 
-# to login
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if session.get('user') is None:
-            return redirect(url_for('login', next=request.url))
-        return f(*args, **kwargs)
-    return decorated_function
-
+####################################################
+# LOGIN AND REGISTER
+####################################################
 @app.route('/register', methods=['POST', 'GET'])
 @login_required
 def register():
     if request.method == 'GET':
         if session['user']['privilege'] == 5:
-            return render_template('register.html')
+            return render_template('register.html', user = session['user'])
         else:
-            return render_template('apology.html', message = "We are sorry but you don't have a permission to access this site.")
+            return apology(message = "We are sorry but you do not have a permission to register new users.", title="Permision denied")
     elif request.method == 'POST':
         # TODO bude treba spravit checking
-        print(request.form.get('password'))
         db.engine.execute('INSERT INTO users("username", "hash", "privilege") VALUES(:username, :hashh, :privilege)', {'username' : request.form.get('username'), 'hashh': sha256.hash(request.form.get('password')), 'privilege': request.form.get('privilege')})
         return redirect( url_for('login') )
 
-@app.route('/')
-@login_required
-def index():
-    response = None
-    
-    orderBy = request.args.get('orderBy')
-    if orderBy is None:
-        orderBy = 'id'
-    ourUrl = "https://stud-db-api.herokuapp.com/api/students?orderBy={}".format(orderBy)
-    print(ourUrl)
-    with urllib.request.urlopen(ourUrl) as url:
-        response = json.loads(url.read().decode())
-    
-    return render_template('listStudents.html',by = orderBy, ala=response['students'], current = 'students')
 
 # index 
 @app.route('/login', methods=["POST", "GET"])
@@ -93,5 +62,268 @@ def login():
         # redirect user to home page
         return redirect(url_for("index"))
     else:
-        return render_template("login.html")
+        nextt = request.args.get('next')
+        return render_template("login.html", ne = nextt)
 
+##########################################################
+# MAIN TABLES
+##########################################################
+
+# Student table
+@app.route('/students')
+@login_required
+def students():
+    
+    # Store all the parameters from user in one variable
+    params = {
+        'orderBy': request.args.get('orderBy')
+    }
+    
+    # Set default sorting to id
+    if params['orderBy'] is None:
+        params['orderBy'] = 'id'
+    
+    # Fetch all the students from the API
+    response = None
+    try:
+        ourUrl = api_server + "/api/students?" + urlencode(params, quote_via=quote_plus)
+
+        with urllib.request.urlopen(ourUrl) as url:
+            response = json.loads(url.read().decode())
+
+        # Sort the array based on the parameter provided by user
+        sortedArray = sortDataOnUnicodeKey(response.get('students'), params.get('orderBy'))
+        
+        return render_template('students/listStudents.html', user = session['user'],orderBy = params['orderBy'], data=response['students'], current = 'students', currentAdd = {'what':'student','where':url_for('addStudent')}, orderDirection = request.args.get('order'))
+    except:
+        return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down', user = session['user'])
+        
+# Class table
+@app.route('/classes')
+@login_required
+def classes():
+    
+    # Store all the parameters from user in one variable
+    params = {
+        'orderBy': request.args.get('orderBy')
+    }
+    
+    # Set default sorting to id
+    if params['orderBy'] is None:
+        params['orderBy'] = 'id'
+    
+    # Fetch all the professors from the API
+    response = None
+    try:
+        ourUrl = api_server + "/api/classes"
+
+        with urllib.request.urlopen(ourUrl) as url:
+            response = json.loads(url.read().decode())
+
+        # Sort the array based on the parameter provided by user
+        sortedArray = sortDataOnUnicodeKey(response.get('classes'), params.get('orderBy'))
+        
+        return render_template('classes/listClasses.html', user = session['user'],orderBy = params['orderBy'], data=response['classes'], current = 'classes', orderDirection = request.args.get('order'), currentAdd = {'what':'class','where':url_for('addClass')})
+    except:
+        raise
+        return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down', user = session['user'])
+
+# Professors table
+@app.route('/professors')
+@login_required
+def professors():
+        # Store all the parameters from user in one variable
+    params = {
+        'orderBy': request.args.get('orderBy')
+    }
+    
+    # Set default sorting to id
+    if params['orderBy'] is None:
+        params['orderBy'] = 'id'
+    
+    # Fetch all the students from the API
+    response = None
+    try:
+        ourUrl = api_server + "/api/professors"
+
+        with urllib.request.urlopen(ourUrl) as url:
+            response = json.loads(url.read().decode())
+
+        # Sort the array based on the parameter provided by user
+        sortedArray = sortDataOnUnicodeKey(response.get('professors'), params.get('orderBy'))
+        
+        return render_template('professors/listProfessors.html', user = session['user'],orderBy = params['orderBy'], data=response['professors'], current = 'professors', orderDirection = request.args.get('order'), currentAdd = {'what':'professor','where':url_for('addProfessor')})
+    except:
+        return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down', user = session['user'])
+
+@app.route('/parents')
+@login_required
+def parents():
+    # Store all the parameters from user in one variable
+    params = {
+        'orderBy': request.args.get('orderBy')
+    }
+    
+    # Set default sorting to id
+    if params['orderBy'] is None:
+        params['orderBy'] = 'id'
+    
+    # Fetch all the students from the API
+    response = None
+    try:
+        ourUrl = api_server + "/api/parents?" + urlencode(params, quote_via=quote_plus)
+
+        with urllib.request.urlopen(ourUrl) as url:
+            response = json.loads(url.read().decode())
+
+        # Sort the array based on the parameter provided by user
+        sortedArray = sortDataOnUnicodeKey(response.get('parents'), params.get('orderBy'))
+        
+        return render_template('parents/listParents.html', user = session['user'], orderBy = params['orderBy'], data=response['parents'], current = 'parents', currentAdd = {'what':'parents','where':url_for('addParent')}, orderDirection = request.args.get('order'))
+    except:
+        raise
+        return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down', user = session['user'])
+
+
+################################################
+# DIPLAY ONE
+################################################
+    
+
+# viewStudent
+@app.route('/students/view', methods=['GET'])
+@login_required
+def viewStudent():
+    ourId = None
+    r = None
+    
+    # Getting the id of the student we should display
+    try:
+        ourId = request.args.get('id')
+    except:
+        apology(message="No user specified", title="No user")
+    
+    # Getting the student's info
+    try:
+        ourUrl = api_server + "/api/students/getOne?id={}".format(ourId)
+        
+        with urllib.request.urlopen(ourUrl) as url:
+            r = json.loads(url.read().decode())
+        
+        isMale = True
+        if r['student']['surname'][-3:] == "ová" or r['student']['surname'][-3:] == "ova":
+            isMale = False
+
+        return render_template('students/viewStudent.html', user = session['user'], student=r['student'], isMale = isMale, userPrivilege = session['user']['privilege'])
+    except:
+        return apology(message="We are sorry the API server is down. Or the ID you provided is non-existent",title='Server Down')
+
+# editStudent
+@app.route('/students/edit', methods=['GET'])
+@login_required
+def editStudent():
+    if session['user']['privilege'] >= 3:
+        ourId = None
+        r = None
+        
+        # Getting the id of the student we should display
+        try:
+            ourId = request.args.get('id')
+        except:
+            apology(message="No user specified", title="No user")
+        
+        # Getting the student's info
+        try:
+            ourUrl = api_server + "/api/students/getOne?id={}".format(ourId)
+            
+            with urllib.request.urlopen(ourUrl) as url:
+                r = json.loads(url.read().decode())
+
+            isMale = True
+            if r['student']['surname'][-3:] == "ová" or r['student']['surname'][-3:] == "ova":
+                isMale = False
+
+            return render_template('students/editStudent.html', user = session['user'], student=r['student'], server = api_server, isMale = isMale)
+        except:
+            return apology(message="We are sorry the API server is down or the ID specified is wrong.",title='Server Down')
+    else:
+        return apology(message = "We are sorry but you do not have a permission to edit students.", title="Permision denied")
+    
+
+# addStudent
+@app.route('/students/add', methods=['GET'])
+@login_required
+def addStudent():
+    if session['user']['privilege'] >= 3:
+            return render_template('students/addStudent.html', user = session['user'], server = api_server)
+    else:
+        return apology(message = "We are sorry but you do not have a permission to add students.", title="Permision denied")
+
+# updateStudentRoute
+@app.route('/students/addStudentRoute', methods = ['POST'])
+def addStudentRoute():
+    try:
+        url = api_server + "/api/students/add"
+        r = requests.post(url, json=request.get_json())
+
+        return jsonify(r.json())
+    except:
+        raise
+        return 'fail'
+
+
+# viewParent
+@app.route('/parents/viewParent', methods=['GET'])
+@login_required
+def viewParent():
+    return 'work in progress'
+
+# viewClass
+@app.route('/classes/viewClass', methods=['GET'])
+@login_required
+def viewClass():
+    return 'work in progress'
+
+
+# updateStudentRoute
+@app.route('/students/updateStudentRoute', methods = ['POST'])
+def updateStudentRoute():
+    try:
+        url = api_server + "/api/students/update"
+        r = requests.post(url, json=request.get_json())
+
+        return jsonify(r.json())
+    except:
+        raise
+        return 'fail'
+
+# updateStudentRoute
+@app.route('/students/delete', methods = ['POST'])
+def deleteStudentRoute():
+    try:
+        url = api_server + "/api/students/remove"
+        r = requests.post(url, json=request.get_json())
+
+        return jsonify(r.json())
+    except:
+        raise
+        return 'fail'
+
+# viewClass
+@app.route('/classes/add', methods=['GET'])
+@login_required
+def addClass():
+    return 'work in progress'
+
+
+# viewClass
+@app.route('/professors/add', methods=['GET'])
+@login_required
+def addProfessor():
+    return 'work in progress'
+
+# viewClass
+@app.route('/parents/add', methods=['GET'])
+@login_required
+def addParent():
+    return 'work in progress'
