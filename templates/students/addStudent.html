@@ -43,15 +43,16 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                            <td class="vs-table-info">
-                                                <p>Start: </p>
-                                            </td>
-                                            <td>
-                                                <div style="margin-bottom:1rem;" class="col-sm-10">
-                                                    <input onkeyup="checkkValidity(event)" data-validation="start" id="startInput" class="form-control is-invalid" placeholder="Year" type="number">
-                                                </div>
-                                            </td>
-                                        </tr>
+                                        <td class="vs-table-info">
+                                            <p>Start: </p>
+                                        </td>
+                                        <td>
+                                            <div style="margin-bottom:1rem;" class="col-sm-10">
+                                                <input onkeyup="checkkValidity(event)" data-validation="start" id="startInput" class="form-control is-invalid" placeholder="Year"
+                                                    type="number">
+                                            </div>
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <td class="vs-table-info">
                                             <p>Class ID: </p>
@@ -62,7 +63,7 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    
+
                                 </table>
 
                             </div>
@@ -116,7 +117,8 @@
                                     </td>
                                     <td>
                                         <div class="col-sm-12">
-                                            <input onkeyup="checkkValidity(event)" data-validation="birth" id="birthInput" class="form-control is-invalid" placeholder="Birthday">
+                                            <input onkeyup="checkkValidity(event)" data-validation="birth" id="birthInput" type="date" class="form-control is-invalid"
+                                                placeholder="Birthday">
                                         </div>
                                     </td>
                                 </tr>
@@ -140,10 +142,15 @@
                 </div>
 
                 <script>
+                    let regexp = new RegExp("^\\+([0-9]{3})\x20([0-9]{3})\x20([0-9]{3})\x20([0-9]{3})$");
+                    let emailReg = new RegExp(
+                        '/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'
+                    );
                     let requiredInputs = {
                         'name': false,
                         'surname': false,
-                        'birth': false
+                        'birth': false,
+                        'start': false
                     }
                     // Validation
                     function checkkValidity(event) {
@@ -237,7 +244,8 @@
                             let allValid = true;
                             for (key in requiredInputs) {
                                 if (requiredInputs[key] === false) {
-                                    allValid = false;7
+                                    allValid = false;
+                                    7
                                 }
                             }
 
@@ -256,7 +264,26 @@
                             $parentCon.append(inputParentField);
                         });
 
+                        $("#phoneInput").blur(function () {
+                            var no = $("#phoneInput").val();
+                            if (!regexp.test(no)) {
+                                console.log('peter');
+                                $('#alertMessage').find('p').text(
+                                    'Invalid telephone number format | Example: +421 948 555 555');
+                                $('#alertMessage').show(200);
+                            }
 
+                        });
+
+
+                        $("#emailInput").blur(function () {
+                            var emailVal = $("#emailInput").val();
+                            if (!emailReg.test(emailVal) && emailVal.length > 0) {
+                                $('#alertMessage').find('p').text(
+                                    'Invalid email adress format | Example: guest@gmail.com');
+                                $('#alertMessage').show(200);
+                            }
+                        });
                     })
                 </script>
 
