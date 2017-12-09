@@ -188,7 +188,7 @@ def viewStudent():
             r = json.loads(url.read().decode())
         
         isMale = True
-        if r['student']['surname'][-3:] == "ová":
+        if r['student']['surname'][-3:] == "ová" or r['student']['surname'][-3:] == "ova":
             isMale = False
 
         return render_template('students/viewStudent.html', user = session['user'], student=r['student'], isMale = isMale, userPrivilege = session['user']['privilege'])
@@ -217,7 +217,7 @@ def editStudent():
                 r = json.loads(url.read().decode())
 
             isMale = True
-            if r['student']['surname'][-3:] == "ová":
+            if r['student']['surname'][-3:] == "ová" or r['student']['surname'][-3:] == "ova":
                 isMale = False
 
             return render_template('students/editStudent.html', user = session['user'], student=r['student'], server = api_server, isMale = isMale)
