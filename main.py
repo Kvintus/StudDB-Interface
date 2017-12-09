@@ -179,7 +179,7 @@ def parents():
         # Sort the array based on the parameter provided by user
         sortedArray = sortDataOnUnicodeKey(response.get('parents'), params.get('orderBy'))
         
-        return render_template('parents/listParents.html', user = session['user'], orderBy = params['orderBy'], data=response['parents'], current = 'parents', currentAdd = {'what':'parents','where':url_for('addParent')}, orderDirection = request.args.get('order'))
+        return render_template('parents/listParents.html', user = session['user'], orderBy = params['orderBy'], data=response['parents'], current = 'parents', currentAdd = {'what':'parent','where':url_for('addParent')}, orderDirection = request.args.get('order'))
     except:
         raise
         return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down', user = session['user'])
