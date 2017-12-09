@@ -129,7 +129,7 @@
                     </div>
                     <div class="row manipulate-buttons-con">
                         <button id="updateStudent" class="btn btn-outline-primary">Save</button>
-                        <button class="btn btn-outline-danger">
+                        <button id="deleteStudent" class="btn btn-outline-danger">
                             Delete
                         </button>
                     </div>
@@ -219,7 +219,29 @@
                             $('#alertMessage').hide(200);
                         })
 
-
+                        $('#deleteStudent').on('click', (event) => {
+                            let student = {
+                                'id': "%% student['id'] %%"
+                            }
+                            $.ajax({
+                                type: "post",
+                                url: "%% url_for('deleteStudentRoute') %%",
+                                // The key needs to match your method's input parameter (case-sensitive).
+                                data: JSON.stringify(student),
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                success: function (data) {
+                                    if (data.success) {
+                                        window.location.href = "%% url_for('students') %%";
+                                    } else {
+                                        console.log(data)
+                                    }
+                                },
+                                failure: function (errMsg) {
+                                    alert(errMsg);
+                                }
+                            });
+                        });
 
                         $("#updateStudent").on('click', () => {
                             // Creating a student to post

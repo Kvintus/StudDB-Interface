@@ -243,11 +243,23 @@ def viewClass():
     return 'work in progress'
 
 
-# viewParent
+# updateStudentRoute
 @app.route('/students/updateStudentRoute', methods = ['POST'])
 def updateStudentRoute():
     try:
         url = api_server + "/api/students/update"
+        r = requests.post(url, json=request.get_json())
+
+        return jsonify(r.json())
+    except:
+        raise
+        return 'fail'
+
+# updateStudentRoute
+@app.route('/students/delete', methods = ['POST'])
+def deleteStudentRoute():
+    try:
+        url = api_server + "/api/students/remove"
         r = requests.post(url, json=request.get_json())
 
         return jsonify(r.json())
