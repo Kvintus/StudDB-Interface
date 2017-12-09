@@ -1,3 +1,5 @@
+$nice-gray: #b1b1b1;
+
 body {
     padding-top: 3.1rem;
 }
@@ -10,7 +12,7 @@ body {
 }
 
 .parentIDInput {
-    margin-bottom: 1rem;
+    margin-bottom: 10px;
 }
 
 #add-parent-button {
@@ -55,11 +57,14 @@ body {
 }
 
 .prof-image-con {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-bottom: 18px;
+    
     img {
         border-radius: 50%;
-        width: 200px;
+        width: 230px;
     }
 }
 
@@ -127,15 +132,19 @@ body {
     }
 }
 
+.vs-gray-info {
+    color: $nice-gray;
+}
+
 .class-ref {
     margin-bottom: 1rem;
     display: block;
-    color: #b1b1b1;
+    color: $nice-gray;
     font-weight: 500;
     transition: 200ms ease;
     &:hover {
         text-decoration: none;
-        color: #cacaca;
+        color: #808080;
     }
 }
 

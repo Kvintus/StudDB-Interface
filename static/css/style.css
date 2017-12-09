@@ -13,7 +13,7 @@ body {
 }
 
 .parentIDInput {
-  margin-bottom: 1rem;
+  margin-bottom: 10px;
 }
 
 #add-parent-button {
@@ -59,13 +59,15 @@ body {
 }
 
 .prof-image-con {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 18px;
 }
 
 .prof-image-con img {
   border-radius: 50%;
-  width: 200px;
+  width: 230px;
 }
 
 @media screen and (max-width: 875px) {
@@ -133,6 +135,10 @@ body {
   display: table-cell;
 }
 
+.vs-gray-info {
+  color: #b1b1b1;
+}
+
 .class-ref {
   margin-bottom: 1rem;
   display: block;
@@ -143,7 +149,7 @@ body {
 
 .class-ref:hover {
   text-decoration: none;
-  color: #cacaca;
+  color: #808080;
 }
 
 .manipulate-buttons-con {

@@ -57,12 +57,22 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                            <td class="vs-table-info">
+                                                <p>Start: </p>
+                                            </td>
+                                            <td>
+                                                <div style="margin-bottom:1rem;" class="col-sm-10">
+                                                    <input onkeyup="checkkValidity(event)" data-validation="start" id="startInput" class="form-control" value="%% student['start'] %%" placeholder="%% student['start'] %%"  type="number">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <tr>
                                         <td class="vs-table-info">
                                             <p>Class ID: </p>
                                         </td>
                                         <td>
                                             <div style="margin-bottom:1rem;" class="col-sm-10">
-                                                <input id="classIDInput" class="form-control" value="%% student['class']['id'] %%" placeholder="remove">
+                                                <input id="classIDInput" class="form-control" value="%% student['class']['id'] %%" placeholder="remove" type="number">
                                             </div>
                                         </td>
                                     </tr>
@@ -101,16 +111,28 @@
                                 </tr>
                                 <tr>
                                     <td class="vs-table-info">
-                                        <p class="no-bottom-margin">
+                                        <p>
                                             <i class="fa fa-home" aria-hidden="true"></i>
                                         </p>
                                     </td>
                                     <td>
-                                        <div class="col-sm-12">
+                                        <div style="margin-bottom:1rem;" class="col-sm-12">
                                             <input id="adressInput" class="form-control" value="%% student['adress'] %%" placeholder="%% student['adress']%%">
                                         </div>
                                     </td>
                                 </tr>
+                                <tr>
+                                        <td class="vs-table-info">
+                                            <p class="no-bottom-margin">
+                                                <i class="fa fa-birthday-cake" aria-hidden="true"></i>
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <div class="col-sm-12">
+                                                <input onkeyup="checkkValidity(event)" data-validation="birth" id="birthInput" class="form-control" value="%% student['birth'] %%" placeholder="%% student['birth'] %%">
+                                            </div>
+                                        </td>
+                                    </tr>
                             </table>
                         </div>
                         <div class="col main-parent-con">
@@ -122,7 +144,7 @@
                                 <div class="parents-con">
                                     <% for parent in student['parents'] %>
                                         <div class="col-sm-10 parent-wrapper">
-                                            <input class="form-control parentIDInput" value="%% parent['id'] %%" placeholder="%% parent['id'] %%">
+                                            <input class="form-control parentIDInput" value="%% parent['id'] %%" placeholder="%% parent['id'] %%" type="number">
                                             <i onclick="hideParent(this)" class="fa fa-times" aria-hidden="true"></i>
 
                                         </div>
@@ -141,10 +163,9 @@
                 </div>
 
                 <script>
-                    let requiredInputs = {
-                        'name': true,
-                        'surname': true
-                    }
+                    // Gets automatically populated with the function below
+                    let requiredInputs = {}
+
                     // Validation
                     function checkkValidity(event) {
                         let $target = $(event.target);
@@ -162,6 +183,8 @@
                             'name': $('#nameInput').val(),
                             'id': parseInt("%% student['id'] %%"),
                             'surname': $('#surnameInput').val(),
+                            'birth': $('#birthInput').val(),
+                            'start': $('#startInput').val(),
                             'classID': parseInt($('#classIDInput').val()),
                             'email': $('#emailInput').val(),
                             'phone': $('#phoneInput').val(),
@@ -273,7 +296,7 @@
 
                         $parentCon = $('.parents-con').first();
                         inputParentField =
-                            '<div class="col-sm-10 parent-wrapper"><input class="form-control parentIDInput"><i onclick="hideParent(this)" class="fa fa-times" aria-hidden="true"></i></div>';
+                            '<div class="col-sm-10 parent-wrapper"><input class="form-control parentIDInput" type="number"><i onclick="hideParent(this)" class="fa fa-times" aria-hidden="true"></i></div>';
                         $('#add-parent-button').on('click', () => {
                             $parentCon.append(inputParentField);
                         });

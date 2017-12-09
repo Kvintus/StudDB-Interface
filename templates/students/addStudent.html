@@ -27,7 +27,7 @@
                                         </td>
                                         <td>
                                             <div style="margin-bottom:1rem;" class="col-sm-10">
-                                                <input data-validation="name" id="nameInput" class="form-control" placeholder="Name" type="text" onkeyup="checkkValidity(event)">
+                                                <input data-validation="name" id="nameInput" class="form-control is-invalid" placeholder="Name" type="text" onkeyup="checkkValidity(event)">
                                             </div>
 
                                         </td>
@@ -38,30 +38,31 @@
                                         </td>
                                         <td>
                                             <div style="margin-bottom:1rem;" class="col-sm-10">
-                                                <input data-validation="surname" id="surnameInput" class="form-control" placeholder="Surname" onkeyup="checkkValidity(event)">
+                                                <input data-validation="surname" id="surnameInput" class="form-control is-invalid" placeholder="Surname" onkeyup="checkkValidity(event)">
                                             </div>
                                         </td>
                                     </tr>
+                                    <tr>
+                                            <td class="vs-table-info">
+                                                <p>Start: </p>
+                                            </td>
+                                            <td>
+                                                <div style="margin-bottom:1rem;" class="col-sm-10">
+                                                    <input onkeyup="checkkValidity(event)" data-validation="start" id="startInput" class="form-control is-invalid" placeholder="Year" type="number">
+                                                </div>
+                                            </td>
+                                        </tr>
                                     <tr>
                                         <td class="vs-table-info">
                                             <p>Class ID: </p>
                                         </td>
                                         <td>
                                             <div style="margin-bottom:1rem;" class="col-sm-10">
-                                                <input id="classIDInput" class="form-control" placeholder="Class ID">
+                                                <input id="classIDInput" class="form-control" placeholder="Class ID" type="number">
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td class="vs-table-info">
-                                            <p>Start: </p>
-                                        </td>
-                                        <td>
-                                            <div style="margin-bottom:1rem;" class="col-sm-10">
-                                                <input id="startInput" class="form-control" placeholder="Year">
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    
                                 </table>
 
                             </div>
@@ -115,7 +116,7 @@
                                     </td>
                                     <td>
                                         <div class="col-sm-12">
-                                            <input id="birthInput" class="form-control" placeholder="Birthday">
+                                            <input onkeyup="checkkValidity(event)" data-validation="birth" id="birthInput" class="form-control is-invalid" placeholder="Birthday">
                                         </div>
                                     </td>
                                 </tr>
@@ -140,8 +141,9 @@
 
                 <script>
                     let requiredInputs = {
-                        'name': true,
-                        'surname': true
+                        'name': false,
+                        'surname': false,
+                        'birth': false
                     }
                     // Validation
                     function checkkValidity(event) {
@@ -184,7 +186,7 @@
                             contentType: "application/json; charset=utf-8",
                             dataType: "json",
                             success: function (data) {
-                                if (data.success) {
+                                if (!('message' in data)) {
                                     window.location.href = "%% url_for('viewStudent') %%" + '?id=' + data.studentID;
                                 } else {
                                     console.log(data);
@@ -235,7 +237,7 @@
                             let allValid = true;
                             for (key in requiredInputs) {
                                 if (requiredInputs[key] === false) {
-                                    allValid = false;
+                                    allValid = false;7
                                 }
                             }
 
@@ -249,7 +251,7 @@
 
                         $parentCon = $('.parents-con').first();
                         inputParentField =
-                            '<div class="col-sm-10 parent-wrapper"><input class="form-control parentIDInput"><i onclick="hideParent(this)" class="fa fa-times" aria-hidden="true"></i></div>';
+                            '<div class="col-sm-10 parent-wrapper"><input class="form-control parentIDInput" type="number"><i onclick="hideParent(this)" class="fa fa-times" aria-hidden="true"></i></div>';
                         $('#add-parent-button').on('click', () => {
                             $parentCon.append(inputParentField);
                         });
