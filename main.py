@@ -217,7 +217,11 @@ def editStudent():
             with urllib.request.urlopen(ourUrl) as url:
                 r = json.loads(url.read().decode())
 
-            return render_template('students/editStudent.html', user = session['user'], student=r['student'], server = api_server)
+            isMale = True
+            if r['student']['surname'][-3:] == "ová":
+                isMale = False
+
+            return render_template('students/editStudent.html', user = session['user'], student=r['student'], server = api_server, isMale = isMale)
         except:
             return apology(message="We are sorry the API server is down.",title='Server Down')
     else:
