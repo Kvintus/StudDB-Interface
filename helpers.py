@@ -1,4 +1,5 @@
-from flask import Flask, flash, redirect, render_template, request, session, url_for, jsonify, make_response, Response
+from flask import Flask, flash, redirect, render_template, session, url_for, jsonify, make_response, Response, jsonify
+from flask import request
 from passlib.hash import pbkdf2_sha256 as sha256
 from urllib.parse import urlencode, quote_plus
 from sqlalchemy.sql.functions import func
@@ -9,6 +10,7 @@ from operator import itemgetter
 from tempfile import mkdtemp
 from functools import wraps
 import urllib.request
+import requests
 import json
 import icu
 import sys

@@ -1,4 +1,5 @@
 from helpers import *
+from flask import request
 
 #api_server = "https://stud-db-api.herokuapp.com"
 api_server = "http://127.0.0.1:5000"
@@ -189,8 +190,34 @@ def viewStudent():
 
         return render_template('students/viewStudent.html', userName = session['user']['username'], student=r['student'])
     except:
+        return apology(message="We are sorry the API server is down. Or the ID you provided is non-existent",title='Server Down')
+
+# editStudent
+@app.route('/students/editStudent', methods=['GET'])
+@login_required
+def editStudent():
+    ourId = None
+    r = None
+    
+    # Getting the id of the student we should display
+    try:
+        ourId = request.args.get('id')
+    except:
+        apology(message="No user specified", title="No user")
+    
+    # Getting the student's info
+    try:
+        ourUrl = api_server + "/api/students/getOne?id={}".format(ourId)
+        
+        with urllib.request.urlopen(ourUrl) as url:
+            r = json.loads(url.read().decode())
+
+        return render_template('students/editStudent.html', userName = session['user']['username'], student=r['student'], server = api_server)
+    except:
         raise
         return apology(message="We are sorry the API server is down.",title='Server Down')
+
+
 
 # viewParent
 @app.route('/parents/viewParent', methods=['GET'])
@@ -203,3 +230,16 @@ def viewParent():
 @login_required
 def viewClass():
     return 'work in progress'
+
+
+# viewParent
+@app.route('/students/updateStudentRoute', methods = ['POST'])
+def updateStudentRoute():
+    try:
+        url = api_server + "/api/students/update"
+        r = requests.post(url, json=request.get_json())
+
+        return jsonify(r.json())
+    except:
+        raise
+        return 'fail'

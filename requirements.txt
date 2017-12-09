@@ -6,3 +6,5 @@ bs4
 passlib
 flask_session
 setuptools
+urllib.parse
+urllib.request
