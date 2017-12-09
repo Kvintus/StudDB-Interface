@@ -96,7 +96,6 @@ def students():
         
         return render_template('students/listStudents.html', user = session['user'],orderBy = params['orderBy'], data=response['students'], current = 'students', currentAdd = {'what':'student','where':url_for('addStudent')}, orderDirection = request.args.get('order'))
     except:
-        raise
         return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down')
         
 # Class table
@@ -223,11 +222,31 @@ def editStudent():
 
             return render_template('students/editStudent.html', user = session['user'], student=r['student'], server = api_server, isMale = isMale)
         except:
-            return apology(message="We are sorry the API server is down.",title='Server Down')
+            return apology(message="We are sorry the API server is down or the ID specified is wrong.",title='Server Down')
     else:
         return apology(message = "We are sorry but you do not have a permission to edit students.", title="Permision denied")
     
 
+# addStudent
+@app.route('/students/add', methods=['GET'])
+@login_required
+def addStudent():
+    if session['user']['privilege'] >= 3:
+            return render_template('students/addStudent.html', user = session['user'], server = api_server)
+    else:
+        return apology(message = "We are sorry but you do not have a permission to add students.", title="Permision denied")
+
+# updateStudentRoute
+@app.route('/students/addStudentRoute', methods = ['POST'])
+def addStudentRoute():
+    try:
+        url = api_server + "/api/students/add"
+        r = requests.post(url, json=request.get_json())
+
+        return jsonify(r.json())
+    except:
+        raise
+        return 'fail'
 
 
 # viewParent
@@ -273,11 +292,6 @@ def deleteStudentRoute():
 def addClass():
     return 'work in progress'
 
-# viewClass
-@app.route('/students/add', methods=['GET'])
-@login_required
-def addStudent():
-    return 'work in progress'
 
 # viewClass
 @app.route('/professors/add', methods=['GET'])
