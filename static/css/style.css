@@ -47,7 +47,15 @@ body {
 
 @media screen and (max-width: 600px) {
   .vs-main-con {
-    width: 80%;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 906px) {
+  .vs-main-con {
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    min-width: 0px;
   }
 }
 
