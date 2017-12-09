@@ -17,7 +17,7 @@ def index():
 def register():
     if request.method == 'GET':
         if session['user']['privilege'] == 5:
-            return render_template('register.html')
+            return render_template('register.html', user = session['user'])
         else:
             return apology(message = "We are sorry but you do not have a permission to register new users.", title="Permision denied")
     elif request.method == 'POST':
@@ -94,7 +94,7 @@ def students():
         # Sort the array based on the parameter provided by user
         sortedArray = sortDataOnUnicodeKey(response.get('students'), params.get('orderBy'))
         
-        return render_template('students/listStudents.html', userName = session['user']['username'],orderBy = params['orderBy'], data=response['students'], current = 'students', currentAdd = 'student', orderDirection = request.args.get('order'))
+        return render_template('students/listStudents.html', user = session['user'],orderBy = params['orderBy'], data=response['students'], current = 'students', currentAdd = 'student', orderDirection = request.args.get('order'))
     except:
         raise
         return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down')
@@ -124,7 +124,7 @@ def classes():
         # Sort the array based on the parameter provided by user
         sortedArray = sortDataOnUnicodeKey(response.get('classes'), params.get('orderBy'))
         
-        return render_template('classes/listClasses.html', userName = session['user']['username'],orderBy = params['orderBy'], data=response['classes'], current = 'classes', orderDirection = request.args.get('order'), currentAdd = 'class')
+        return render_template('classes/listClasses.html', user = session['user'],orderBy = params['orderBy'], data=response['classes'], current = 'classes', orderDirection = request.args.get('order'), currentAdd = 'class')
     except:
         raise
         return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down')
@@ -153,7 +153,7 @@ def professors():
         # Sort the array based on the parameter provided by user
         sortedArray = sortDataOnUnicodeKey(response.get('professors'), params.get('orderBy'))
         
-        return render_template('professors/listProfessors.html', userName = session['user']['username'],orderBy = params['orderBy'], data=response['professors'], current = 'professors', orderDirection = request.args.get('order'), currentAdd = 'professor')
+        return render_template('professors/listProfessors.html', user = session['user'],orderBy = params['orderBy'], data=response['professors'], current = 'professors', orderDirection = request.args.get('order'), currentAdd = 'professor')
     except:
         return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down')
 
@@ -192,7 +192,7 @@ def viewStudent():
         if r['student']['surname'][-3:] == "ová":
             isMale = False
 
-        return render_template('students/viewStudent.html', userName = session['user']['username'], student=r['student'], isMale = isMale, userPrivilege = session['user']['privilege'])
+        return render_template('students/viewStudent.html', user = session['user'], student=r['student'], isMale = isMale, userPrivilege = session['user']['privilege'])
     except:
         return apology(message="We are sorry the API server is down. Or the ID you provided is non-existent",title='Server Down')
 
@@ -217,7 +217,7 @@ def editStudent():
             with urllib.request.urlopen(ourUrl) as url:
                 r = json.loads(url.read().decode())
 
-            return render_template('students/editStudent.html', userName = session['user']['username'], student=r['student'], server = api_server)
+            return render_template('students/editStudent.html', user = session['user'], student=r['student'], server = api_server)
         except:
             return apology(message="We are sorry the API server is down.",title='Server Down')
     else:
