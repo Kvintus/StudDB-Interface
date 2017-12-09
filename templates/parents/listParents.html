@@ -1,5 +1,5 @@
 <% extends "main_template.html" %> 
-<% block title %> Students <% endblock %>
+<% block title %> Parents <% endblock %>
 <% block content %>
 <table id="tabulka" class="table sticky-header">
     <thead class="table-header">
@@ -42,23 +42,23 @@
     </thead>
     <tbody>
         <% if orderDirection == 'asc' %>
-            <% for student in data | reverse %>
+            <% for parent in data | reverse %>
             <tr class="display-row">
-                <td class="student-table-id">%% student['id']%%</td>
-                <td>%% student['name'] %%</td>
-                <td>%% student['surname'] %%</td>
-                <td class="student-table-email" >%% student['email'] %%</td>
-                <td class="student-table-phone" >%% student['phone'] %%</td>
+                <td class="student-table-id">%% parent['id']%%</td>
+                <td>%% parent['name'] %%</td>
+                <td>%% parent['surname'] %%</td>
+                <td class="student-table-email" >%% parent['email'] %%</td>
+                <td class="student-table-phone" >%% parent['phone'] %%</td>
             </tr>
             <% endfor %>
         <% else %>
-            <% for student in data %>
+            <% for parent in data %>
             <tr class="display-row">
-                <td class="student-table-id">%% student['id']%%</td>
-                <td>%% student['name'] %%</td>
-                <td>%% student['surname'] %%</td>
-                <td class="student-table-email">%% student['email'] %%</td>
-                <td class="student-table-phone" >%% student['phone'] %%</td>
+                <td class="student-table-id">%% parent['id']%%</td>
+                <td>%% parent['name'] %%</td>
+                <td>%% parent['surname'] %%</td>
+                <td class="student-table-email">%% parent['email'] %%</td>
+                <td class="student-table-phone" >%% parent['phone'] %%</td>
             </tr>
             <% endfor %>
         <% endif %>
@@ -85,7 +85,7 @@
                 mainSorter.order = 'asc';
             }
         }
-        window.location.replace('%% url_for("students")%%' + '?orderBy=' + mainSorter.ID + '&order=' + mainSorter.order)
+        window.location.replace('%% url_for("parents")%%' + '?orderBy=' + mainSorter.ID + '&order=' + mainSorter.order)
     }
 
     $(() => {
@@ -109,7 +109,7 @@
 
         $('.display-row').on('click', (event)=>{
             let idOfThisRow = event.currentTarget.firstElementChild.innerHTML;
-            window.location.href = "%% url_for('viewStudent')%%" + '?id=' + idOfThisRow;
+            window.location.href = "%% url_for('viewParent')%%" + '?id=' + idOfThisRow;
         })
 
         $('#nav-' + '%% current %%').addClass('active');

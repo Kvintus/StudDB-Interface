@@ -96,7 +96,7 @@ def students():
         
         return render_template('students/listStudents.html', user = session['user'],orderBy = params['orderBy'], data=response['students'], current = 'students', currentAdd = {'what':'student','where':url_for('addStudent')}, orderDirection = request.args.get('order'))
     except:
-        return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down')
+        return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down', user = session['user'])
         
 # Class table
 @app.route('/classes')
@@ -126,7 +126,7 @@ def classes():
         return render_template('classes/listClasses.html', user = session['user'],orderBy = params['orderBy'], data=response['classes'], current = 'classes', orderDirection = request.args.get('order'), currentAdd = {'what':'class','where':url_for('addClass')})
     except:
         raise
-        return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down')
+        return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down', user = session['user'])
 
 # Professors table
 @app.route('/professors')
@@ -154,12 +154,35 @@ def professors():
         
         return render_template('professors/listProfessors.html', user = session['user'],orderBy = params['orderBy'], data=response['professors'], current = 'professors', orderDirection = request.args.get('order'), currentAdd = {'what':'professor','where':url_for('addProfessor')})
     except:
-        return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down')
+        return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down', user = session['user'])
 
 @app.route('/parents')
 @login_required
 def parents():
-    return "work in progress"
+    # Store all the parameters from user in one variable
+    params = {
+        'orderBy': request.args.get('orderBy')
+    }
+    
+    # Set default sorting to id
+    if params['orderBy'] is None:
+        params['orderBy'] = 'id'
+    
+    # Fetch all the students from the API
+    response = None
+    try:
+        ourUrl = api_server + "/api/parents?" + urlencode(params, quote_via=quote_plus)
+
+        with urllib.request.urlopen(ourUrl) as url:
+            response = json.loads(url.read().decode())
+
+        # Sort the array based on the parameter provided by user
+        sortedArray = sortDataOnUnicodeKey(response.get('parents'), params.get('orderBy'))
+        
+        return render_template('parents/listParents.html', user = session['user'], orderBy = params['orderBy'], data=response['parents'], current = 'parents', currentAdd = {'what':'parents','where':url_for('addParent')}, orderDirection = request.args.get('order'))
+    except:
+        raise
+        return render_template('apology.html', message="We are sorry the API server is down.",title='Server Down', user = session['user'])
 
 
 ################################################
