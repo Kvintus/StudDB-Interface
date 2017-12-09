@@ -12,6 +12,10 @@ body {
   }
 }
 
+.parentIDInput {
+  margin-bottom: 1rem;
+}
+
 #add-parent-button {
   margin-left: 20px;
   color: gray;
