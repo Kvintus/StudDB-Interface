@@ -200,7 +200,7 @@ def viewStudent():
 @app.route('/students/editStudent', methods=['GET'])
 @login_required
 def editStudent():
-    if session['user']['privilege'] == 5:
+    if session['user']['privilege'] >= 3:
         ourId = None
         r = None
         

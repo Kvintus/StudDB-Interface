@@ -54,4 +54,4 @@ def sortDataOnUnicodeKey(arrayToSort, key):
         return -1
 
 def apology(message='Error', title='Error'):
-    return render_template('apology.html', message=message, title=title)
+    return render_template('apology.html', message=message, title=title, user = session['user'])
