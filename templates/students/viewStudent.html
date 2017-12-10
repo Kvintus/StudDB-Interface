@@ -3,7 +3,9 @@
         <%endblock%>
             <% block content %>
                 <div class="container vs-main-con">
-
+                    <div class="row">
+                        <h1 class="card-heading">Student:</h1>
+                    </div>
                     <div class="row">
                         <div class="col prof-image-con">
                             <% if isMale %>
@@ -115,7 +117,7 @@
                                 <p class="view-rel-headline">Parents</p>
                                 <div class="parents-con">
                                     <% for parent in student['parents'] %>
-                                        <a class="parent-ref custom-button" data-parentID="%% parent['id'] %%" href="#">%% parent['wholeName'] %%</a>
+                                        <a class="relative-ref custom-button" data-parentID="%% parent['id'] %%" href="#">%% parent['wholeName'] %%</a>
                                         <br>
                                         <% endfor %>
                                 </div>
@@ -134,7 +136,7 @@
                     $(function () {
 
                         // Make refs to parent pages
-                        parents = document.getElementsByClassName('parent-ref');
+                        parents = document.getElementsByClassName('relative-ref');
 
                         for (let index = 0; index < parents.length; index++) {
                             let adress = "%% url_for('viewParent') %%" + '?id=' + parents[index].getAttribute(

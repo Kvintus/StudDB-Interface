@@ -111,7 +111,14 @@ body {
   margin-left: 20px;
 }
 
-.parent-ref {
+.card-heading {
+  margin-left: 50px;
+  font-size: 50px;
+  color: #cccccc;
+  margin-bottom: 12px;
+}
+
+.relative-ref {
   display: block;
 }
 

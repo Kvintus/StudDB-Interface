@@ -10,7 +10,9 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                         <p style="margin-bottom: 0;">Alert</p>
-
+                    </div>
+                    <div class="row">
+                        <h1 class="card-heading">Student:</h1>
                     </div>
                     <form id="validationForm"></form>
                     <div class="row">
@@ -261,7 +263,7 @@
                             $('#birthInput').val(getIsoFormatDate("%% student['birth'] %%"));
 
                             // Make refs to parent pages
-                            parents = document.getElementsByClassName('parent-ref');
+                            parents = document.getElementsByClassName('relative-ref');
 
                             for (let index = 0; index < parents.length; index++) {
                                 let adress = "%% url_for('viewParent') %%" + '?id=' + parents[index].getAttribute(
