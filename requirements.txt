@@ -1,10 +1,8 @@
 Flask
-pyicu
 gunicorn
 flask_sqlalchemy
 bs4
+pyicu
 passlib
 flask_session
 setuptools
-urllib.parse
-urllib.request
