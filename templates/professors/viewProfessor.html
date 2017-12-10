@@ -1,10 +1,10 @@
 <% extends "main_template.html" %>
-    <% block title %>%% student['surname'] %% %% student['name'] %%
+    <% block title %>%% professor['surname'] %% %% professor['name'] %%
         <%endblock%>
             <% block content %>
                 <div class="container vs-main-con">
                     <div class="row">
-                        <h1 class="card-heading">Student:</h1>
+                        <h1 class="card-heading">Professor:</h1>
                     </div>
                     <div class="row">
                         <div class="col prof-image-con">
@@ -19,10 +19,18 @@
                                 <table>
                                     <tr>
                                         <td style="padding-right: 80px;" class="vs-table-info">
+                                            <p>Title:</p>
+                                        </td>
+                                        <td>
+                                            <p>%% professor['title'] %%</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-right: 80px;" class="vs-table-info">
                                             <p>Name:</p>
                                         </td>
                                         <td>
-                                            <p>%% student['name'] %%</p>
+                                            <p>%% professor['name'] %%</p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -30,7 +38,7 @@
                                             <p>Surname: </p>
                                         </td>
                                         <td>
-                                            <p>%% student['surname'] %%</p>
+                                            <p>%% professor['surname'] %%</p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -38,28 +46,7 @@
                                             <p>ID:</p>
                                         </td>
                                         <td>
-                                            <p class="vs-gray-info">%% student['id'] %%</p>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td class="vs-table-info">
-                                            <p>Start:</p>
-                                        </td>
-                                        <td>
-                                            <p class="vs-gray-info">%% student['start'] %%</p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="vs-table-info">
-                                            <p>Class:</p>
-                                        </td>
-                                        <td>
-                                            <% if 'altname' in student['class'] %>
-                                                <a class="class-ref" data-classID="%% student['class']['id'] %%" href="#">%% student['class']['altname'] %%</a>
-                                                <% else %>
-                                                    <a class="class-ref" data-classID="%% student['class']['id'] %%" href="#">%% student['class']['name'] %%</a>
-                                                    <% endif %>
+                                            <p class="vs-gray-info">%% professor['id'] %%</p>
                                         </td>
                                     </tr>
                                 </table>
@@ -77,7 +64,7 @@
                                         </p>
                                     </td>
                                     <td>
-                                        <p>%% student['email'] %%</p>
+                                        <p>%% professor['email'] %%</p>
                                     </td>
                                 </tr>
                                 <tr>
@@ -87,7 +74,7 @@
                                         </p>
                                     </td>
                                     <td>
-                                        <p>%% student['phone'] %%</p>
+                                        <p>%% professor['phone'] %%</p>
                                     </td>
                                 </tr>
                                 <tr>
@@ -97,28 +84,23 @@
                                         </p>
                                     </td>
                                     <td>
-                                        <p>%% student['adress'] %%</p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="vs-table-info">
-                                        <p class="no-bottom-margin">
-                                            <i class="fa fa-birthday-cake" aria-hidden="true"></i>
-                                        </p>
-                                    </td>
-                                    <td>
-                                        <p class="no-bottom-margin">%% student['birth'] %%</p>
+                                        <p>%% professor['adress'] %%</p>
                                     </td>
                                 </tr>
                             </table>
                         </div>
                         <div class="col main-parent-con">
                             <div>
-                                <p class="view-rel-headline">Parents</p>
+                                <p class="view-rel-headline">Classes</p>
                                 <div class="parents-con">
-                                    <% for parent in student['parents'] %>
-                                        <a class="relative-ref custom-button" data-parentID="%% parent['id'] %%" href="#">%% parent['wholeName'] %%</a>
-                                        <br>
+                                    <% for tempClass in professor['classes'] %>
+                                        <% if 'altname' in tempClass %>
+                                            <a class="relative-ref custom-button" data-classID="%% tempClass['id'] %%" href="#">%% tempClass['altname'] %%</a>
+                                            <br>
+                                        <% else %>
+                                            <a class="relative-ref custom-button" data-classID="%% tempClass['id'] %%" href="#">%% tempClass['name'] %%</a>
+                                            <br>
+                                        <% endif %>
                                         <% endfor %>
                                 </div>
 
@@ -127,7 +109,7 @@
                     </div>
                     <% if userPrivilege >= 3 %>
                         <div class="row manipulate-buttons-con">
-                            <button id="editStudentButton" class="btn btn-outline-secondary">Edit</button>
+                            <button id="editProfessorButton" class="btn btn-outline-secondary">Edit</button>
                         </div>
                         <% endif %>
                 </div>
@@ -135,28 +117,19 @@
                 <script>
                     $(function () {
 
-                        // Make refs to parent pages
-                        parents = document.getElementsByClassName('relative-ref');
+                        // Make refs to children pages
+                        classes = document.getElementsByClassName('relative-ref');
 
-                        for (let index = 0; index < parents.length; index++) {
-                            let adress = "%% url_for('viewParent') %%" + '?id=' + parents[index].getAttribute(
-                                'data-parentID');
-                            parents[index].setAttribute('href', adress);
-                        }
-
-                        // Make refs to Class page
-                        // Doing it dynamically with loop prevents out of index error if there are no class-ref elements
-                        classRef = document.getElementsByClassName('class-ref')
-                        for (let index = 0; index < classRef.length; index++) {
-                            let adress = "%% url_for('viewClass') %%" + '?id=' + classRef[index].getAttribute(
+                        for (let index = 0; index < classes.length; index++) {
+                            let adress = "%% url_for('viewClass') %%" + '?id=' + classes[index].getAttribute(
                                 'data-classID');
-                            classRef[index].setAttribute('href', adress);
+                            classes[index].setAttribute('href', adress);
                         }
 
                         // Setting up the editButton
-                        $('#editStudentButton').on('click', () => {
-                            let adress = "%% url_for('editStudent') %%" + '?id=' +
-                                "%% student['id'] %%";
+                        $('#editProfessorButton').on('click', () => {
+                            let adress = "%% url_for('editProfessor') %%" + '?id=' +
+                                "%% professor['id'] %%";
                             window.location.href = adress;
                         })
                     })
