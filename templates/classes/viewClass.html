@@ -1,0 +1,117 @@
+<% extends "main_template.html" %>
+    <% block title %>
+        <% if 'altname' in rclass %>
+            %% rclass['altname'] %%
+            <% else %>
+                %% rclass['name'] %%
+                <% endif %>
+                    <%endblock%>
+                        <% block content %>
+                            <div style="padding-left: 50px;" class="container vs-main-con">
+                                <div style="margin-bottom: 2rem;" class="row">
+                                    <h1 style="margin-left: 0;" class="card-heading">Class:
+                                        <% if 'altname' in rclass %>
+                                            %% rclass['altname'] %% (%% rclass['name'] %%)
+                                            <% else %>
+                                                %% rclass['name'] %%
+                                                <% endif %>
+                                    </h1>
+                                </div>
+                                <div class="row">
+                                    <div style="align-items: flex-start; " class="col">
+                                        <p style="font-size: 2rem; margin-bottom: 1.3rem" class="view-rel-headline">Info: </p>
+                                        <br>
+                                        <div class="class-info">
+                                            <table>
+                                                <tr>
+                                                    <td style="padding-right: 90px;" class="vs-table-info">
+                                                        <p>Name:</p>
+                                                    </td>
+                                                    <td>
+                                                        <p>
+                                                            <% if 'altname' in rclass %>
+                                                                %% rclass['altname'] %% (%% rclass['name'] %%)
+                                                                <% else %>
+                                                                    %% rclass['name'] %%
+                                                                    <% endif %>
+                                                        </p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="vs-table-info">
+                                                        <p>Class teacher:</p>
+                                                    </td>
+                                                    <td>
+                                                        <a class="teacher-ref" data-teacherID="%% rclass['professors'][0]['id'] %%" href="#">%% rclass['professors'][0]['wholeName'] %%</a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="vs-table-info">
+                                                        <p>Start: </p>
+                                                    </td>
+                                                    <td>
+                                                        <p>%% rclass['start'] %%</p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="vs-table-info">
+                                                        <p>ID:</p>
+                                                    </td>
+                                                    <td>
+                                                        <p class="vs-gray-info">%% rclass['id'] %%</p>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="col main-parent-con">
+                                        <div class="students-wrapper">
+                                            <p style="font-size: 2rem; margin-bottom: 1.3rem" class="view-rel-headline">Students: </p>
+                                            <div style="margin-left: 50px" class="parents-con">
+                                                <% for pupil in rclass['pupils'] %>
+                                                    <a class="relative-ref custom-button" data-pupilID="%% pupil['id'] %%" href="#">%% pupil['wholeName'] %%</a>
+                                                    <br>
+                                                    <% endfor %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <% if userPrivilege >= 3 %>
+                                    <div class="row manipulate-buttons-con">
+                                        <button id="editClassButton" class="btn btn-outline-secondary">Edit</button>
+                                    </div>
+                                    <% endif %>
+                            </div>
+
+                            <script>
+                                $(function () {
+
+                                    // Make refs to Class page
+                                    // Doing it dynamically with loop prevents out of index error if there are no class-ref elements
+                                    teacherRef = document.getElementsByClassName('teacher-ref')
+                                    for (let index = 0; index < teacherRef.length; index++) {
+                                        let adress = "%% url_for('viewProfessor') %%" + '?id=' + teacherRef[index].getAttribute(
+                                            'data-teacherID');
+                                            teacherRef[index].setAttribute('href', adress);
+                                    }
+
+                                    // Make refs to children pages
+                                    pupils = document.getElementsByClassName('relative-ref');
+
+                                    for (let index = 0; index < pupils.length; index++) {
+                                        let adress = "%% url_for('viewStudent') %%" + '?id=' + pupils[index].getAttribute(
+                                            'data-pupilID');
+                                        pupils[index].setAttribute('href', adress);
+                                    }
+
+                                    // Setting up the editButton
+                                    $('#editClassButton').on('click', () => {
+                                        let adress = "%% url_for('editClass') %%" + '?id=' +
+                                            "%% rclass['id'] %%";
+                                        window.location.href = adress;
+                                    })
+                                })
+                            </script>
+
+                            <% endblock %>

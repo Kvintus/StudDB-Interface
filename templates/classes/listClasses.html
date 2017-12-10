@@ -108,6 +108,11 @@
                 }
             }
         }
+        
+        $('.display-row').on('click', (event)=>{
+            let idOfThisRow = event.currentTarget.firstElementChild.innerHTML;
+            window.location.href = "%% url_for('viewClass')%%" + '?id=' + idOfThisRow;
+        })
 
         $('#nav-' + '%% current %%').addClass('active');
     })

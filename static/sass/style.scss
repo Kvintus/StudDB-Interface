@@ -27,6 +27,29 @@ body {
     }
 }
 
+.class-info {
+    margin-left: 50px;
+
+    @media screen and (max-width: 968px){
+        margin-left: 20px;
+    }
+
+    table{
+        font-size: 20px;
+    }
+}
+
+.teacher-ref {
+    padding-bottom: 1rem;
+    color: gray;
+    display: block;
+
+    &:hover {
+        text-decoration: none;
+        color: rgb(87, 87, 87);
+    }
+}
+
 .student-table-hide {
     @media screen and (max-width: 768px){
         display: none;
@@ -114,6 +137,13 @@ body {
 
 .parents-con {
     margin-left: 20px;
+}
+
+.students-wrapper {
+    @media screen and (max-width: 916px){
+        text-align: center;
+        transform: translate(-20px);
+    }
 }
 
 .card-heading {

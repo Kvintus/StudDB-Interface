@@ -538,7 +538,7 @@ def viewClass():
         with urllib.request.urlopen(ourUrl) as url:
             r = json.loads(url.read().decode())
 
-        return render_template('classes/viewClass.html', user = session['user'], class=r['class'], userPrivilege = session['user']['privilege'])
+        return render_template('classes/viewClass.html', user = session['user'], rclass=r['rclass'], userPrivilege = session['user']['privilege'])
     except:
         raise
         return apology(message="We are sorry the API server is down. Or the ID you provided is non-existent",title='Server Down')
@@ -564,7 +564,7 @@ def editClass():
             with urllib.request.urlopen(ourUrl) as url:
                 r = json.loads(url.read().decode())
 
-            return render_template('classes/editClass.html', user = session['user'], class=r['class'], server = api_server)
+            return render_template('classes/editClass.html', user = session['user'], rclass=r['rclass'], server = api_server)
         except:
             raise
             return apology(message="We are sorry the API server is down or the ID specified is wrong.",title='Server Down')
@@ -582,7 +582,7 @@ def addClass():
 
 # updateStudentRoute
 @app.route('/classes/addClassRoute', methods = ['POST'])
-def addProfessorRoute():
+def addClassRoute():
     try:
         url = api_server + "/api/classes/add"
         r = requests.post(url, json=request.get_json())
@@ -594,7 +594,7 @@ def addProfessorRoute():
 
 # updateStudentRoute
 @app.route('/classes/updateClassRoute', methods = ['POST'])
-def updateProfessorRoute():
+def updateClassRoute():
     try:
         url = api_server + "/api/classes/update"
         r = requests.post(url, json=request.get_json())
@@ -606,7 +606,7 @@ def updateProfessorRoute():
 
 # updateStudentRoute
 @app.route('/classes/delete', methods = ['POST'])
-def deleteProfessorRoute():
+def deleteClassRoute():
     try:
         url = api_server + "/api/classes/remove"
         r = requests.post(url, json=request.get_json())
