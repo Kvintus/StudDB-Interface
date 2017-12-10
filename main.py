@@ -276,7 +276,62 @@ def addStudentRoute():
 @app.route('/parents/viewParent', methods=['GET'])
 @login_required
 def viewParent():
-    return 'work in progress'
+    ourId = None
+    r = None
+    
+    # Getting the id of the student we should display
+    try:
+        ourId = request.args.get('id')
+    except:
+        apology(message="No user specified", title="No user")
+    
+    # Getting the student's info
+    try:
+        ourUrl = api_server + "/api/parents/getOne?id={}".format(ourId)
+        
+        with urllib.request.urlopen(ourUrl) as url:
+            r = json.loads(url.read().decode())
+        
+        isMale = True
+        if r['parent']['surname'][-3:] == "ová" or r['parent']['surname'][-3:] == "ova":
+            isMale = False
+
+        return render_template('parents/viewParent.html', user = session['user'], parent=r['parent'], isMale = isMale, userPrivilege = session['user']['privilege'])
+    except:
+        raise
+        return apology(message="We are sorry the API server is down. Or the ID you provided is non-existent",title='Server Down')
+
+# editStudent
+@app.route('/parents/edit', methods=['GET'])
+@login_required
+def editParent():
+    return "work in progress"
+    if session['user']['privilege'] >= 3:
+        ourId = None
+        r = None
+        
+        # Getting the id of the student we should display
+        try:
+            ourId = request.args.get('id')
+        except:
+            apology(message="No user specified", title="No user")
+        
+        # Getting the student's info
+        try:
+            ourUrl = api_server + "/api/students/getOne?id={}".format(ourId)
+            
+            with urllib.request.urlopen(ourUrl) as url:
+                r = json.loads(url.read().decode())
+
+            isMale = True
+            if r['student']['surname'][-3:] == "ová" or r['student']['surname'][-3:] == "ova":
+                isMale = False
+
+            return render_template('students/editStudent.html', user = session['user'], student=r['student'], server = api_server, isMale = isMale)
+        except:
+            return apology(message="We are sorry the API server is down or the ID specified is wrong.",title='Server Down')
+    else:
+        return apology(message = "We are sorry but you do not have a permission to edit students.", title="Permision denied")
 
 # viewClass
 @app.route('/classes/viewClass', methods=['GET'])
