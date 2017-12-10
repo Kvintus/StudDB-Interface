@@ -148,9 +148,8 @@
                                 <div class="parents-con">
                                     <% for parent in student['parents'] %>
                                         <div class="col-sm-10 parent-wrapper">
-                                            <input class="form-control parentIDInput" value="%% parent['id'] %%" placeholder="%% parent['id'] %%" type="number">
+                                            <input class="form-control parentIDInput" value="%%parent['id']%%" placeholder="%%parent['id']%%" type="number">
                                             <i onclick="hideParent(this)" class="fa fa-times" aria-hidden="true"></i>
-
                                         </div>
                                         <% endfor %>
                                 </div>
@@ -315,8 +314,8 @@
                         });
 
                         $('#cancelEdit').on('click', () => {
-                            window.location.href = "%% url_for('viewParent') %%" + '?id=' +
-                                "%% parent['id'] %%"
+                            window.location.href = "%% url_for('viewStudent') %%" + '?id=' +
+                                "%% student['id'] %%"
                         })
 
                         $("#updateStudent").on('click', () => {
