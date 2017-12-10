@@ -44,21 +44,21 @@
         <% if orderDirection == 'asc' %>
             <% for parent in data | reverse %>
             <tr class="display-row">
-                <td class="student-table-id">%% parent['id']%%</td>
+                <td class="student-table-hide">%% parent['id']%%</td>
                 <td>%% parent['name'] %%</td>
                 <td>%% parent['surname'] %%</td>
-                <td class="student-table-email" >%% parent['email'] %%</td>
-                <td class="student-table-phone" >%% parent['phone'] %%</td>
+                <td class="student-table-hide" >%% parent['email'] %%</td>
+                <td class="student-table-hide" >%% parent['phone'] %%</td>
             </tr>
             <% endfor %>
         <% else %>
             <% for parent in data %>
             <tr class="display-row">
-                <td class="student-table-id">%% parent['id']%%</td>
+                <td class="student-table-hide">%% parent['id']%%</td>
                 <td>%% parent['name'] %%</td>
                 <td>%% parent['surname'] %%</td>
-                <td class="student-table-email">%% parent['email'] %%</td>
-                <td class="student-table-phone" >%% parent['phone'] %%</td>
+                <td class="student-table-hide">%% parent['email'] %%</td>
+                <td class="student-table-hide" >%% parent['phone'] %%</td>
             </tr>
             <% endfor %>
         <% endif %>

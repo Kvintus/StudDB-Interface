@@ -1,9 +1,9 @@
 <% extends "main_template.html" %>
-    <% block title %>%% student['surname'] %% %% student['name'] %%
+    <% block title %>Add parent
         <%endblock%>
             <% block content %>
 
-                <div class="container vs-main-con">
+                <div id="vs-main-vue" class="container vs-main-con">
                     <div id="alertMessage" style="margin-bottom: 20px; display:none;" class="alert alert-danger alert-dismissible fade show"
                         role="alert">
                         <button type="button" class="close" id="alertDismiss" aria-label="Close">
@@ -12,16 +12,12 @@
                         <p style="margin-bottom: 0;">Alert</p>
                     </div>
                     <div class="row">
-                        <h1 class="card-heading">Student:</h1>
+                        <h1 class="card-heading">Parent:</h1>
                     </div>
                     <form id="validationForm"></form>
                     <div class="row">
                         <div class="col prof-image-con">
-                            <% if isMale %>
-                                <img src="%% url_for('static', filename='images/placeholder_male.jpg') %%" alt="">
-                                <% else %>
-                                    <img src="%% url_for('static', filename='images/placeholder_female.jpg') %%" alt="">
-                                    <% endif %>
+                                <img v-bind:src="image" alt="">
                         </div>
                         <div class="col vs-text-con">
                             <div>
@@ -33,8 +29,7 @@
                                         </td>
                                         <td>
                                             <div style="margin-bottom:1rem;" class="col-sm-10">
-                                                <input data-validation="name" id="nameInput" class="form-control" value="%% student['name'] %%" placeholder="%% student['name'] %%"
-                                                    type="text" onkeyup="checkkValidity(event)">
+                                                <input data-validation="name" id="nameInput" class="form-control is-invalid" placeholder="Name" type="text" onkeyup="checkkValidity(event)">
                                             </div>
 
                                         </td>
@@ -45,37 +40,7 @@
                                         </td>
                                         <td>
                                             <div style="margin-bottom:1rem;" class="col-sm-10">
-                                                <input data-validation="surname" id="surnameInput" class="form-control" value="%% student['surname'] %%" placeholder="%% student['surname'] %%"
-                                                    onkeyup="checkkValidity(event)">
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="vs-table-info">
-                                            <p>ID:</p>
-                                        </td>
-                                        <td>
-                                            <p style="color: rgb(206, 206, 206)">%% student['id'] %%</p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="vs-table-info">
-                                            <p>Start: </p>
-                                        </td>
-                                        <td>
-                                            <div style="margin-bottom:1rem;" class="col-sm-10">
-                                                <input onkeyup="checkkValidity(event)" data-validation="start" id="startInput" class="form-control" value="%% student['start'] %%"
-                                                    placeholder="%% student['start'] %%" type="number">
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="vs-table-info">
-                                            <p>Class ID: </p>
-                                        </td>
-                                        <td>
-                                            <div style="margin-bottom:1rem;" class="col-sm-10">
-                                                <input id="classIDInput" class="form-control" value="%% student['class']['id'] %%" placeholder="remove" type="number">
+                                                <input v-model="surname" data-validation="surname" id="surnameInput" class="form-control is-invalid" placeholder="Surname" onkeyup="checkkValidity(event)">
                                             </div>
                                         </td>
                                     </tr>
@@ -96,8 +61,7 @@
                                     </td>
                                     <td>
                                         <div style="margin-bottom:1rem;" class="col-sm-12">
-                                            <input type="email" id="emailInput" class="form-control" value="%% student['email'] %%" placeholder="%% student['email'] %%"
-                                                type="text">
+                                            <input type="email" id="emailInput" class="form-control" placeholder="Email adress" type="text">
                                         </div>
                                     </td>
                                 </tr>
@@ -109,7 +73,7 @@
                                     </td>
                                     <td>
                                         <div style="margin-bottom:1rem;" class="col-sm-12">
-                                            <input id="phoneInput" class="form-control" value="%% student['phone'] %%" placeholder="%% student['phone']%%">
+                                            <input id="phoneInput" class="form-control" placeholder="Telephone number">
                                         </div>
                                     </td>
                                 </tr>
@@ -121,19 +85,7 @@
                                     </td>
                                     <td>
                                         <div style="margin-bottom:1rem;" class="col-sm-12">
-                                            <input id="adressInput" class="form-control" value="%% student['adress'] %%" placeholder="%% student['adress']%%">
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="vs-table-info">
-                                        <p class="no-bottom-margin">
-                                            <i class="fa fa-birthday-cake" aria-hidden="true"></i>
-                                        </p>
-                                    </td>
-                                    <td>
-                                        <div class="col-sm-12">
-                                            <input onkeyup="checkkValidity(event)" data-validation="birth" type="date" id="birthInput" class="form-control" placeholder="%% student['birth'] %%">
+                                            <input id="adressInput" class="form-control" placeholder="Adress">
                                         </div>
                                     </td>
                                 </tr>
@@ -141,17 +93,14 @@
                         </div>
                         <div class="col main-parent-con">
                             <div>
-                                <p class="view-rel-headline">Parents</p>
+                                <p class="view-rel-headline">Children</p>
                                 <p id="add-parent-button">
                                     <i class="fa fa-plus-circle" aria-hidden="true"></i>
                                 </p>
                                 <div class="parents-con">
-                                    <% for parent in student['parents'] %>
-                                        <div class="col-sm-10 parent-wrapper">
-                                            <input class="form-control parentIDInput" value="%%parent['id']%%" placeholder="%%parent['id']%%" type="number">
-                                            <i onclick="hideParent(this)" class="fa fa-times" aria-hidden="true"></i>
-                                        </div>
-                                        <% endfor %>
+                                    <div class="col-sm-10 parent-wrapper">
+
+                                    </div>
                                 </div>
 
                             </div>
@@ -161,13 +110,27 @@
                         <div id="cancel-button-wrapper">
                             <button id="cancelEdit" class="btn btn-outline-secondary">Cancel</button>
                         </div>
-                        <button id="updateStudent" class="btn btn-outline-primary">Save</button>
-                        <button id="deleteStudent" class="btn btn-outline-danger">
-                            Delete
-                        </button>
+                        <button id="updateParent" class="btn btn-outline-primary">Save</button>
                     </div>
                 </div>
 
+                <script>
+                    new Vue({
+                        el: '#vs-main-vue',
+                        data: {
+                            surname: ''
+                        },
+                        computed: {
+                            image: function () {
+                                if ((this.surname.indexOf('ova') > -1) || (this.surname.indexOf('ová') > -1)) {
+                                    return "%% url_for('static', filename='images/placeholder_female.jpg') %%"
+                                } else {
+                                    return "%% url_for('static', filename='images/placeholder_male.jpg') %%"
+                                }
+                            }
+                        }
+                    })
+                </script>
                 <script>
                     let regexp = new RegExp("^\\+([0-9]{3})\x20([0-9]{3})\x20([0-9]{3})\x20([0-9]{3})$");
                     let emailReg = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
@@ -213,39 +176,35 @@
                     }
 
 
-                    function getStudentData() {
-                        postStudent = {
+                    function getParentData() {
+                        postParent = {
                             'name': $('#nameInput').val(),
-                            'id': parseInt("%% student['id'] %%"),
                             'surname': $('#surnameInput').val(),
-                            'birth': $('#birthInput').val(),
-                            'start': $('#startInput').val(),
-                            'classID': parseInt($('#classIDInput').val()),
                             'email': $('#emailInput').val(),
                             'phone': $('#phoneInput').val(),
                             'adress': $('#adressInput').val(),
-                            'parents': []
+                            'children': []
                         };
 
                         // Appending all the parents found
-                        $('.parentIDInput').each(function () {
-                            postStudent['parents'].push(parseInt($(this).val()));
+                        $('.childIDInput').each(function () {
+                            postParent['children'].push(parseInt($(this).val()));
                         });
-                        return postStudent
+                        return postParent
                     }
 
                     function postData(dataToPost) {
                         $.ajax({
                             type: "post",
-                            url: "%% url_for('updateStudentRoute') %%",
+                            url: "%% url_for('addParentRoute') %%",
                             // The key needs to match your method's input parameter (case-sensitive).
                             data: JSON.stringify(dataToPost),
                             contentType: "application/json; charset=utf-8",
                             dataType: "json",
                             success: function (data) {
-                                if (data.success) {
-                                    window.location.href = "%% url_for('viewStudent') %%" + '?id=' +
-                                        "%% student['id'] %%";
+                                if (!('message' in data)) {
+                                    window.location.href = "%% url_for('viewParent') %%" + '?id=' +
+                                        data.parentID;
                                 } else {
                                     $('#alertMessage').find('p').text(data.message);
                                     $('#alertMessage').show(200);
@@ -264,61 +223,16 @@
 
 
                     $(function () {
-                        $('#birthInput').val(getIsoFormatDate("%% student['birth'] %%"));
-
-                        // Make refs to parent pages
-                        parents = document.getElementsByClassName('relative-ref');
-
-                        for (let index = 0; index < parents.length; index++) {
-                            let adress = "%% url_for('viewParent') %%" + '?id=' + parents[index].getAttribute(
-                                'data-parentID');
-                            parents[index].setAttribute('href', adress);
-                        }
-
-                        // Make refs to Class page
-                        // Doing it dynamically with loop prevents out of index error if there are no class-ref elements
-                        classRef = document.getElementsByClassName('class-ref')
-                        for (let index = 0; index < classRef.length; index++) {
-                            let adress = "%% url_for('viewClass') %%" + '?id=' + classRef[index].getAttribute(
-                                'data-classID');
-                            classRef[index].setAttribute('href', adress);
-                        }
 
                         $('#alertDismiss').on('click', () => {
                             $('#alertMessage').hide(200);
                         })
 
-                        $('#deleteStudent').on('click', (event) => {
-                            let student = {
-                                'id': "%% student['id'] %%"
-                            }
-                            $.ajax({
-                                type: "post",
-                                url: "%% url_for('deleteStudentRoute') %%",
-                                // The key needs to match your method's input parameter (case-sensitive).
-                                data: JSON.stringify(student),
-                                contentType: "application/json; charset=utf-8",
-                                dataType: "json",
-                                success: function (data) {
-                                    if (!('message' in data)) {
-                                        window.location.href =
-                                            "%% url_for('students') %%";
-                                    } else {
-                                        console.log(data)
-                                    }
-                                },
-                                failure: function (errMsg) {
-                                    alert(errMsg);
-                                }
-                            });
-                        });
-
                         $('#cancelEdit').on('click', () => {
-                            window.location.href = "%% url_for('viewStudent') %%" + '?id=' +
-                                "%% student['id'] %%"
+                            window.location.href = "%% url_for('parents') %%"
                         })
 
-                        $("#updateStudent").on('click', () => {
+                        $("#updateParent").on('click', () => {
                             // Creating a student to post
                             // Validate
                             let allValid = true;
@@ -329,7 +243,7 @@
                             }
 
                             if (allValid) {
-                                postData(getStudentData())
+                                postData(getParentData())
                             } else {
                                 $('#alertMessage').find('p').text(errorMessage);
                                 $('#alertMessage').show(200);
@@ -338,7 +252,7 @@
 
                         $parentCon = $('.parents-con').first();
                         inputParentField =
-                            '<div class="col-sm-10 parent-wrapper"><input class="form-control parentIDInput" type="number"><i onclick="hideParent(this)" class="fa fa-times" aria-hidden="true"></i></div>';
+                            '<div class="col-sm-10 parent-wrapper"><input class="form-control childIDInput" type="number"><i onclick="hideParent(this)" class="fa fa-times" aria-hidden="true"></i></div>';
 
                         $('#add-parent-button').on('click', () => {
                             $parentCon.append(inputParentField);

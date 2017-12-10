@@ -12,6 +12,9 @@
                         <p style="margin-bottom: 0;">Alert</p>
 
                     </div>
+                    <div class="row">
+                        <h1 class="card-heading">Student:</h1>
+                    </div>
                     <form id="validationForm"></form>
                     <div class="row">
                         <div class="col prof-image-con">
@@ -160,9 +163,7 @@
                 </script>
                 <script>
                     let regexp = new RegExp("^\\+([0-9]{3})\x20([0-9]{3})\x20([0-9]{3})\x20([0-9]{3})$");
-                    let emailReg = new RegExp(
-                        '/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'
-                    );
+                    let emailReg = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
                     let requiredInputs = {
                         'name': false,
                         'surname': false,
@@ -233,7 +234,7 @@
                     $(function () {
 
                         // Make refs to parent pages
-                        parents = document.getElementsByClassName('parent-ref');
+                        parents = document.getElementsByClassName('relative-ref');
 
                         for (let index = 0; index < parents.length; index++) {
                             let adress = "%% url_for('viewParent') %%" + '?id=' + parents[index].getAttribute(

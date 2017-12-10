@@ -1,5 +1,5 @@
 <% extends "main_template.html" %>
-    <% block title %>%% student['surname'] %% %% student['name'] %%
+    <% block title %>%% professor['surname'] %% %% professor['name'] %%
         <%endblock%>
             <% block content %>
 
@@ -12,7 +12,7 @@
                         <p style="margin-bottom: 0;">Alert</p>
                     </div>
                     <div class="row">
-                        <h1 class="card-heading">Student:</h1>
+                        <h1 class="card-heading">Professor:</h1>
                     </div>
                     <form id="validationForm"></form>
                     <div class="row">
@@ -27,13 +27,25 @@
                             <div>
 
                                 <table>
+                                        <tr>
+                                                <td style="padding-right: 80px;" class="vs-table-info">
+                                                    <p>Title:</p>
+                                                </td>
+                                                <td>
+                                                    <div style="margin-bottom:1rem;" class="col-sm-10">
+                                                        <input data-validation="name" id="titleInput" class="form-control" value="%% professor['title'] %%" placeholder="%% professor['title'] %%"
+                                                            type="text">
+                                                    </div>
+        
+                                                </td>
+                                            </tr>
                                     <tr>
                                         <td style="padding-right: 80px;" class="vs-table-info">
                                             <p>Name:</p>
                                         </td>
                                         <td>
                                             <div style="margin-bottom:1rem;" class="col-sm-10">
-                                                <input data-validation="name" id="nameInput" class="form-control" value="%% student['name'] %%" placeholder="%% student['name'] %%"
+                                                <input data-validation="name" id="nameInput" class="form-control" value="%% professor['name'] %%" placeholder="%% professor['name'] %%"
                                                     type="text" onkeyup="checkkValidity(event)">
                                             </div>
 
@@ -45,7 +57,7 @@
                                         </td>
                                         <td>
                                             <div style="margin-bottom:1rem;" class="col-sm-10">
-                                                <input data-validation="surname" id="surnameInput" class="form-control" value="%% student['surname'] %%" placeholder="%% student['surname'] %%"
+                                                <input data-validation="surname" id="surnameInput" class="form-control" value="%% professor['surname'] %%" placeholder="%% professor['surname'] %%"
                                                     onkeyup="checkkValidity(event)">
                                             </div>
                                         </td>
@@ -55,28 +67,7 @@
                                             <p>ID:</p>
                                         </td>
                                         <td>
-                                            <p style="color: rgb(206, 206, 206)">%% student['id'] %%</p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="vs-table-info">
-                                            <p>Start: </p>
-                                        </td>
-                                        <td>
-                                            <div style="margin-bottom:1rem;" class="col-sm-10">
-                                                <input onkeyup="checkkValidity(event)" data-validation="start" id="startInput" class="form-control" value="%% student['start'] %%"
-                                                    placeholder="%% student['start'] %%" type="number">
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="vs-table-info">
-                                            <p>Class ID: </p>
-                                        </td>
-                                        <td>
-                                            <div style="margin-bottom:1rem;" class="col-sm-10">
-                                                <input id="classIDInput" class="form-control" value="%% student['class']['id'] %%" placeholder="remove" type="number">
-                                            </div>
+                                            <p style="color: rgb(206, 206, 206)">%% professor['id'] %%</p>
                                         </td>
                                     </tr>
                                 </table>
@@ -96,7 +87,7 @@
                                     </td>
                                     <td>
                                         <div style="margin-bottom:1rem;" class="col-sm-12">
-                                            <input type="email" id="emailInput" class="form-control" value="%% student['email'] %%" placeholder="%% student['email'] %%"
+                                            <input type="email" id="emailInput" class="form-control" value="%% professor['email'] %%" placeholder="%% professor['email'] %%"
                                                 type="text">
                                         </div>
                                     </td>
@@ -109,7 +100,7 @@
                                     </td>
                                     <td>
                                         <div style="margin-bottom:1rem;" class="col-sm-12">
-                                            <input id="phoneInput" class="form-control" value="%% student['phone'] %%" placeholder="%% student['phone']%%">
+                                            <input id="phoneInput" class="form-control" value="%% professor['phone'] %%" placeholder="%% professor['phone']%%">
                                         </div>
                                     </td>
                                 </tr>
@@ -121,34 +112,33 @@
                                     </td>
                                     <td>
                                         <div style="margin-bottom:1rem;" class="col-sm-12">
-                                            <input id="adressInput" class="form-control" value="%% student['adress'] %%" placeholder="%% student['adress']%%">
+                                            <input id="adressInput" class="form-control" value="%% professor['adress'] %%" placeholder="%% professor['adress'] %%">
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="vs-table-info">
-                                        <p class="no-bottom-margin">
-                                            <i class="fa fa-birthday-cake" aria-hidden="true"></i>
-                                        </p>
-                                    </td>
-                                    <td>
-                                        <div class="col-sm-12">
-                                            <input onkeyup="checkkValidity(event)" data-validation="birth" type="date" id="birthInput" class="form-control" placeholder="%% student['birth'] %%">
-                                        </div>
-                                    </td>
-                                </tr>
+                                        <td class="vs-table-info">
+                                            <p>Office: </p>
+                                        </td>
+                                        <td>
+                                            <div style="margin-bottom:1rem;" class="col-sm-10">
+                                                <input data-validation="surname" id="locInput" class="form-control" placeholder="Office"
+                                                    onkeyup="checkkValidity(event)">
+                                            </div>
+                                        </td>
+                                    </tr>
                             </table>
                         </div>
                         <div class="col main-parent-con">
                             <div>
-                                <p class="view-rel-headline">Parents</p>
+                                <p class="view-rel-headline">Classes</p>
                                 <p id="add-parent-button">
                                     <i class="fa fa-plus-circle" aria-hidden="true"></i>
                                 </p>
                                 <div class="parents-con">
-                                    <% for parent in student['parents'] %>
+                                    <% for tempClass in professor['classes'] %>
                                         <div class="col-sm-10 parent-wrapper">
-                                            <input class="form-control parentIDInput" value="%%parent['id']%%" placeholder="%%parent['id']%%" type="number">
+                                            <input class="form-control classIDInput" value="%% tempClass['id'] %%" placeholder="%% tempClass['id'] %%" type="number">
                                             <i onclick="hideParent(this)" class="fa fa-times" aria-hidden="true"></i>
                                         </div>
                                         <% endfor %>
@@ -161,8 +151,8 @@
                         <div id="cancel-button-wrapper">
                             <button id="cancelEdit" class="btn btn-outline-secondary">Cancel</button>
                         </div>
-                        <button id="updateStudent" class="btn btn-outline-primary">Save</button>
-                        <button id="deleteStudent" class="btn btn-outline-danger">
+                        <button id="updateProfessor" class="btn btn-outline-primary">Save</button>
+                        <button id="deleteProfessor" class="btn btn-outline-danger">
                             Delete
                         </button>
                     </div>
@@ -170,7 +160,8 @@
 
                 <script>
                     let regexp = new RegExp("^\\+([0-9]{3})\x20([0-9]{3})\x20([0-9]{3})\x20([0-9]{3})$");
-                    let emailReg = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+                    let emailReg =
+                        /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
                     // Gets automatically populated with the function below
                     let requiredInputs = {}
                     let errorMessage = '';
@@ -213,39 +204,38 @@
                     }
 
 
-                    function getStudentData() {
-                        postStudent = {
+                    function getProfessorData() {
+                        postProfessor = {
                             'name': $('#nameInput').val(),
-                            'id': parseInt("%% student['id'] %%"),
+                            'id': parseInt("%% professor['id'] %%"),
                             'surname': $('#surnameInput').val(),
-                            'birth': $('#birthInput').val(),
-                            'start': $('#startInput').val(),
-                            'classID': parseInt($('#classIDInput').val()),
                             'email': $('#emailInput').val(),
                             'phone': $('#phoneInput').val(),
+                            'loc': $('#locInput').val(),
                             'adress': $('#adressInput').val(),
-                            'parents': []
+                            'title': $('#titleInput').val(),
+                            'classes': []
                         };
 
                         // Appending all the parents found
-                        $('.parentIDInput').each(function () {
-                            postStudent['parents'].push(parseInt($(this).val()));
+                        $('.classIDInput').each(function () {
+                            postProfessor['classes'].push(parseInt($(this).val()));
                         });
-                        return postStudent
+                        return postProfessor
                     }
 
                     function postData(dataToPost) {
                         $.ajax({
                             type: "post",
-                            url: "%% url_for('updateStudentRoute') %%",
+                            url: "%% url_for('updateProfessorRoute') %%",
                             // The key needs to match your method's input parameter (case-sensitive).
                             data: JSON.stringify(dataToPost),
                             contentType: "application/json; charset=utf-8",
                             dataType: "json",
                             success: function (data) {
-                                if (data.success) {
-                                    window.location.href = "%% url_for('viewStudent') %%" + '?id=' +
-                                        "%% student['id'] %%";
+                                if (!('message' in data)) {
+                                    window.location.href = "%% url_for('viewProfessor') %%" + '?id=' +
+                                        "%% professor['id'] %%";
                                 } else {
                                     $('#alertMessage').find('p').text(data.message);
                                     $('#alertMessage').show(200);
@@ -264,45 +254,26 @@
 
 
                     $(function () {
-                        $('#birthInput').val(getIsoFormatDate("%% student['birth'] %%"));
-
-                        // Make refs to parent pages
-                        parents = document.getElementsByClassName('relative-ref');
-
-                        for (let index = 0; index < parents.length; index++) {
-                            let adress = "%% url_for('viewParent') %%" + '?id=' + parents[index].getAttribute(
-                                'data-parentID');
-                            parents[index].setAttribute('href', adress);
-                        }
-
-                        // Make refs to Class page
-                        // Doing it dynamically with loop prevents out of index error if there are no class-ref elements
-                        classRef = document.getElementsByClassName('class-ref')
-                        for (let index = 0; index < classRef.length; index++) {
-                            let adress = "%% url_for('viewClass') %%" + '?id=' + classRef[index].getAttribute(
-                                'data-classID');
-                            classRef[index].setAttribute('href', adress);
-                        }
 
                         $('#alertDismiss').on('click', () => {
                             $('#alertMessage').hide(200);
                         })
 
-                        $('#deleteStudent').on('click', (event) => {
-                            let student = {
-                                'id': "%% student['id'] %%"
+                        $('#deleteProfessor').on('click', (event) => {
+                            let professor = {
+                                'id': "%% professor['id'] %%"
                             }
                             $.ajax({
                                 type: "post",
-                                url: "%% url_for('deleteStudentRoute') %%",
+                                url: "%% url_for('deleteProfessorRoute') %%",
                                 // The key needs to match your method's input parameter (case-sensitive).
-                                data: JSON.stringify(student),
+                                data: JSON.stringify(professor),
                                 contentType: "application/json; charset=utf-8",
                                 dataType: "json",
                                 success: function (data) {
                                     if (!('message' in data)) {
                                         window.location.href =
-                                            "%% url_for('students') %%";
+                                            "%% url_for('professors') %%";
                                     } else {
                                         console.log(data)
                                     }
@@ -314,11 +285,11 @@
                         });
 
                         $('#cancelEdit').on('click', () => {
-                            window.location.href = "%% url_for('viewStudent') %%" + '?id=' +
-                                "%% student['id'] %%"
+                            window.location.href = "%% url_for('viewProfessor') %%" + '?id=' +
+                                "%% professor['id'] %%"
                         })
 
-                        $("#updateStudent").on('click', () => {
+                        $("#updateProfessor").on('click', () => {
                             // Creating a student to post
                             // Validate
                             let allValid = true;
@@ -329,7 +300,7 @@
                             }
 
                             if (allValid) {
-                                postData(getStudentData())
+                                postData(getProfessorData())
                             } else {
                                 $('#alertMessage').find('p').text(errorMessage);
                                 $('#alertMessage').show(200);
@@ -338,7 +309,7 @@
 
                         $parentCon = $('.parents-con').first();
                         inputParentField =
-                            '<div class="col-sm-10 parent-wrapper"><input class="form-control parentIDInput" type="number"><i onclick="hideParent(this)" class="fa fa-times" aria-hidden="true"></i></div>';
+                            '<div class="col-sm-10 parent-wrapper"><input class="form-control classIDInput" type="number"><i onclick="hideParent(this)" class="fa fa-times" aria-hidden="true"></i></div>';
 
                         $('#add-parent-button').on('click', () => {
                             $parentCon.append(inputParentField);

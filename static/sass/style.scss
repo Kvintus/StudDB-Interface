@@ -27,9 +27,30 @@ body {
     }
 }
 
-.student-table-phone,
-.student-table-id,
-.student-table-email {
+.class-info {
+    margin-left: 50px;
+
+    @media screen and (max-width: 968px){
+        margin-left: 20px;
+    }
+
+    table{
+        font-size: 20px;
+    }
+}
+
+.teacher-ref {
+    padding-bottom: 1rem;
+    color: gray;
+    display: block;
+
+    &:hover {
+        text-decoration: none;
+        color: rgb(87, 87, 87);
+    }
+}
+
+.student-table-hide {
     @media screen and (max-width: 768px){
         display: none;
     }
@@ -60,6 +81,10 @@ body {
         margin-bottom: 20px;
         min-width: 0px;
     }
+
+    hr {
+        margin-bottom: 1.7rem;
+    }
 }
 
 .vs-text-con {
@@ -87,6 +112,14 @@ body {
     }
 }
 
+#cancel-button-wrapper {
+    margin-right: auto;
+
+    button {
+        margin-left: 12px;
+    }
+}
+
 .vs-table-info {
     color: gray;
 }
@@ -106,7 +139,21 @@ body {
     margin-left: 20px;
 }
 
-.parent-ref {
+.students-wrapper {
+    @media screen and (max-width: 916px){
+        text-align: center;
+        transform: translate(-20px);
+    }
+}
+
+.card-heading {
+    margin-left: 50px;
+    font-size: 50px;
+    color: #cccccc;
+    margin-bottom: 12px;
+}
+
+.relative-ref {
     display: block;
 }
 
@@ -129,6 +176,7 @@ body {
 
 .parent-wrapper {
     display: table;
+    margin-bottom: 0.7rem;
 
     i{
         padding-left: 12px;
