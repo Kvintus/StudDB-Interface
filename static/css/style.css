@@ -28,6 +28,31 @@ body {
   color: #525252;
 }
 
+.class-info {
+  margin-left: 50px;
+}
+
+@media screen and (max-width: 968px) {
+  .class-info {
+    margin-left: 20px;
+  }
+}
+
+.class-info table {
+  font-size: 20px;
+}
+
+.teacher-ref {
+  padding-bottom: 1rem;
+  color: gray;
+  display: block;
+}
+
+.teacher-ref:hover {
+  text-decoration: none;
+  color: #575757;
+}
+
 @media screen and (max-width: 768px) {
   .student-table-hide {
     display: none;
@@ -121,6 +146,13 @@ body {
   margin-left: 20px;
 }
 
+@media screen and (max-width: 916px) {
+  .students-wrapper {
+    text-align: center;
+    transform: translate(-20px);
+  }
+}
+
 .card-heading {
   margin-left: 50px;
   font-size: 50px;
@@ -152,6 +184,7 @@ body {
 
 .parent-wrapper {
   display: table;
+  margin-bottom: 0.7rem;
 }
 
 .parent-wrapper i {
