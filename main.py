@@ -566,7 +566,7 @@ def editClass():
             with urllib.request.urlopen(ourUrl) as url:
                 r = json.loads(url.read().decode())
 
-            return render_template('classes/editClass.html', user = session['user'], rclass=r['rclass'], server = api_server)
+            return render_template('classes/editClass.html', user = session['user'], rclass=r['rclass'], server = api_server, userPrivilege = session['user']['privilege'])
         except:
             raise
             return apology(message="We are sorry the API server is down or the ID specified is wrong.",title='Server Down')
