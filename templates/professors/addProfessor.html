@@ -3,7 +3,7 @@
         <%endblock%>
             <% block content %>
 
-                <div class="container vs-main-con">
+                <div id="vs-main-vue" class="container vs-main-con">
                     <div id="alertMessage" style="margin-bottom: 20px; display:none;" class="alert alert-danger alert-dismissible fade show"
                         role="alert">
                         <button type="button" class="close" id="alertDismiss" aria-label="Close">
@@ -17,11 +17,7 @@
                     <form id="validationForm"></form>
                     <div class="row">
                         <div class="col prof-image-con">
-                            <% if isMale %>
-                                <img src="%% url_for('static', filename='images/placeholder_male.jpg') %%" alt="">
-                                <% else %>
-                                    <img src="%% url_for('static', filename='images/placeholder_female.jpg') %%" alt="">
-                                    <% endif %>
+                                <img v-bind:src="image" alt="">
                         </div>
                         <div class="col vs-text-con">
                             <div>
@@ -57,7 +53,7 @@
                                         </td>
                                         <td>
                                             <div style="margin-bottom:1rem;" class="col-sm-10">
-                                                <input data-validation="surname" id="surnameInput" class="form-control" placeholder="Surname"
+                                                <input v-model="surname" data-validation="surname" id="surnameInput" class="form-control" placeholder="Surname"
                                                     onkeyup="checkkValidity(event)">
                                             </div>
                                         </td>
@@ -142,6 +138,24 @@
                         <button id="updateProfessor" class="btn btn-outline-primary">Save</button>
                     </div>
                 </div>
+
+                <script>
+                        new Vue({
+                            el: '#vs-main-vue',
+                            data: {
+                                surname: ''
+                            },
+                            computed: {
+                                image: function () {
+                                    if ((this.surname.indexOf('ova') > -1) || (this.surname.indexOf('ová') > -1)) {
+                                        return "%% url_for('static', filename='images/placeholder_female.jpg') %%"
+                                    } else {
+                                        return "%% url_for('static', filename='images/placeholder_male.jpg') %%"
+                                    }
+                                }
+                            }
+                        })
+                    </script>
 
                 <script>
                     let regexp = new RegExp("^\\+([0-9]{3})\x20([0-9]{3})\x20([0-9]{3})\x20([0-9]{3})$");

@@ -506,7 +506,6 @@ def updateProfessorRoute():
 # updateStudentRoute
 @app.route('/professors/delete', methods = ['POST'])
 def deleteProfessorRoute():
-    print('tu som')
     try:
         url = api_server + "/api/professors/remove"
         r = requests.post(url, json=request.get_json())
@@ -516,19 +515,103 @@ def deleteProfessorRoute():
         raise
         return 'fail'
 
-
-
+#############################################
+# Classes
+#############################################
 # viewClass
-@app.route('/classes/viewClass', methods=['GET'])
+@app.route('/classes/view', methods=['GET'])
 @login_required
 def viewClass():
-    return 'work in progress'
+    ourId = None
+    r = None
+    
+    # Getting the id of the student we should display
+    try:
+        ourId = request.args.get('id')
+    except:
+        apology(message="No user specified", title="No user")
+    
+    # Getting the student's info
+    try:
+        ourUrl = api_server + "/api/classes/getOne?id={}".format(ourId)
+        
+        with urllib.request.urlopen(ourUrl) as url:
+            r = json.loads(url.read().decode())
 
+        return render_template('classes/viewClass.html', user = session['user'], class=r['class'], userPrivilege = session['user']['privilege'])
+    except:
+        raise
+        return apology(message="We are sorry the API server is down. Or the ID you provided is non-existent",title='Server Down')
 
+# editStudent
+@app.route('/classes/edit', methods=['GET'])
+@login_required
+def editClass():
+    if session['user']['privilege'] >= 3:
+        ourId = None
+        r = None
+        
+        # Getting the id of the student we should display
+        try:
+            ourId = request.args.get('id')
+        except:
+            apology(message="No user specified", title="No user")
+        
+        # Getting the student's info
+        try:
+            ourUrl = api_server + "/api/classes/getOne?id={}".format(ourId)
+            
+            with urllib.request.urlopen(ourUrl) as url:
+                r = json.loads(url.read().decode())
 
-# viewClass
+            return render_template('classes/editClass.html', user = session['user'], class=r['class'], server = api_server)
+        except:
+            raise
+            return apology(message="We are sorry the API server is down or the ID specified is wrong.",title='Server Down')
+    else:
+        return apology(message = "We are sorry but you do not have a permission to edit classes.", title="Permision denied")
+
+# addStudent
 @app.route('/classes/add', methods=['GET'])
 @login_required
 def addClass():
-    return 'work in progress'
+    if session['user']['privilege'] >= 3:
+        return render_template('classes/addClass.html', user = session['user'], server = api_server)
+    else:
+        return apology(message = "We are sorry but you do not have a permission to add classes.", title="Permision denied")
 
+# updateStudentRoute
+@app.route('/classes/addClassRoute', methods = ['POST'])
+def addProfessorRoute():
+    try:
+        url = api_server + "/api/classes/add"
+        r = requests.post(url, json=request.get_json())
+
+        return jsonify(r.json())
+    except:
+        raise
+        return 'fail'
+
+# updateStudentRoute
+@app.route('/classes/updateClassRoute', methods = ['POST'])
+def updateProfessorRoute():
+    try:
+        url = api_server + "/api/classes/update"
+        r = requests.post(url, json=request.get_json())
+
+        return jsonify(r.json())
+    except:
+        raise
+        return 'fail'
+
+# updateStudentRoute
+@app.route('/classes/delete', methods = ['POST'])
+def deleteProfessorRoute():
+    try:
+        url = api_server + "/api/classes/remove"
+        r = requests.post(url, json=request.get_json())
+
+        return jsonify(r.json())
+    except:
+        raise
+        return 'fail'
