@@ -92,6 +92,14 @@ body {
   }
 }
 
+#cancel-button-wrapper {
+  margin-right: auto;
+}
+
+#cancel-button-wrapper button {
+  margin-left: 12px;
+}
+
 .vs-table-info {
   color: gray;
 }
