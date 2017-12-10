@@ -93,6 +93,7 @@ def students():
 
         # Sort the array based on the parameter provided by user
         sortedArray = sortDataOnUnicodeKey(response.get('students'), params.get('orderBy'))
+        print(sortedArray)
         
         return render_template('students/listStudents.html', user = session['user'],orderBy = params['orderBy'], data=response['students'], current = 'students', currentAdd = {'what':'student','where':url_for('addStudent')}, orderDirection = request.args.get('order'))
     except:
@@ -122,6 +123,7 @@ def classes():
 
         # Sort the array based on the parameter provided by user
         sortedArray = sortDataOnUnicodeKey(response.get('classes'), params.get('orderBy'))
+        
         
         return render_template('classes/listClasses.html', user = session['user'],orderBy = params['orderBy'], data=response['classes'], current = 'classes', orderDirection = request.args.get('order'), currentAdd = {'what':'class','where':url_for('addClass')})
     except:

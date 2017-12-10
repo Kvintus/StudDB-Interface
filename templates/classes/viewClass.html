@@ -69,7 +69,7 @@
                                             <p style="font-size: 2rem; margin-bottom: 1.3rem" class="view-rel-headline">Students: </p>
                                             <div style="margin-left: 50px" class="parents-con">
                                                 <% for pupil in rclass['pupils'] %>
-                                                    <a class="relative-ref custom-button" data-pupilID="%% pupil['id'] %%" href="#">%% pupil['wholeName'] %%</a>
+                                                    <a class="relative-ref custom-button" data-pupilID="%% pupil['id'] %%" href="#">%% pupil['name'] %% %% pupil['surname'] %%</a>
                                                     <br>
                                                     <% endfor %>
                                             </div>
