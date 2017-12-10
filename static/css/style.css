@@ -184,6 +184,7 @@ body {
 
 .parent-wrapper {
   display: table;
+  margin-bottom: 0.7rem;
 }
 
 .parent-wrapper i {

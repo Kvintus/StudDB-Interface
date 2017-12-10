@@ -1,14 +1,10 @@
 <% extends "main_template.html" %>
     <% block title %>
-        <% if 'altname' in rclass %>
-            %% rclass['altname'] %%
-            <% else %>
-                %% rclass['name'] %%
-                <% endif %>
+        Add class
                     <%endblock%>
                         <% block content %>
                             <div style="padding-left: 50px;" class="container vs-main-con">
-                                <div id="alertMessage" style="margin-bottom: 20px; display:none;" class="alert alert-danger alert-dismissible fade show"
+                                    <div id="alertMessage" style="margin-bottom: 20px; display:none;" class="alert alert-danger alert-dismissible fade show"
                                     role="alert">
                                     <button type="button" class="close" id="alertDismiss" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
@@ -17,11 +13,6 @@
                                 </div>
                                 <div style="margin-bottom: 2rem;" class="row">
                                     <h1 style="margin-left: 0;" class="card-heading">Class:
-                                        <% if 'altname' in rclass %>
-                                            %% rclass['altname'] %% (%% rclass['name'] %%)
-                                            <% else %>
-                                                %% rclass['name'] %%
-                                                <% endif %>
                                     </h1>
                                 </div>
                                 <div class="row">
@@ -30,42 +21,24 @@
                                         <br>
                                         <div class="class-info">
                                             <table>
-                                                <tr>
-                                                    <td style="padding-right: 90px;" class="vs-table-info">
-                                                        <p>Name:</p>
-                                                    </td>
-                                                    <td>
-                                                        <p>
-                                                            <% if 'altname' in rclass %>
-                                                                %% rclass['altname'] %% (%% rclass['name'] %%)
-                                                                <% else %>
-                                                                    %% rclass['name'] %%
-                                                                    <% endif %>
-                                                        </p>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="vs-table-info">
-                                                        <p>Class teacher:</p>
-                                                    </td>
-                                                    <td>
-                                                        <div style="margin-bottom:1rem;" class="col-sm-10">
-                                                            <% if rclass['professors']|length %>
-                                                                <input data-validation="teacher" id="teacherIDInput" class="form-control" value="%% rclass['professors'][0]['id'] %%" placeholder="%% rclass['professors'][0]['id'] %%"
-                                                                    onkeyup="checkkValidity(event)" type="number">
-                                                                <% else %>
-                                                                    <input data-validation="teacher" id="teacherIDInput" class="form-control" onkeyup="checkkValidity(event)" type="number">
-                                                                    <% endif %>
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                                    <tr>
+                                                            <td class="vs-table-info">
+                                                                <p>Teacher:</p>
+                                                            </td>
+                                                            <td>
+                                                                <div style="margin-bottom:1rem;" class="col-sm-10">
+                                                                    <input data-validation="teacher" id="teacherIDInput" class="form-control is-invalid" placeholder="Teacher ID"
+                                                                        onkeyup="checkkValidity(event)" type="number">
+                                                                </div>
+                                                            </td>
+                                                        </tr>
                                                 <tr>
                                                     <td class="vs-table-info">
                                                         <p>Letter:</p>
                                                     </td>
                                                     <td>
                                                         <div style="margin-bottom:1rem;" class="col-sm-10">
-                                                            <input data-validation="letter" id="letterInput" class="form-control" value="%% rclass['letter']%%" placeholder="%% rclass['letter']%%"
+                                                            <input data-validation="letter" id="letterInput" class="form-control is-invalid" placeholder="Letter"
                                                                 onkeyup="checkkValidity(event)">
                                                         </div>
                                                     </td>
@@ -76,7 +49,7 @@
                                                     </td>
                                                     <td>
                                                         <div style="margin-bottom:1rem;" class="col-sm-10">
-                                                            <input data-validation="room" id="roomInput" class="form-control" value="%% rclass['room'] %%" placeholder="%% rclass['room'] %%"
+                                                            <input data-validation="room" id="roomInput" class="form-control is-invalid" placeholder="Class room"
                                                                 onkeyup="checkkValidity(event)">
                                                         </div>
                                                     </td>
@@ -87,17 +60,9 @@
                                                     </td>
                                                     <td>
                                                         <div style="margin-bottom:1rem;" class="col-sm-10">
-                                                            <input data-validation="start" id="startInput" class="form-control" value="%% rclass['start'] %%" placeholder="%% rclass['start'] %%"
+                                                            <input data-validation="start" id="startInput" class="form-control is-invalid" placeholder="Start"
                                                                 onkeyup="checkkValidity(event)" type="number">
                                                         </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="vs-table-info">
-                                                        <p>ID:</p>
-                                                    </td>
-                                                    <td>
-                                                        <p class="vs-gray-info">%% rclass['id'] %%</p>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -110,12 +75,8 @@
                                                 <i class="fa fa-plus-circle" aria-hidden="true"></i>
                                             </p>
                                             <div style="margin-left: 50px" class="parents-con">
-                                                <% for pupil in rclass['pupils'] %>
                                                     <div class="col-sm-10 parent-wrapper">
-                                                        <input class="form-control pupilIDInput" value="%% pupil['id'] %%" placeholder="%% pupil['id'] %%" type="number">
-                                                        <i onclick="hideParent(this)" class="fa fa-times" aria-hidden="true"></i>
                                                     </div>
-                                                    <% endfor %>
                                             </div>
                                         </div>
                                     </div>
@@ -127,9 +88,6 @@
                                             <button id="cancelEdit" class="btn btn-outline-secondary">Cancel</button>
                                         </div>
                                         <button id="updateClass" class="btn btn-outline-primary">Save</button>
-                                        <button id="deleteClass" class="btn btn-outline-danger">
-                                            Delete
-                                        </button>
                                     </div>
                                     <% endif %>
                             </div>
@@ -179,7 +137,6 @@
 
                                 function getClassData() {
                                     postClass = {
-                                        'id': parseInt("%% rclass['id'] %%"),
                                         'start': $('#startInput').val(),
                                         'room': $('#roomInput').val(),
                                         'letter': $('#letterInput').val(),
@@ -191,12 +148,11 @@
                                     $('.pupilIDInput').each(function () {
                                         postClass['pupils'].push(parseInt($(this).val()));
                                     });
-
+                                    
                                     // Appending all the parents found
-                                    $('#teacherIDInput').each(function () {
+                                    $('.teacherIDInput').each(function () {
                                         postClass['professors'].push(parseInt($(this).val()));
                                     });
-
 
                                     return postClass
                                 }
@@ -204,16 +160,14 @@
                                 function postData(dataToPost) {
                                     $.ajax({
                                         type: "post",
-                                        url: "%% url_for('updateClassRoute') %%",
+                                        url: "%% url_for('addClassRoute') %%",
                                         // The key needs to match your method's input parameter (case-sensitive).
                                         data: JSON.stringify(dataToPost),
                                         contentType: "application/json; charset=utf-8",
                                         dataType: "json",
                                         success: function (data) {
                                             if (!('message' in data)) {
-                                                window.location.href = "%% url_for('viewClass') %%" +
-                                                    '?id=' +
-                                                    "%% rclass['id'] %%";
+                                                window.location.href = "%% url_for('viewClass') %%" + '?id=' + data.classID;
                                             } else {
                                                 $('#alertMessage').find('p').text(data.message);
                                                 $('#alertMessage').show(200);
@@ -233,67 +187,41 @@
 
                                 $(function () {
 
-                                    $('#alertDismiss').on('click', () => {
-                                        $('#alertMessage').hide(200);
-                                    });
+                                            $('#alertDismiss').on('click', () => {
+                                                $('#alertMessage').hide(200);
+                                            });
 
-                                    $('#deleteClass').on('click', (event) => {
-                                        let tempClass = {
-                                            'id': "%% rclass['id'] %%"
-                                        };
-                                        $.ajax({
-                                            type: "post",
-                                            url: "%% url_for('deleteClassRoute') %%",
-                                            // The key needs to match your method's input parameter (case-sensitive).
-                                            data: JSON.stringify(tempClass),
-                                            contentType: "application/json; charset=utf-8",
-                                            dataType: "json",
-                                            success: function (data) {
-                                                if (!('message' in data)) {
-                                                    window.location.href =
-                                                        "%% url_for('classes') %%";
-                                                } else {
-                                                    console.log(data)
+                                            
+                                            $('#cancelEdit').on('click', () => {
+                                                window.location.href = "%% url_for('classes') %%"
+                                            });
+
+                                            $("#updateClass").on('click', () => {
+                                                // Creating a student to post
+                                                // Validate
+                                                let allValid = true;
+                                                for (key in requiredInputs) {
+                                                    if (requiredInputs[key] === false) {
+                                                        allValid = false;
+                                                    }
                                                 }
-                                            },
-                                            failure: function (errMsg) {
-                                                alert(errMsg);
-                                            }
-                                        });
-                                    });
 
-                                    $('#cancelEdit').on('click', () => {
-                                        window.location.href = "%% url_for('viewClass') %%" +
-                                            '?id=' +
-                                            "%% rclass['id'] %%"
-                                    });
+                                                if (allValid) {
+                                                    postData(getClassData())
+                                                } else {
+                                                    $('#alertMessage').find('p').text(errorMessage);
+                                                    $('#alertMessage').show(200);
+                                                }
+                                            });
 
-                                    $("#updateClass").on('click', () => {
-                                        // Creating a student to post
-                                        // Validate
-                                        let allValid = true;
-                                        for (key in requiredInputs) {
-                                            if (requiredInputs[key] === false) {
-                                                allValid = false;
-                                            }
-                                        }
+                                            $parentCon = $('.parents-con').first();
+                                            inputParentField = '<div class="col-sm-10 parent-wrapper"><input class="form-control pupilIDInput" type="number"><i onclick="hideParent(this)" class="fa fa-times" aria-hidden="true"></i></div>';
 
-                                        if (allValid) {
-                                            postData(getClassData())
-                                        } else {
-                                            $('#alertMessage').find('p').text(errorMessage);
-                                            $('#alertMessage').show(200);
-                                        }
-                                    });
-
-                                    $parentCon = $('.parents-con').first();
-                                    inputParentField =
-                                        '<div class="col-sm-10 parent-wrapper"><input class="form-control pupilIDInput" type="number"><i onclick="hideParent(this)" class="fa fa-times" aria-hidden="true"></i></div>';
-
-                                    $('#add-parent-button').on('click', () => {
-                                        $parentCon.prepend(inputParentField);
-                                    })
+                                            $('#add-parent-button').on('click', () => {
+                                                $parentCon.prepend(inputParentField);
+                                            })
                                 })
+                                        
                             </script>
 
                             <% endblock %>

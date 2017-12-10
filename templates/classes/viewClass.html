@@ -42,7 +42,11 @@
                                                         <p>Class teacher:</p>
                                                     </td>
                                                     <td>
-                                                        <a class="teacher-ref" data-teacherID="%% rclass['professors'][0]['id'] %%" href="#">%% rclass['professors'][0]['wholeName'] %%</a>
+                                                        <% if rclass['professors']|length > 0 %>
+                                                            <a class="teacher-ref" data-teacherID="%% rclass['professors'][0]['id'] %%" href="#">%% rclass['professors'][0]['wholeName'] %%</a>
+                                                        <% else %>
+                                                            <p>No teacher</p>
+                                                        <% endif %>
                                                     </td>
                                                 </tr>
                                                 <tr>

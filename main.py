@@ -578,7 +578,7 @@ def editClass():
 @login_required
 def addClass():
     if session['user']['privilege'] >= 3:
-        return render_template('classes/addClass.html', user = session['user'], server = api_server)
+        return render_template('classes/addClass.html', user = session['user'], server = api_server, userPrivilege = session['user']['privilege'])
     else:
         return apology(message = "We are sorry but you do not have a permission to add classes.", title="Permision denied")
 
