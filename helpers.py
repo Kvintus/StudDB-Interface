@@ -36,6 +36,7 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+
 def sortDataOnUnicodeKey(arrayToSort, key):
     """Sorts an array by the parameter specified"""
 
