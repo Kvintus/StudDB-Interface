@@ -29,9 +29,7 @@ body {
 }
 
 @media screen and (max-width: 768px) {
-  .student-table-phone,
-  .student-table-id,
-  .student-table-email {
+  .student-table-hide {
     display: none;
   }
 }
@@ -65,6 +63,10 @@ body {
     margin-bottom: 20px;
     min-width: 0px;
   }
+}
+
+.vs-main-con hr {
+  margin-bottom: 1.7rem;
 }
 
 .vs-text-con {

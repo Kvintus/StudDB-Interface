@@ -94,7 +94,7 @@
                                 <p class="view-rel-headline">Classes</p>
                                 <div class="parents-con">
                                     <% for tempClass in professor['classes'] %>
-                                        <% if 'altname' in professor['classes'] %>
+                                        <% if 'altname' in tempClass %>
                                             <a class="relative-ref custom-button" data-classID="%% tempClass['id'] %%" href="#">%% tempClass['altname'] %%</a>
                                             <br>
                                         <% else %>
@@ -123,7 +123,7 @@
                         for (let index = 0; index < classes.length; index++) {
                             let adress = "%% url_for('viewClass') %%" + '?id=' + classes[index].getAttribute(
                                 'data-classID');
-                            children[index].setAttribute('href', adress);
+                            classes[index].setAttribute('href', adress);
                         }
 
                         // Setting up the editButton

@@ -53,23 +53,23 @@
         <% if orderDirection == 'asc' %>
             <% for professor in data | reverse %>
             <tr class="display-row">
-                <td>%% professor['id']%%</td>
-                <td>%% professor['title']%%</td>
+                <td class="student-table-hide">%% professor['id']%%</td>
+                <td class="student-table-hide">%% professor['title']%%</td>
                 <td>%% professor['name'] %%</td>
                 <td>%% professor['surname'] %%</td>
-                <td>%% professor['email'] %%</td>
-                <td>%% professor['phone'] %%</td>
+                <td class="student-table-hide">%% professor['email'] %%</td>
+                <td class="student-table-hide">%% professor['phone'] %%</td>
             </tr>
             <% endfor %>
         <% else %>
             <% for professor in data %>
             <tr class="display-row">
-                <td>%% professor['id']%%</td>
-                <td>%% professor['title']%%</td>
+                <td class="student-table-hide">%% professor['id']%%</td>
+                <td class="student-table-hide">%% professor['title']%%</td>
                 <td>%% professor['name'] %%</td>
                 <td>%% professor['surname'] %%</td>
-                <td>%% professor['email'] %%</td>
-                <td>%% professor['phone'] %%</td>
+                <td class="student-table-hide">%% professor['email'] %%</td>
+                <td class="student-table-hide">%% professor['phone'] %%</td>
             </tr>
             <% endfor %>
         <% endif %>
@@ -104,6 +104,7 @@
         if (mainSorter.order === "None") {
             mainSorter.order = "desc";
         }
+        
         //Zmenit znaky na vsetkych ostatnych
         ostatne = document.getElementsByClassName('sorter');
         for (var i = 0; i < ostatne.length; i++) {

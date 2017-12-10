@@ -465,21 +465,22 @@ def editProfessor():
 
             return render_template('professors/editProfessor.html', user = session['user'], professor=r['professor'], server = api_server, isMale = isMale)
         except:
+            raise
             return apology(message="We are sorry the API server is down or the ID specified is wrong.",title='Server Down')
     else:
         return apology(message = "We are sorry but you do not have a permission to edit professors.", title="Permision denied")
 
 # addStudent
-@app.route('/parents/add', methods=['GET'])
+@app.route('/professors/add', methods=['GET'])
 @login_required
 def addProfessor():
     if session['user']['privilege'] >= 3:
-        return render_template('parents/addParent.html', user = session['user'], server = api_server)
+        return render_template('professors/addProfessor.html', user = session['user'], server = api_server)
     else:
-        return apology(message = "We are sorry but you do not have a permission to add parents.", title="Permision denied")
+        return apology(message = "We are sorry but you do not have a permission to add professors.", title="Permision denied")
 
 # updateStudentRoute
-@app.route('/parents/addProfessorRoute', methods = ['POST'])
+@app.route('/professors/addProfessorRoute', methods = ['POST'])
 def addProfessorRoute():
     try:
         url = api_server + "/api/professors/add"
@@ -491,7 +492,7 @@ def addProfessorRoute():
         return 'fail'
 
 # updateStudentRoute
-@app.route('/parents/updateProfessorRoute', methods = ['POST'])
+@app.route('/professors/updateProfessorRoute', methods = ['POST'])
 def updateProfessorRoute():
     try:
         url = api_server + "/api/professors/update"
@@ -503,8 +504,9 @@ def updateProfessorRoute():
         return 'fail'
 
 # updateStudentRoute
-@app.route('/parents/delete', methods = ['POST'])
+@app.route('/professors/delete', methods = ['POST'])
 def deleteProfessorRoute():
+    print('tu som')
     try:
         url = api_server + "/api/professors/remove"
         r = requests.post(url, json=request.get_json())
