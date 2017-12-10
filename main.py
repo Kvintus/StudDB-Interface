@@ -356,6 +356,15 @@ def editParent():
     else:
         return apology(message = "We are sorry but you do not have a permission to edit students.", title="Permision denied")
 
+# addStudent
+@app.route('/parents/add', methods=['GET'])
+@login_required
+def addParent():
+    if session['user']['privilege'] >= 3:
+        return render_template('parents/addParent.html', user = session['user'], server = api_server)
+    else:
+        return apology(message = "We are sorry but you do not have a permission to add parents.", title="Permision denied")
+
 # updateStudentRoute
 @app.route('/parents/addParentRoute', methods = ['POST'])
 def addParentRoute():
@@ -400,7 +409,6 @@ def viewClass():
 
 
 
-
 # viewClass
 @app.route('/classes/add', methods=['GET'])
 @login_required
@@ -412,10 +420,4 @@ def addClass():
 @app.route('/professors/add', methods=['GET'])
 @login_required
 def addProfessor():
-    return 'work in progress'
-
-# viewClass
-@app.route('/parents/add', methods=['GET'])
-@login_required
-def addParent():
     return 'work in progress'
