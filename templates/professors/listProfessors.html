@@ -117,6 +117,13 @@
             }
         }
 
+        $('.display-row').on('click', (event)=>{
+            let idOfThisRow = event.currentTarget.firstElementChild.innerHTML;
+            window.location.href = "%% url_for('viewProfessor')%%" + '?id=' + idOfThisRow;
+        })
+
+        $('#nav-' + '%% current %%').addClass('active');
+
         $('#nav-' + '%% current %%').addClass('active');
     })
 </script>

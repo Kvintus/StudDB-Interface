@@ -300,7 +300,7 @@ def deleteStudentRoute():
 
 
 # viewParent
-@app.route('/parents/viewParent', methods=['GET'])
+@app.route('/parents/view', methods=['GET'])
 @login_required
 def viewParent():
     ourId = None
@@ -404,6 +404,118 @@ def deleteParentRoute():
         raise
         return 'fail'
 
+
+
+#############################################
+# Professors
+#############################################
+# viewProfessor
+@app.route('/professors/view', methods=['GET'])
+@login_required
+def viewProfessor():
+    ourId = None
+    r = None
+    
+    # Getting the id of the student we should display
+    try:
+        ourId = request.args.get('id')
+    except:
+        apology(message="No user specified", title="No user")
+    
+    # Getting the student's info
+    try:
+        ourUrl = api_server + "/api/professors/getOne?id={}".format(ourId)
+        
+        with urllib.request.urlopen(ourUrl) as url:
+            r = json.loads(url.read().decode())
+        
+        isMale = True
+        if r['professor']['surname'][-3:] == "ová" or r['professor']['surname'][-3:] == "ova":
+            isMale = False
+
+        return render_template('professors/viewProfessor.html', user = session['user'], professor=r['professor'], isMale = isMale, userPrivilege = session['user']['privilege'])
+    except:
+        raise
+        return apology(message="We are sorry the API server is down. Or the ID you provided is non-existent",title='Server Down')
+
+# editStudent
+@app.route('/professors/edit', methods=['GET'])
+@login_required
+def editProfessor():
+    if session['user']['privilege'] >= 3:
+        ourId = None
+        r = None
+        
+        # Getting the id of the student we should display
+        try:
+            ourId = request.args.get('id')
+        except:
+            apology(message="No user specified", title="No user")
+        
+        # Getting the student's info
+        try:
+            ourUrl = api_server + "/api/professors/getOne?id={}".format(ourId)
+            
+            with urllib.request.urlopen(ourUrl) as url:
+                r = json.loads(url.read().decode())
+
+            isMale = True
+            if r['professor']['surname'][-3:] == "ová" or r['professor']['surname'][-3:] == "ova":
+                isMale = False
+
+            return render_template('professors/editProfessor.html', user = session['user'], professor=r['professor'], server = api_server, isMale = isMale)
+        except:
+            return apology(message="We are sorry the API server is down or the ID specified is wrong.",title='Server Down')
+    else:
+        return apology(message = "We are sorry but you do not have a permission to edit professors.", title="Permision denied")
+
+# addStudent
+@app.route('/parents/add', methods=['GET'])
+@login_required
+def addProfessor():
+    if session['user']['privilege'] >= 3:
+        return render_template('parents/addParent.html', user = session['user'], server = api_server)
+    else:
+        return apology(message = "We are sorry but you do not have a permission to add parents.", title="Permision denied")
+
+# updateStudentRoute
+@app.route('/parents/addProfessorRoute', methods = ['POST'])
+def addProfessorRoute():
+    try:
+        url = api_server + "/api/professors/add"
+        r = requests.post(url, json=request.get_json())
+
+        return jsonify(r.json())
+    except:
+        raise
+        return 'fail'
+
+# updateStudentRoute
+@app.route('/parents/updateProfessorRoute', methods = ['POST'])
+def updateProfessorRoute():
+    try:
+        url = api_server + "/api/professors/update"
+        r = requests.post(url, json=request.get_json())
+
+        return jsonify(r.json())
+    except:
+        raise
+        return 'fail'
+
+# updateStudentRoute
+@app.route('/parents/delete', methods = ['POST'])
+def deleteProfessorRoute():
+    try:
+        url = api_server + "/api/professors/remove"
+        r = requests.post(url, json=request.get_json())
+
+        return jsonify(r.json())
+    except:
+        raise
+        return 'fail'
+
+
+
 # viewClass
 @app.route('/classes/viewClass', methods=['GET'])
 @login_required
@@ -418,9 +530,3 @@ def viewClass():
 def addClass():
     return 'work in progress'
 
-
-# viewClass
-@app.route('/professors/add', methods=['GET'])
-@login_required
-def addProfessor():
-    return 'work in progress'
