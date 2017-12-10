@@ -87,6 +87,14 @@ body {
     }
 }
 
+#cancel-button-wrapper {
+    margin-right: auto;
+
+    button {
+        margin-left: 12px;
+    }
+}
+
 .vs-table-info {
     color: gray;
 }

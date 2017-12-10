@@ -271,6 +271,30 @@ def addStudentRoute():
         raise
         return 'fail'
 
+# updateStudentRoute
+@app.route('/students/updateStudentRoute', methods = ['POST'])
+def updateStudentRoute():
+    try:
+        url = api_server + "/api/students/update"
+        r = requests.post(url, json=request.get_json())
+
+        return jsonify(r.json())
+    except:
+        raise
+        return 'fail'
+
+# updateStudentRoute
+@app.route('/students/delete', methods = ['POST'])
+def deleteStudentRoute():
+    try:
+        url = api_server + "/api/students/remove"
+        r = requests.post(url, json=request.get_json())
+
+        return jsonify(r.json())
+    except:
+        raise
+        return 'fail'
+
 
 # viewParent
 @app.route('/parents/viewParent', methods=['GET'])
@@ -305,7 +329,6 @@ def viewParent():
 @app.route('/parents/edit', methods=['GET'])
 @login_required
 def editParent():
-    return "work in progress"
     if session['user']['privilege'] >= 3:
         ourId = None
         r = None
@@ -318,20 +341,56 @@ def editParent():
         
         # Getting the student's info
         try:
-            ourUrl = api_server + "/api/students/getOne?id={}".format(ourId)
+            ourUrl = api_server + "/api/parents/getOne?id={}".format(ourId)
             
             with urllib.request.urlopen(ourUrl) as url:
                 r = json.loads(url.read().decode())
 
             isMale = True
-            if r['student']['surname'][-3:] == "ová" or r['student']['surname'][-3:] == "ova":
+            if r['parent']['surname'][-3:] == "ová" or r['parent']['surname'][-3:] == "ova":
                 isMale = False
 
-            return render_template('students/editStudent.html', user = session['user'], student=r['student'], server = api_server, isMale = isMale)
+            return render_template('parents/editParent.html', user = session['user'], parent=r['parent'], server = api_server, isMale = isMale)
         except:
             return apology(message="We are sorry the API server is down or the ID specified is wrong.",title='Server Down')
     else:
         return apology(message = "We are sorry but you do not have a permission to edit students.", title="Permision denied")
+
+# updateStudentRoute
+@app.route('/parents/addParentRoute', methods = ['POST'])
+def addParentRoute():
+    try:
+        url = api_server + "/api/parents/add"
+        r = requests.post(url, json=request.get_json())
+
+        return jsonify(r.json())
+    except:
+        raise
+        return 'fail'
+
+# updateStudentRoute
+@app.route('/parents/updateParentRoute', methods = ['POST'])
+def updateParentRoute():
+    try:
+        url = api_server + "/api/parents/update"
+        r = requests.post(url, json=request.get_json())
+
+        return jsonify(r.json())
+    except:
+        raise
+        return 'fail'
+
+# updateStudentRoute
+@app.route('/parents/delete', methods = ['POST'])
+def deleteParentRoute():
+    try:
+        url = api_server + "/api/parents/remove"
+        r = requests.post(url, json=request.get_json())
+
+        return jsonify(r.json())
+    except:
+        raise
+        return 'fail'
 
 # viewClass
 @app.route('/classes/viewClass', methods=['GET'])
@@ -340,29 +399,7 @@ def viewClass():
     return 'work in progress'
 
 
-# updateStudentRoute
-@app.route('/students/updateStudentRoute', methods = ['POST'])
-def updateStudentRoute():
-    try:
-        url = api_server + "/api/students/update"
-        r = requests.post(url, json=request.get_json())
 
-        return jsonify(r.json())
-    except:
-        raise
-        return 'fail'
-
-# updateStudentRoute
-@app.route('/students/delete', methods = ['POST'])
-def deleteStudentRoute():
-    try:
-        url = api_server + "/api/students/remove"
-        r = requests.post(url, json=request.get_json())
-
-        return jsonify(r.json())
-    except:
-        raise
-        return 'fail'
 
 # viewClass
 @app.route('/classes/add', methods=['GET'])
