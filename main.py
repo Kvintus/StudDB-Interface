@@ -216,6 +216,7 @@ def viewStudent():
 
         return render_template('students/viewStudent.html', user = session['user'], student=r['student'], isMale = isMale, userPrivilege = session['user']['privilege'])
     except:
+        raise
         return apology(message="We are sorry the API server is down. Or the ID you provided is non-existent",title='Server Down')
 
 # editStudent
@@ -242,9 +243,11 @@ def editStudent():
             isMale = True
             if r['student']['surname'][-3:] == "ová" or r['student']['surname'][-3:] == "ova":
                 isMale = False
+            
 
             return render_template('students/editStudent.html', user = session['user'], student=r['student'], server = api_server, isMale = isMale)
         except:
+            raise
             return apology(message="We are sorry the API server is down or the ID specified is wrong.",title='Server Down')
     else:
         return apology(message = "We are sorry but you do not have a permission to edit students.", title="Permision denied")
