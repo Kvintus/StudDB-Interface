@@ -539,6 +539,8 @@ def viewClass():
         
         with urllib.request.urlopen(ourUrl) as url:
             r = json.loads(url.read().decode())
+        
+        sortDataOnUnicodeKey(r['rclass']['pupils'], 'surname')
 
         return render_template('classes/viewClass.html', user = session['user'], rclass=r['rclass'], userPrivilege = session['user']['privilege'])
     except:
