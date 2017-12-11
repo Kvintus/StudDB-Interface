@@ -1,8 +1,8 @@
 from helpers import *
 from flask import request
 
-#api_server = "https://stud-db-api.herokuapp.com"
-api_server = "http://127.0.0.1:5000"
+api_server = "https://stud-db-api.herokuapp.com"
+#api_server = "http://127.0.0.1:5000"
 
 # Index
 @app.route('/')
