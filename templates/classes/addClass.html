@@ -150,9 +150,10 @@
                                     });
                                     
                                     // Appending all the parents found
-                                    $('.teacherIDInput').each(function () {
+                                    $('#teacherIDInput').each(function () {
                                         postClass['professors'].push(parseInt($(this).val()));
                                     });
+                                    console.log(postClass)
 
                                     return postClass
                                 }
