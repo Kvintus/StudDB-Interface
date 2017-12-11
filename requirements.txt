@@ -2,7 +2,7 @@ Flask
 gunicorn
 flask_sqlalchemy
 bs4
-assets/pyicu.whl
+assets/PyICU-1.9.5-cp35-cp35m-linux_x86_64.whl
 passlib
 flask_session
 setuptools
