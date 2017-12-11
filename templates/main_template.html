@@ -36,11 +36,10 @@
                             <i class="fa fa-user user-icon" aria-hidden="true"></i>
                         </div>
                         <div class="dropdown-menu drp" aria-labelledby="navbarDropdownMenuLink">
-                            <a style="color: #6f6f6f" class="dropdown-item" href="#">Profile</a>
                             <% if user['privilege'] == 5 %>
                                 <a style="color: #6f6f6f" class="dropdown-item" href="%% url_for('register') %%">Register</a>
+                                <div class="dropdown-divider"></div>
                             <% endif %>
-                            <div class="dropdown-divider"></div>
                             
 
                             <a class="logout" href="%% url_for('login') %%">
