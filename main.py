@@ -1,8 +1,8 @@
 from helpers import *
 from flask import request
 
-#api_server = "https://stud-db-api.herokuapp.com"
-api_server = "http://127.0.0.1:5000"
+api_server = "https://stud-db-api.herokuapp.com"
+#api_server = "http://127.0.0.1:5000"
 
 # Index
 @app.route('/')
@@ -539,6 +539,8 @@ def viewClass():
         
         with urllib.request.urlopen(ourUrl) as url:
             r = json.loads(url.read().decode())
+        
+        sortDataOnUnicodeKey(r['rclass']['pupils'], 'surname')
 
         return render_template('classes/viewClass.html', user = session['user'], rclass=r['rclass'], userPrivilege = session['user']['privilege'])
     except:
