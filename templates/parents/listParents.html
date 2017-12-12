@@ -1,0 +1,123 @@
+<% extends "main_template.html" %> 
+<% block title %> Parents <% endblock %>
+<% block content %>
+<table id="tabulka" class="table sticky-header">
+    <thead class="table-header">
+        <tr>
+            <th class="student-table-id" data-tsorter="numeric">
+                <div>
+                    <input id="inputID" onkeyup="filterByID()" class="table-header" type="text" placeholder="#">
+                    <img onclick="switchB(this)" data-sorterID="id" class="sipka sorter" src="%% url_for('static', filename='images/icons/desc.png') %%"
+                        alt="" srcset="">
+                </div>
+            </th>
+            <th>
+                <div>
+                    <input id="inputName" onkeyup="menaFilter()" class="table-header" type="text" placeholder="Name">
+                    <img onclick="switchB(this)" data-sorterID="name" class="sipka sorter" src="%% url_for('static', filename='images/icons/no.png') %%"
+                        alt="" srcset="">
+                </div>
+            </th>
+
+            <th>
+                <div>
+                    <input id="inputSurname" onkeyup="priezvFilter()" class="table-header" type="text" placeholder="Surname">
+                    <img onclick="switchB(this)" data-sorterID="surname" class="sipka sorter" src="%% url_for('static', filename='images/icons/no.png') %%"
+                        alt="" srcset="">
+                </div>
+            </th>
+            <th class="student-table-email">
+                <div>
+                    <input class="table-header dis" type="text" placeholder="Email" disabled>
+                    <div class="placeholderDiv"></div>
+                </div>
+            </th>
+            <th class="student-table-phone">
+                <div>
+                    <input class="table-header dis" type="text" placeholder="Telefon" disabled>
+                    <div class=""></div>
+                </div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if orderDirection == 'asc' %>
+            <% for parent in data | reverse %>
+            <tr class="display-row">
+                <td class="student-table-hide">%% parent['id']%%</td>
+                <td>%% parent['name'] %%</td>
+                <td>%% parent['surname'] %%</td>
+                <td class="student-table-hide" >%% parent['email'] %%</td>
+                <td class="student-table-hide" >%% parent['phone'] %%</td>
+            </tr>
+            <% endfor %>
+        <% else %>
+            <% for parent in data %>
+            <tr class="display-row">
+                <td class="student-table-hide">%% parent['id']%%</td>
+                <td>%% parent['name'] %%</td>
+                <td>%% parent['surname'] %%</td>
+                <td class="student-table-hide">%% parent['email'] %%</td>
+                <td class="student-table-hide" >%% parent['phone'] %%</td>
+            </tr>
+            <% endfor %>
+        <% endif %>
+    </tbody>
+</table>
+
+<script>
+    mainSorter = {
+        ID: '%% orderBy %%',
+        order: '%% orderDirection %%'
+    }
+
+    function switchB(caller) {
+        if (caller.getAttribute('data-sorterID') != mainSorter.ID) {
+            //Zmenit mainSorter
+            mainSorter.ID = caller.getAttribute('data-sorterID');
+            mainSorter.order = 'desc';
+
+        } else {
+            //Zmenime mainSorter order
+            if (mainSorter.order === 'asc') {
+                mainSorter.order = 'desc';
+            } else {
+                mainSorter.order = 'asc';
+            }
+        }
+        window.location.replace('%% url_for("parents")%%' + '?orderBy=' + mainSorter.ID + '&order=' + mainSorter.order)
+    }
+
+    $(() => {
+
+        if (mainSorter.order === "None") {
+            mainSorter.order = "desc";
+        }
+        //Zmenit znaky na vsetkych ostatnych
+        ostatne = document.getElementsByClassName('sorter');
+        for (var i = 0; i < ostatne.length; i++) {
+            ostatne[i].src = "%% url_for('static', filename='images/icons/no.png')%%";
+            if (ostatne[i].getAttribute('data-sorterID') == mainSorter.ID){
+                if (mainSorter.order === 'desc') {
+                    ostatne[i].src = "%% url_for('static', filename='images/icons/desc.png') %%";
+                }else {
+                    ostatne[i].src = "%% url_for('static', filename='images/icons/asc.png') %%";
+                }
+            }
+        }
+        
+
+        $('.display-row').on('click', (event)=>{
+            let idOfThisRow = event.currentTarget.firstElementChild.innerHTML;
+            window.location.href = "%% url_for('viewParent')%%" + '?id=' + idOfThisRow;
+        })
+
+        $('#nav-' + '%% current %%').addClass('active');
+    })
+</script>
+
+
+
+<script src="%%url_for('static',filename='js/filter.js')%%"></script>
+<script src="%%url_for('static',filename='js/stickyTableHeader.js', v='0.15')%%"></script>
+<% endblock %>

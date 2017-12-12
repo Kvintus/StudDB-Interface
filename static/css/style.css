@@ -2,6 +2,63 @@ body {
   padding-top: 3.1rem;
 }
 
+.add-menu-button {
+  margin-left: 50px;
+}
+
+@media screen and (max-width: 768px) {
+  .add-menu-button {
+    margin-left: 0px;
+  }
+}
+
+.parentIDInput {
+  margin-bottom: 10px;
+}
+
+#add-parent-button {
+  margin-left: 20px;
+  color: gray;
+  display: inline-block;
+  font-size: 20px;
+  transition: 200ms ease;
+}
+
+#add-parent-button:hover {
+  color: #525252;
+}
+
+.class-info {
+  margin-left: 50px;
+}
+
+@media screen and (max-width: 968px) {
+  .class-info {
+    margin-left: 20px;
+  }
+}
+
+.class-info table {
+  font-size: 20px;
+}
+
+.teacher-ref {
+  padding-bottom: 1rem;
+  color: gray;
+  display: block;
+}
+
+.teacher-ref:hover {
+  text-decoration: none;
+  color: #575757;
+}
+
+@media screen and (max-width: 768px) {
+  .student-table-hide {
+    display: none;
+  }
+}
+
 /* viewStudent */
 #vs-info-wrap {
   text-align: right;
@@ -21,8 +78,20 @@ body {
 
 @media screen and (max-width: 600px) {
   .vs-main-con {
-    width: 80%;
+    width: 100%;
   }
+}
+
+@media screen and (max-width: 906px) {
+  .vs-main-con {
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    min-width: 0px;
+  }
+}
+
+.vs-main-con hr {
+  margin-bottom: 1.7rem;
 }
 
 .vs-text-con {
@@ -33,13 +102,15 @@ body {
 }
 
 .prof-image-con {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 18px;
 }
 
 .prof-image-con img {
   border-radius: 50%;
-  width: 200px;
+  width: 230px;
 }
 
 @media screen and (max-width: 875px) {
@@ -48,11 +119,20 @@ body {
   }
 }
 
+#cancel-button-wrapper {
+  margin-right: auto;
+}
+
+#cancel-button-wrapper button {
+  margin-left: 12px;
+}
+
 .vs-table-info {
   color: gray;
 }
 
 .view-rel-headline {
+  display: inline-block;
   color: gray;
   font-size: 26px;
   margin-bottom: 5px;
@@ -66,7 +146,22 @@ body {
   margin-left: 20px;
 }
 
-.parent-ref {
+@media screen and (max-width: 916px) {
+  .students-wrapper {
+    text-align: center;
+    transform: translate(-40px);
+  }
+}
+
+.card-heading {
+  margin-left: 50px;
+  font-size: 50px;
+  font-family: sans-serif;
+  color: #cccccc;
+  margin-bottom: 12px;
+}
+
+.relative-ref {
   display: block;
 }
 
@@ -88,6 +183,29 @@ body {
   background-color: #eaeaea;
 }
 
+.parent-wrapper {
+  display: table;
+  margin-bottom: 0.7rem;
+}
+
+.parent-wrapper i {
+  padding-left: 12px;
+  color: #ff6767;
+}
+
+.parent-wrapper i:hover {
+  color: #f84242;
+  cursor: pointer;
+}
+
+.parent-wrapper * {
+  display: table-cell;
+}
+
+.vs-gray-info {
+  color: #b1b1b1;
+}
+
 .class-ref {
   margin-bottom: 1rem;
   display: block;
@@ -98,11 +216,12 @@ body {
 
 .class-ref:hover {
   text-decoration: none;
-  color: #cacaca;
+  color: #808080;
 }
 
 .manipulate-buttons-con {
   justify-content: flex-end;
+  margin-top: 18px;
 }
 
 .manipulate-buttons-con button {

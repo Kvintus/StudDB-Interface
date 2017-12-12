@@ -1,65 +1,64 @@
-<% extends "main_template.html" %> <% block content %>
+<% extends "main_template.html" %> 
+<% block title %> Students <% endblock %>
+<% block content %>
 <table id="tabulka" class="table sticky-header">
     <thead class="table-header">
         <tr>
-            <th data-tsorter="numeric">
+            <th class="student-table-id" data-tsorter="numeric">
                 <div>
                     <input id="inputID" onkeyup="filterByID()" class="table-header" type="text" placeholder="#">
-                    <img onclick="switchSortIconAndRedirect(this)" data-sorterID="id" class="sipka sorter" src="%% url_for('static', filename='images/icons/desc.png') %%"
+                    <img onclick="switchB(this)" data-sorterID="id" class="sipka sorter" src="%% url_for('static', filename='images/icons/desc.png') %%"
                         alt="" srcset="">
                 </div>
             </th>
             <th>
                 <div>
                     <input id="inputName" onkeyup="menaFilter()" class="table-header" type="text" placeholder="Name">
-                    <img onclick="switchSortIconAndRedirect(this)" data-sorterID="name" class="sipka sorter" src="%% url_for('static', filename='images/icons/no.png') %%"
+                    <img onclick="switchB(this)" data-sorterID="name" class="sipka sorter" src="%% url_for('static', filename='images/icons/no.png') %%"
                         alt="" srcset="">
                 </div>
             </th>
+
             <th>
                 <div>
-                    <input id="inputSurname" onkeyup="priezvFilter()" class="table-header" type="text" placeholder="Start">
-                    <img onclick="switchSortIconAndRedirect(this)" data-sorterID="start" class="sipka sorter" src="%% url_for('static', filename='images/icons/no.png') %%"
+                    <input id="inputSurname" onkeyup="priezvFilter()" class="table-header" type="text" placeholder="Surname">
+                    <img onclick="switchB(this)" data-sorterID="surname" class="sipka sorter" src="%% url_for('static', filename='images/icons/no.png') %%"
                         alt="" srcset="">
                 </div>
             </th>
-            <th>
+            <th class="student-table-email">
                 <div>
-                    <input class="table-header dis" type="text" placeholder="Class room" disabled>
+                    <input class="table-header dis" type="text" placeholder="Email" disabled>
                     <div class="placeholderDiv"></div>
+                </div>
+            </th>
+            <th class="student-table-phone">
+                <div>
+                    <input class="table-header dis" type="text" placeholder="Phone" disabled>
+                    <div class=""></div>
                 </div>
             </th>
         </tr>
     </thead>
     <tbody>
         <% if orderDirection == 'asc' %>
-            <% for class in data | reverse %>
+            <% for student in data | reverse %>
             <tr class="display-row">
-                <td>%% class['id']%%</td>
-                <td>
-                    <% if 'altname' in class%>
-                        %% class['altname'] %%
-                    <% else %>
-                        %% class['name'] %%
-                    <% endif %>
-                </td>
-                <td>%% class['start'] %%</td>
-                <td>%% class['room'] %%</td>
+                <td class="student-table-id">%% student['id']%%</td>
+                <td>%% student['name'] %%</td>
+                <td>%% student['surname'] %%</td>
+                <td class="student-table-email" >%% student['email'] %%</td>
+                <td class="student-table-phone" >%% student['phone'] %%</td>
             </tr>
             <% endfor %>
         <% else %>
-            <% for class in data %>
+            <% for student in data %>
             <tr class="display-row">
-                <td>%% class['id']%%</td>
-                <td>
-                    <% if 'altname' in class%>
-                        %% class['altname'] %%
-                    <% else %>
-                        %% class['name'] %%
-                    <% endif %>
-                </td>
-                <td>%% class['start'] %%</td>
-                <td>%% class['room'] %%</td>
+                <td class="student-table-id">%% student['id']%%</td>
+                <td>%% student['name'] %%</td>
+                <td>%% student['surname'] %%</td>
+                <td class="student-table-email">%% student['email'] %%</td>
+                <td class="student-table-phone" >%% student['phone'] %%</td>
             </tr>
             <% endfor %>
         <% endif %>
@@ -67,12 +66,12 @@
 </table>
 
 <script>
-    let mainSorter = {
+    mainSorter = {
         ID: '%% orderBy %%',
         order: '%% orderDirection %%'
-    };
+    }
 
-    function switchSortIconAndRedirect(caller) {
+    function switchB(caller) {
         if (caller.getAttribute('data-sorterID') != mainSorter.ID) {
             //Zmenit mainSorter
             mainSorter.ID = caller.getAttribute('data-sorterID');
@@ -86,7 +85,7 @@
                 mainSorter.order = 'asc';
             }
         }
-        window.location.replace('%% url_for("classes")%%' + '?orderBy=' + mainSorter.ID + '&order=' + mainSorter.order)
+        window.location.replace('%% url_for("students")%%' + '?orderBy=' + mainSorter.ID + '&order=' + mainSorter.order)
     }
 
     $(() => {
@@ -106,11 +105,14 @@
                 }
             }
         }
+        
+
+        $('.display-row').on('click', (event)=>{
+            let idOfThisRow = event.currentTarget.firstElementChild.innerHTML;
+            window.location.href = "%% url_for('viewStudent')%%" + '?id=' + idOfThisRow;
+        })
 
         $('#nav-' + '%% current %%').addClass('active');
-        cur = "%% current %%";
-        cur = cur[0].toUpperCase() + cur.slice(1);
-        document.title = cur;
     })
 </script>
 

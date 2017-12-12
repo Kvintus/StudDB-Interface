@@ -1,0 +1,339 @@
+<% extends "main_template.html" %>
+    <% block title %>%% professor['surname'] %% %% professor['name'] %%
+        <%endblock%>
+            <% block content %>
+
+                <div class="container vs-main-con">
+                    <div id="alertMessage" style="margin-bottom: 20px; display:none;" class="alert alert-danger alert-dismissible fade show"
+                        role="alert">
+                        <button type="button" class="close" id="alertDismiss" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <p style="margin-bottom: 0;">Alert</p>
+                    </div>
+                    <div class="row">
+                        <h1 class="card-heading">Professor:</h1>
+                    </div>
+                    <form id="validationForm"></form>
+                    <div class="row">
+                        <div class="col prof-image-con">
+                            <% if isMale %>
+                                <img src="%% url_for('static', filename='images/placeholder_male.jpg') %%" alt="">
+                                <% else %>
+                                    <img src="%% url_for('static', filename='images/placeholder_female.jpg') %%" alt="">
+                                    <% endif %>
+                        </div>
+                        <div class="col vs-text-con">
+                            <div>
+
+                                <table>
+                                        <tr>
+                                                <td style="padding-right: 80px;" class="vs-table-info">
+                                                    <p>Title:</p>
+                                                </td>
+                                                <td>
+                                                    <div style="margin-bottom:1rem;" class="col-sm-10">
+                                                        <input data-validation="name" id="titleInput" class="form-control" value="%% professor['title'] %%" placeholder="%% professor['title'] %%"
+                                                            type="text">
+                                                    </div>
+        
+                                                </td>
+                                            </tr>
+                                    <tr>
+                                        <td style="padding-right: 80px;" class="vs-table-info">
+                                            <p>Name:</p>
+                                        </td>
+                                        <td>
+                                            <div style="margin-bottom:1rem;" class="col-sm-10">
+                                                <input data-validation="name" id="nameInput" class="form-control" value="%% professor['name'] %%" placeholder="%% professor['name'] %%"
+                                                    type="text" onkeyup="checkkValidity(event)">
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="vs-table-info">
+                                            <p>Surname: </p>
+                                        </td>
+                                        <td>
+                                            <div style="margin-bottom:1rem;" class="col-sm-10">
+                                                <input data-validation="surname" id="surnameInput" class="form-control" value="%% professor['surname'] %%" placeholder="%% professor['surname'] %%"
+                                                    onkeyup="checkkValidity(event)">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="vs-table-info">
+                                            <p>ID:</p>
+                                        </td>
+                                        <td>
+                                            <p style="color: rgb(206, 206, 206)">%% professor['id'] %%</p>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div style="margin-left: 20px; display:flex;align-items: center;" class="col">
+                            <table>
+                                <tr>
+                                    <td style="padding-right: 50px;" class="vs-table-info">
+                                        <p>
+                                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <div style="margin-bottom:1rem;" class="col-sm-12">
+                                            <input type="email" id="emailInput" class="form-control" value="%% professor['email'] %%" placeholder="%% professor['email'] %%"
+                                                type="text">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="vs-table-info">
+                                        <p>
+                                            <i class="fa fa-phone" aria-hidden="true"></i>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <div style="margin-bottom:1rem;" class="col-sm-12">
+                                            <input id="phoneInput" class="form-control" value="%% professor['phone'] %%" placeholder="%% professor['phone']%%">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="vs-table-info">
+                                        <p>
+                                            <i class="fa fa-home" aria-hidden="true"></i>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <div style="margin-bottom:1rem;" class="col-sm-12">
+                                            <input id="adressInput" class="form-control" value="%% professor['adress'] %%" placeholder="%% professor['adress'] %%">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                        <td class="vs-table-info">
+                                            <p>Office: </p>
+                                        </td>
+                                        <td>
+                                            <div style="margin-bottom:1rem;" class="col-sm-10">
+                                                <input data-validation="surname" id="locInput" class="form-control" placeholder="Office"
+                                                    onkeyup="checkkValidity(event)">
+                                            </div>
+                                        </td>
+                                    </tr>
+                            </table>
+                        </div>
+                        <div class="col main-parent-con">
+                            <div>
+                                <p class="view-rel-headline">Classes</p>
+                                <p id="add-parent-button">
+                                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                </p>
+                                <div class="parents-con">
+                                    <% for tempClass in professor['classes'] %>
+                                        <div class="col-sm-10 parent-wrapper">
+                                            <input class="form-control classIDInput" value="%% tempClass['id'] %%" placeholder="%% tempClass['id'] %%" type="number">
+                                            <i onclick="hideParent(this)" class="fa fa-times" aria-hidden="true"></i>
+                                        </div>
+                                        <% endfor %>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row manipulate-buttons-con">
+                        <div id="cancel-button-wrapper">
+                            <button id="cancelEdit" class="btn btn-outline-secondary">Cancel</button>
+                        </div>
+                        <button id="updateProfessor" class="btn btn-outline-primary">Save</button>
+                        <button id="deleteProfessor" class="btn btn-outline-danger">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+
+                <script>
+                    let regexp = new RegExp("^\\+([0-9]{3})\x20([0-9]{3})\x20([0-9]{3})\x20([0-9]{3})$");
+                    let emailReg =
+                        /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+                    // Gets automatically populated with the function below
+                    let requiredInputs = {}
+                    let errorMessage = '';
+
+
+                    // Validation
+                    function checkkValidity(event) {
+                        let $target = $(event.target);
+                        if ($target.val() === '') {
+                            $target.addClass('is-invalid')
+                            requiredInputs[$target.attr('data-validation')] = false;
+                            errorMessage = 'All fields in red are required!';
+                        } else {
+                            $target.removeClass('is-invalid')
+                            requiredInputs[$target.attr('data-validation')] = true;
+                        }
+                    }
+
+                    function getIsoFormatDate(date) {
+                        if (date.indexOf('.') > -1) {
+                            let partsOfTheDate = date.split('.');
+                            let newDate = new Date(partsOfTheDate[2], partsOfTheDate[1], partsOfTheDate[0]);
+
+                            year = newDate.getFullYear();
+                            month = newDate.getMonth() + 1;
+                            dt = newDate.getDate();
+
+                            if (dt < 10) {
+                                dt = '0' + dt;
+                            }
+                            if (month < 10) {
+                                month = '0' + month;
+                            }
+
+
+                            return year + '-' + month + '-' + dt;
+                        } else {
+                            return date
+                        }
+                    }
+
+
+                    function getProfessorData() {
+                        postProfessor = {
+                            'name': $('#nameInput').val(),
+                            'id': parseInt("%% professor['id'] %%"),
+                            'surname': $('#surnameInput').val(),
+                            'email': $('#emailInput').val(),
+                            'phone': $('#phoneInput').val(),
+                            'loc': $('#locInput').val(),
+                            'adress': $('#adressInput').val(),
+                            'title': $('#titleInput').val(),
+                            'classes': []
+                        };
+
+                        // Appending all the parents found
+                        $('.classIDInput').each(function () {
+                            postProfessor['classes'].push(parseInt($(this).val()));
+                        });
+                        return postProfessor
+                    }
+
+                    function postData(dataToPost) {
+                        $.ajax({
+                            type: "post",
+                            url: "%% url_for('updateProfessorRoute') %%",
+                            // The key needs to match your method's input parameter (case-sensitive).
+                            data: JSON.stringify(dataToPost),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (data) {
+                                if (!('message' in data)) {
+                                    window.location.href = "%% url_for('viewProfessor') %%" + '?id=' +
+                                        "%% professor['id'] %%";
+                                } else {
+                                    $('#alertMessage').find('p').text(data.message);
+                                    $('#alertMessage').show(200);
+                                }
+                            },
+                            failure: function (errMsg) {
+                                alert(errMsg);
+                            }
+                        });
+                    }
+
+                    function hideParent(thiso) {
+                        $(thiso).parent().fadeOut(100);
+                        $(thiso).parent().remove();
+                    }
+
+
+                    $(function () {
+
+                        $('#alertDismiss').on('click', () => {
+                            $('#alertMessage').hide(200);
+                        })
+
+                        $('#deleteProfessor').on('click', (event) => {
+                            let professor = {
+                                'id': "%% professor['id'] %%"
+                            }
+                            $.ajax({
+                                type: "post",
+                                url: "%% url_for('deleteProfessorRoute') %%",
+                                // The key needs to match your method's input parameter (case-sensitive).
+                                data: JSON.stringify(professor),
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                success: function (data) {
+                                    if (!('message' in data)) {
+                                        window.location.href =
+                                            "%% url_for('professors') %%";
+                                    } else {
+                                        console.log(data)
+                                    }
+                                },
+                                failure: function (errMsg) {
+                                    alert(errMsg);
+                                }
+                            });
+                        });
+
+                        $('#cancelEdit').on('click', () => {
+                            window.location.href = "%% url_for('viewProfessor') %%" + '?id=' +
+                                "%% professor['id'] %%"
+                        })
+
+                        $("#updateProfessor").on('click', () => {
+                            // Creating a student to post
+                            // Validate
+                            let allValid = true;
+                            for (key in requiredInputs) {
+                                if (requiredInputs[key] === false) {
+                                    allValid = false;
+                                }
+                            }
+
+                            if (allValid) {
+                                postData(getProfessorData())
+                            } else {
+                                $('#alertMessage').find('p').text(errorMessage);
+                                $('#alertMessage').show(200);
+                            }
+                        });
+
+                        $parentCon = $('.parents-con').first();
+                        inputParentField =
+                            '<div class="col-sm-10 parent-wrapper"><input class="form-control classIDInput" type="number"><i onclick="hideParent(this)" class="fa fa-times" aria-hidden="true"></i></div>';
+
+                        $('#add-parent-button').on('click', () => {
+                            $parentCon.append(inputParentField);
+                        });
+
+
+                        $("#phoneInput").blur(function () {
+                            var phoneNumber = $("#phoneInput").val();
+                            if (!regexp.test(phoneNumber) && phoneNumber.length > 0) {
+                                $('#alertMessage').find('p').text(
+                                    'Invalid telephone number format | Example: +421 948 555 555');
+                                $('#alertMessage').show(200);
+                            }
+                        });
+
+                        $("#emailInput").blur(function () {
+                            var emailVal = $("#emailInput").val();
+                            if (!emailReg.test(emailVal) && emailVal.length > 0) {
+                                $('#alertMessage').find('p').text(
+                                    'Invalid email adress format | Example: guest@gmail.com');
+                                $('#alertMessage').show(200);
+                            }
+                        });
+                    })
+                </script>
+
+                <% endblock %>
