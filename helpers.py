@@ -1,4 +1,4 @@
-from flask import Flask, flash, redirect, render_template, session, url_for, jsonify, make_response, Response, jsonify
+from flask import Flask, flash, redirect, render_template, session, url_for, jsonify, make_response, Response, jsonify, Blueprint
 from flask import request
 from passlib.hash import pbkdf2_sha256 as sha256
 from urllib.parse import urlencode, quote_plus
