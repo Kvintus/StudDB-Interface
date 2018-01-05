@@ -14,7 +14,7 @@ export default new Vuex.Store({
     },
     // Logs user out from the vuex session
     logUserOut(state) {
-      state.user = null;
+      state.user = {};
     },
   },
 });

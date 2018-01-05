@@ -15,9 +15,14 @@ export default new Router({
       path: '/login',
       component: Login,
       name: 'LoginRoute',
+      // If the user is logged in redirect him to Homepag
       beforeEnter(to, from, next) {
-        store.commit('logUserOut');
-        next();
+        console.log(Object.keys(store.state.user).length);
+        if (!(Object.keys(store.state.user).length === 0)) {
+          next({ name: 'mainDisplay' });
+        } else {
+          next();
+        }
       },
     },
     {

@@ -38,12 +38,12 @@
               <a style="color: #6f6f6f" class="dropdown-item" href="%% url_for('register') %%">Register</a>
               <div class="dropdown-divider"></div>
             </div>
-            <router-link tag="a" class="logout" :to="{name: 'LoginRoute'}">
+            <a @click="logout" class="logout">
               <div class="dropdown-item logout-con">
                 <i class="fa fa-sign-out" aria-hidden="true"></i>
                 Logout
               </div>
-            </router-link>
+            </a>
           </div>
         </li>
       </ul>
@@ -59,6 +59,12 @@
       },
       route() {
         return this.$route.path;
+      },
+    },
+    methods: {
+      logout() {
+        this.$store.commit('logUserOut');
+        this.$router.push({name: 'LoginRoute'});
       },
     },
   };
@@ -128,6 +134,7 @@
   .logout {
     /* Own styles */
     display: inline;
+    cursor: pointer;
     text-decoration: none !important;
 
     /* Container */
