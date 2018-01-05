@@ -30,7 +30,7 @@ module.exports = {
       vue: 'never'
     }],
     'no-unused-vars': 0,
-    'indent': ['error', 2],
+    'indent': 0,
     // disallow reassignment of function parameters
     // disallow parameter object manipulation except for specific exclusions
     'no-param-reassign': ['error', {

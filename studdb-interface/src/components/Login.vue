@@ -4,7 +4,7 @@
       <div style="width: auto;text-align:center;" class="card card-container vcenter">
         <img id="profile-img" class="profile-img-card" src="static/images/logo.png" />
         <div>
-          <div class="alert alert-danger" v-if="error.is && sent.was">{{ error.message }}</div>
+          <div id="errorCon" class="alert alert-danger" style="display: none;"></div>
           <form @submit.prevent="login" class="form-signin">
             <span id="reauth-email" class="reauth-email"></span>
             <input v-model="username" type="text" name="username" id="inputUsername" class="form-control" placeholder="Username" autofocus>
@@ -23,61 +23,51 @@
 <script>
   export default {
     created() {
+      // Changes the window title
       document.title = 'Login';
     },
     data() {
       return {
         username: '',
         password: '',
-        sent: {
-          was: false,
-          error: false,
-          message: '',
-        },
       };
     },
     methods: {
-      login() {
-      if (this.username && this.password){
-        this.sent.was = true;
-        this.axios.post('http://127.0.0.1:5000/user', {
-          username: this.username,
-          password: this.password,
-        })
-          .then((resp) => {
-            if (resp.data.success) {
-              window.location.href = 'www.google.com';
-            } else {
-              this.sent.error = true;
-              this.sent.message = resp.data.message;
-            }
-          });
-      }
+      // Shows an error with specified message
+      showError(message) {
+        const con = document.getElementById('errorCon');
+        con.textContent = message;
+        con.style.display = 'block';
+        // Make the error disapear after 5secs
+        setTimeout(() => {
+          con.style.display = 'none';
+        }, 5000);
       },
-    },
-    computed: {
-      error() {
-        if (this.sent.error) {
-          return {
-            is: true,
-            message: this.sent.message,
-          }
-        } else if (this.username.length < 1) {
-          return {
-            is: true,
-            message: 'Please fill in the username',
-          };
-        } else if (this.password.length < 1) {
-          return {
-            is: true,
-            message: 'Plase fill in the Password',
-          };
+      // Tries to log user in
+      login() {
+        // If both fiels are not empty
+        if (this.username && this.password) {
+            // Sends a request to a server with the parameters in the passed-in object
+            this.axios.post('http://127.0.0.1:5000/user', {
+            username: this.username,
+            password: this.password,
+          }).then((resp) => {
+            // If the login was successfull store the user in the vuex and redirect to the main page
+            if (resp.data.success) {
+              this.$store.commit('setUser', resp.data.user);
+              this.$router.push({ name: 'mainDisplay' });
+            // Else show an error from the server response
+            } else {
+              this.showError(resp.data.message);
+            }
+          // If there's an error returned from the API server show it
+          }).catch((error) => {
+            this.showError(error);
+          });
+        } else {
+          // Display the error because the user didn't fill in all the fields
+          this.showError('Please fill in all the fields!');
         }
-
-        return {
-          is: false,
-          message: '',
-        };
       },
     },
   };
@@ -89,6 +79,7 @@
   .alert {
     max-width: 227px;
   }
+
   .container {
     display: flex;
   }
