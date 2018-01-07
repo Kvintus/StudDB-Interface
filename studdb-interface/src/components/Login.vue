@@ -48,14 +48,14 @@
         // If both fiels are not empty
         if (this.username && this.password) {
             // Sends a request to a server with the parameters in the passed-in object
-            this.axios.post('http://127.0.0.1:5000/user', {
+            this.axios.post(this.$store.state.server + '/user', {
             username: this.username,
             password: this.password,
           }).then((resp) => {
             // If the login was successfull store the user in the vuex and redirect to the main page
             if (resp.data.success) {
               this.$store.commit('setUser', resp.data.user);
-              this.$router.push({ name: 'mainDisplay' });
+              this.$router.push({ name: 'studentsList' });
             // Else show an error from the server response
             } else {
               this.showError(resp.data.message);

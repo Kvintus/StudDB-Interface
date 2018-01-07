@@ -5,6 +5,7 @@ import store from '@/store/store';
 import Login from '@/components/Login.vue';
 // eslint-disable-next-line
 import MainList from '@/components/MainList.vue';
+import StudentList from '@/components/Students/StudentList';
 
 
 Vue.use(Router);
@@ -17,7 +18,6 @@ export default new Router({
       name: 'LoginRoute',
       // If the user is logged in redirect him to Homepag
       beforeEnter(to, from, next) {
-        console.log(Object.keys(store.state.user).length);
         if (!(Object.keys(store.state.user).length === 0)) {
           next({ name: 'mainDisplay' });
         } else {
@@ -26,9 +26,16 @@ export default new Router({
       },
     },
     {
-      path: '/',
+      path: '/list',
       component: MainList,
-      name: 'mainDisplay',
+      name: 'mainListDisplay',
+      children: [
+        {
+          name: 'studentsList',
+          path: 'students',
+          component: StudentList,
+        },
+      ],
     },
   ],
 });

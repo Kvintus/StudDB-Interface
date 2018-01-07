@@ -10,7 +10,7 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav mr-auto">
         <li id="nav-students" class="nav-item">
-          <router-link tag="a" class="nav-link" :class="{'active': route==='/list'}" :to="{name: 'StudentsList'}">Students</router-link>
+          <router-link tag="a" class="nav-link" :class="{'active': route === '/list'}" :to="{name: 'studentsList'}">Students</router-link>
         </li>
         <li id="nav-classes" class="nav-item">
           <router-link tag="a" class="nav-link" :to="{name: 'ClassesList'}">Classes</router-link>
@@ -70,6 +70,7 @@
   };
 
 </script>
+
 
 <style lang="scss" scoped>
   .bg-moj {

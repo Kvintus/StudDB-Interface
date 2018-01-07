@@ -8,6 +8,9 @@ import store from './store/store';
 Vue.config.productionTip = false;
 Vue.use(VueAxios, axios);
 
+// Filter to reverse an array
+Vue.filter('reverse', value => value.slice().reverse());
+
 
 /* eslint-disable no-new */
 new Vue({

@@ -1,7 +1,7 @@
 <template>
 <div>
     <app-navbar></app-navbar>
-    <p>peter</p>
+    <router-view></router-view>
 </div>
 </template>
 
@@ -14,3 +14,11 @@ export default {
     },
 };
 </script>
+
+<style>
+ body {
+   /* Thanks to the navbar */
+   margin-top: 60px;
+ }
+</style>
+
