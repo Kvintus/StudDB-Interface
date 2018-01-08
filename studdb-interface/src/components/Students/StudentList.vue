@@ -4,20 +4,20 @@
       <tr>
         <th class="student-table-id" data-tsorter="numeric">
           <div>
-            <input id="inputID" onkeyup="filterByID()" class="table-header" type="text" placeholder="#">
+            <input id="inputID" v-model="idFilter" class="table-header" type="text" placeholder="#">
             <img onclick="switchB(this)" data-sorterID="id" class="sipka sorter" src="static/images/icons/desc.png'" alt="" srcset="">
           </div>
         </th>
         <th>
           <div>
-            <input id="inputName" onkeyup="menaFilter()" class="table-header" type="text" placeholder="Name">
+            <input id="inputName" v-model="nameFilter" class="table-header" type="text" placeholder="Name">
             <img onclick="switchB(this)" data-sorterID="name" class="sipka sorter" src="static/images/icons/no.png" alt="" srcset="">
           </div>
         </th>
 
         <th>
           <div>
-            <input id="inputSurname" onkeyup="priezvFilter()" class="table-header" type="text" placeholder="Surname">
+            <input id="inputSurname" v-model="surnameFilter" class="table-header" type="text" placeholder="Surname">
             <img onclick="switchB(this)" data-sorterID="surname" class="sipka sorter" src="static/images/icons/no.png" alt="" srcset="">
           </div>
         </th>
@@ -63,7 +63,20 @@
         return this.$route.query.order;
       },
       students() {
-        return this.$store.state.students;
+        return this.$store.state.students
+        // ID filter, return only exact matches 
+        .filter((student)=>{
+          return this.idFilter === '' || student.id == this.idFilter;
+        })
+        // Name filter, if the student's name starts with the value of the filter
+        .filter((student) => {
+          return this.nameFilter === '' || student.name.toUpperCase().indexOf(this.nameFilter.toUpperCase()) === 0;
+        })
+        // Surname filter, if the student's surname starts with the value of the filter
+        .filter((student) => {
+          return this.surnameFilter === '' || student.surname.toUpperCase().indexOf(this.surnameFilter.toUpperCase()) === 0;
+        });
+        ;
       },
     },
     mounted() {

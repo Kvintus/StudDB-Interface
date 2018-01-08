@@ -45,7 +45,7 @@ export default new Router({
             Vue.axios.get(`${store.state.server}/api/student/all`)
             .then((resp) => {
               if (resp.data.success) {
-                store.state.students = Object.assign({}, resp.data.students);
+                store.state.students = resp.data.students.slice();
                 next();
               } else {
                 // TODO: Display error
