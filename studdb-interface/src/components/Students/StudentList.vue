@@ -53,13 +53,18 @@
   export default {
     data() {
       return {
-        students: [],
+        idFilter: '',
+        nameFilter: '',
+        surnameFilter: '',
       }
     },
     computed: {
       order() {
         return this.$route.query.order;
-      }
+      },
+      students() {
+        return this.$store.state.students;
+      },
     },
     mounted() {
       // "Turns on" the sticky header
@@ -68,28 +73,8 @@
           scrollingTop: 60
         });
       });
-      this.fetchStudents();
-    },
-    created() {
-      this.fetchStudents();
-    },
-    methods: {
-      fetchStudents() {
-        console.log(this.$store.state.server + '/api/student/all');
-        this.axios.get(this.$store.state.server + '/api/student/all')
-          .then(resp => {
-            if (resp.data.success) {
-              this.students = resp.data.students;
-            } else {
-              // Display error
-              console.log(resp.message);
-            }
-          })
-          .catch(error => {
-            // Display the error somehow
-            console.log(error);
-          });
-      },
+
+
     },
   }
 

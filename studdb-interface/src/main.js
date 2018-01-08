@@ -11,6 +11,12 @@ Vue.use(VueAxios, axios);
 // Filter to reverse an array
 Vue.filter('reverse', value => value.slice().reverse());
 
+// To set the titles on the routes
+router.beforeEach((to, from, next) => {
+  document.title = to.meta.title;
+  next();
+});
+
 
 /* eslint-disable no-new */
 new Vue({

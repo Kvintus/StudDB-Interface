@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     user: {},
     server: 'http://127.0.0.1:5000',
+    students: {},
   },
   mutations: {
     // Sets user from the payload (Loggs him in)
@@ -16,6 +17,10 @@ export default new Vuex.Store({
     // Logs user out from the vuex session
     logUserOut(state) {
       state.user = {};
+    },
+    // Clears the students
+    clearStudents(state) {
+      state.students = [];
     },
   },
 });
