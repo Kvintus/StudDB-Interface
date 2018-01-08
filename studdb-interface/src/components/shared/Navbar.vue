@@ -13,14 +13,15 @@
           <router-link tag="a" class="nav-link" :class="{'active': route === '/list/students'}" :to="{name: 'studentsList'}">Students</router-link>
         </li>
         <li id="nav-classes" class="nav-item">
-          <router-link tag="a" class="nav-link" :to="{name: 'ClassesList'}">Classes</router-link>
+          <router-link tag="a" class="nav-link" :class="{'active': route === '/list/classes'}" :to="{name: 'classesList'}">Classes</router-link>
         </li>
         <li id="nav-professors" class="nav-item">
-          <router-link tag="a" class="nav-link" :to="{name: 'ProfessorsList'}">Professors</router-link>
+          <router-link tag="a" class="nav-link" :class="{'active': route === '/list/professors'}" :to="{name: 'ProfessorsList'}">Professors</router-link>
         </li>
         <li id="nav-parents" class="nav-item">
-          <router-link tag="a" class="nav-link" :to="{name: 'ParentsList'}">Parents</router-link>
+          <router-link tag="a" class="nav-link" :class="{'active': route === '/list/parents'}" :to="{name: 'ParentsList'}">Parents</router-link>
         </li>
+        <!-- Add Button -->
         <li v-if="route.indexOf('/list') != -1" id="nav-parents" class="nav-item">
           <router-link tag="a" class="add-menu-button btn btn-outline-success" :to="{name: 'add${whatToAdd}'}">Add {{ whatToAdd }}</router-link>
         </li>

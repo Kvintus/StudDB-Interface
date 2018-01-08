@@ -17,31 +17,27 @@
 
         <th>
           <div>
-            <input id="inputSurname" v-model="filters.surname" class="table-header" type="text" placeholder="Surname">
-            <img @click="changeSorter('surname')" class="sipka sorter" :src="whichIcon('surname')" alt="" srcset="">
+            <input id="inputStart" v-model="filters.start" class="table-header" type="text" placeholder="Start">
+            <img @click="changeSorter('start')" class="sipka sorter" :src="whichIcon('start')" alt="" srcset="">
           </div>
         </th>
-        <th class="student-table-email">
+        <th>
           <div>
-            <input class="table-header dis" type="text" placeholder="Email" disabled>
-            <div class="placeholderDiv"></div>
-          </div>
-        </th>
-        <th class="student-table-phone">
-          <div>
-            <input class="table-header dis" type="text" placeholder="Phone" disabled>
+            <input class="table-header dis" type="text" placeholder="Class Room" disabled>
             <div class=""></div>
           </div>
         </th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="student in students" :key="student.id" class="display-row">
-        <td class="student-table-id">{{ student['id'] }}</td>
-        <td>{{ student['name'] }}</td>
-        <td>{{ student['surname'] }}</td>
-        <td class="student-table-email">{{ student['email'] }}</td>
-        <td class="student-table-phone">{{ student['phone'] }}</td>
+      <tr v-for="tempClass in classes" :key="tempClass.id" class="display-row">
+        <td>{{ tempClass['id'] }}</td>
+        <td>
+          <span v-if="'altname' in tempClass" class="class-altname">{{ 'altname' in tempClass ? tempClass.altname : '' }}</span>
+          <span class="class-name">{{ tempClass.name }}</span>
+        </td>
+        <td>{{ tempClass['start'] }}</td>
+        <td>{{ tempClass['room'] }}</td>
       </tr>
     </tbody>
   </table>
@@ -59,7 +55,7 @@
         filters: {
           id: '',
           name: '',
-          surname: '',
+          start: '',
         },
 
         // Sorter
@@ -96,14 +92,14 @@
     },
     computed: {
       // Returns a list of studens who passed all the filters and are sorted
-      students() {
-        return this.$store.state.students
+      classes() {
+        return this.$store.state.classes
           // ID filter, return only exact matches 
           .filter(allFilters.filterById(this.filters.id))
           // Name filter, if the student's name starts with the value of the filter
-          .filter(allFilters.filterByProperty(this.filters.name, 'name'))
+          .filter(allFilters.containsByProperty(this.filters.name, 'name'))
           // Surname filter, if the student's surname starts with the value of the filter
-          .filter(allFilters.filterByProperty(this.filters.surname, 'surname'))
+          .filter(allFilters.containsByProperty(this.filters.start, 'start'))
           // Sorts the filteres array with the setting in the sorter object
           .sort(AoSorter(this.sorter));
       },
@@ -115,25 +111,6 @@
           scrollingTop: 60
         });
       });
-    },
-    // Fetches all the students and stores them in the central store
-    beforeRouteUpdate(to, from, next) {
-      this.axios.get(`${store.state.server}/api/student/all`)
-        .then((resp) => {
-          if (resp.data.success) {
-            store.state.students = resp.data.students.slice();
-            next();
-          } else {
-            // TODO: Display error
-            console.log(resp.message);
-            next();
-          }
-        })
-        .catch((error) => {
-          // TODO: Display the error somehow
-          console.log(error);
-          next();
-        });
     },
   }
 
@@ -160,6 +137,14 @@
       background-color: #f1fbff;
       ;
     }
+  }
+
+  .class-name {
+    color: rgb(184, 184, 184);
+  }
+
+  .class-altname {
+    margin-right: 10px;
   }
 
   .dis {
