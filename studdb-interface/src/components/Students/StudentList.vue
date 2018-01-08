@@ -4,21 +4,21 @@
       <tr>
         <th class="student-table-id" data-tsorter="numeric">
           <div>
-            <input id="inputID" v-model="idFilter" class="table-header" type="text" placeholder="#">
-            <img onclick="switchB(this)" data-sorterID="id" class="sipka sorter" src="static/images/icons/desc.png'" alt="" srcset="">
+            <input id="inputID" v-model="filters.id" class="table-header" type="text" placeholder="#">
+            <img @click="changeSorter('id')" class="sipka sorter" :src="whichIcon('id')" alt="" srcset="">
           </div>
         </th>
         <th>
           <div>
-            <input id="inputName" v-model="nameFilter" class="table-header" type="text" placeholder="Name">
-            <img onclick="switchB(this)" data-sorterID="name" class="sipka sorter" src="static/images/icons/no.png" alt="" srcset="">
+            <input id="inputName" v-model="filters.name" class="table-header" type="text" placeholder="Name">
+            <img @click="changeSorter('name')" class="sipka sorter" :src="whichIcon('name')" alt="" srcset="">
           </div>
         </th>
 
         <th>
           <div>
-            <input id="inputSurname" v-model="surnameFilter" class="table-header" type="text" placeholder="Surname">
-            <img onclick="switchB(this)" data-sorterID="surname" class="sipka sorter" src="static/images/icons/no.png" alt="" srcset="">
+            <input id="inputSurname" v-model="filters.surname" class="table-header" type="text" placeholder="Surname">
+            <img @click="changeSorter('surname')" class="sipka sorter" :src="whichIcon('surname')" alt="" srcset="">
           </div>
         </th>
         <th class="student-table-email">
@@ -49,34 +49,63 @@
 
 <script>
   let sticky = require('@/assets/js/stickyTableHeader');
+  import AoSorter from '@/assets/js/Filters_and_Sorters/arrayOfObjectsSorter';
+  import allFilters from '@/assets/js/Filters_and_Sorters/filters';
   
   export default {
     data() {
       return {
-        idFilter: '',
-        nameFilter: '',
-        surnameFilter: '',
+        // All the filters in one object
+        filters: {
+          id: '',
+          name: '',
+          surname: '',
+        },
+
+        // Sorter
+        sorter: {
+          by: 'id',
+          order: 'desc',
+        },
+      }
+    },
+    methods: {
+      // Change what we are sorting by and takes care of the order automatically
+      changeSorter(by) {
+        // If we are already sorting by the same value then only change the order, else it will change what value we are sorting by 
+        if (this.sorter.by === by) {
+          if (this.sorter.order === 'asc') {
+            this.sorter.order = 'desc';
+          } else {
+            this.sorter.order = 'asc';
+          }
+        } else {
+          this.sorter.by = by;
+          this.sorter.order = 'desc';
+        }
+      },
+      
+      // Will decide which icon to use based on the sorter
+      whichIcon(by) {
+        if (this.sorter.by === by) {
+          return `static/images/icons/${this.sorter.order}.png`
+        } else {
+          return 'static/images/icons/no.png';
+        }
       }
     },
     computed: {
-      order() {
-        return this.$route.query.order;
-      },
+      // Returns a list of studens who passed all the filters and are sorted
       students() {
         return this.$store.state.students
         // ID filter, return only exact matches 
-        .filter((student)=>{
-          return this.idFilter === '' || student.id == this.idFilter;
-        })
+        .filter(allFilters.filterById(this.filters.id))
         // Name filter, if the student's name starts with the value of the filter
-        .filter((student) => {
-          return this.nameFilter === '' || student.name.toUpperCase().indexOf(this.nameFilter.toUpperCase()) === 0;
-        })
+        .filter(allFilters.filterByName(this.filters.name))
         // Surname filter, if the student's surname starts with the value of the filter
-        .filter((student) => {
-          return this.surnameFilter === '' || student.surname.toUpperCase().indexOf(this.surnameFilter.toUpperCase()) === 0;
-        });
-        ;
+        .filter(allFilters.filterBySurname(this.filters.surname))
+        // Sorts the filteres array with the setting in the sorter object
+        .sort(AoSorter(this.sorter));
       },
     },
     mounted() {
@@ -86,8 +115,6 @@
           scrollingTop: 60
         });
       });
-
-
     },
   }
 
