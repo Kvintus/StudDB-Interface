@@ -101,9 +101,9 @@
           // ID filter, return only exact matches 
           .filter(allFilters.filterById(this.filters.id))
           // Name filter, if the student's name starts with the value of the filter
-          .filter(allFilters.filterByName(this.filters.name))
+          .filter(allFilters.filterByProperty(this.filters.name, 'name'))
           // Surname filter, if the student's surname starts with the value of the filter
-          .filter(allFilters.filterBySurname(this.filters.surname))
+          .filter(allFilters.filterByProperty(this.filters.surname, 'surname'))
           // Sorts the filteres array with the setting in the sorter object
           .sort(AoSorter(this.sorter));
       },

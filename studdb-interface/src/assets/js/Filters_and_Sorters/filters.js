@@ -8,11 +8,7 @@ export default {
         return student => value === '' || student.id == value;
     },
     // Returns objects whose names start with the name specified in the 'value'
-    filterByName(value) {
-        return student => value === '' || student.name.toUpperCase().indexOf(value.toUpperCase()) === 0;
-    },
-    // Returns objects whose surnames start with the name specified in the 'value'
-    filterBySurname(value) {
-        return student => value === '' || student.surname.toUpperCase().indexOf(value.toUpperCase()) === 0;
+    filterByProperty(value, property) {
+        return student => value === '' || student[property].toUpperCase().indexOf(value.toUpperCase()) === 0;
     },
 };
