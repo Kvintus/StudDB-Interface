@@ -51,7 +51,7 @@
   let sticky = require('@/assets/js/stickyTableHeader');
   import AoSorter from '@/assets/js/Filters_and_Sorters/arrayOfObjectsSorter';
   import allFilters from '@/assets/js/Filters_and_Sorters/filters';
-  
+
   export default {
     data() {
       return {
@@ -84,7 +84,7 @@
           this.sorter.order = 'desc';
         }
       },
-      
+
       // Will decide which icon to use based on the sorter
       whichIcon(by) {
         if (this.sorter.by === by) {
@@ -98,14 +98,14 @@
       // Returns a list of studens who passed all the filters and are sorted
       students() {
         return this.$store.state.students
-        // ID filter, return only exact matches 
-        .filter(allFilters.filterById(this.filters.id))
-        // Name filter, if the student's name starts with the value of the filter
-        .filter(allFilters.filterByName(this.filters.name))
-        // Surname filter, if the student's surname starts with the value of the filter
-        .filter(allFilters.filterBySurname(this.filters.surname))
-        // Sorts the filteres array with the setting in the sorter object
-        .sort(AoSorter(this.sorter));
+          // ID filter, return only exact matches 
+          .filter(allFilters.filterById(this.filters.id))
+          // Name filter, if the student's name starts with the value of the filter
+          .filter(allFilters.filterByName(this.filters.name))
+          // Surname filter, if the student's surname starts with the value of the filter
+          .filter(allFilters.filterBySurname(this.filters.surname))
+          // Sorts the filteres array with the setting in the sorter object
+          .sort(AoSorter(this.sorter));
       },
     },
     mounted() {
@@ -131,6 +131,15 @@
       outline: 0;
       -webkit-box-shadow: none;
       box-shadow: none;
+    }
+  }
+
+  .display-row {
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+    &:hover {
+      background-color: #f1fbff;
+      ;
     }
   }
 

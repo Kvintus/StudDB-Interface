@@ -10,7 +10,7 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav mr-auto">
         <li id="nav-students" class="nav-item">
-          <router-link tag="a" class="nav-link" :class="{'active': route === '/list'}" :to="{name: 'studentsList'}">Students</router-link>
+          <router-link tag="a" class="nav-link" :class="{'active': route === '/list/students'}" :to="{name: 'studentsList'}">Students</router-link>
         </li>
         <li id="nav-classes" class="nav-item">
           <router-link tag="a" class="nav-link" :to="{name: 'ClassesList'}">Classes</router-link>
@@ -21,11 +21,9 @@
         <li id="nav-parents" class="nav-item">
           <router-link tag="a" class="nav-link" :to="{name: 'ParentsList'}">Parents</router-link>
         </li>
-        <!--                     <% if currentAdd %>
-                    <li id="nav-parents" class="nav-item">
-                            <a class="add-menu-button btn btn-outline-success" href="%% currentAdd['where'] %%">Add %% currentAdd['what'] %%</a>
-                    </li>
-                    <% endif %> -->
+        <li v-if="route.indexOf('/list') != -1" id="nav-parents" class="nav-item">
+          <router-link tag="a" class="add-menu-button btn btn-outline-success" :to="{name: 'add${whatToAdd}'}">Add {{ whatToAdd }}</router-link>
+        </li>
       </ul>
       <ul class="navbar-nav navbar-right">
         <li class="nav-item dropdown">
@@ -54,17 +52,30 @@
 <script>
   export default {
     computed: {
+      // Return a currently logged-in user
       user() {
         return this.$store.state.user;
       },
+      // Returns current route
       route() {
         return this.$route.path;
       },
+      // Returns a string of the current route in singular
+      whatToAdd() {
+        // If there's a word 'classes' in the route
+        if (this.route.indexOf('classes') != -1) {
+          return 'class'
+        } else {
+          return this.route.slice('/list/'.length, this.route.length - 1) // route: '/list/students' -> student
+        }
+      }
     },
     methods: {
       logout() {
         this.$store.commit('logUserOut');
-        this.$router.push({name: 'LoginRoute'});
+        this.$router.push({
+          name: 'LoginRoute'
+        });
       },
     },
   };
@@ -75,6 +86,13 @@
 <style lang="scss" scoped>
   .bg-moj {
     background-color: #385777;
+  }
+
+  .add-menu-button {
+    margin-left: 50px;
+    @media screen and (max-width: 768px) {
+      margin-left: 0px;
+    }
   }
 
   .navbar-brand {
