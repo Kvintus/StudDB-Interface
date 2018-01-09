@@ -1,50 +1,72 @@
 <template>
-  <table id="tabulka" class="table sticky-header">
-    <thead class="table-header">
-      <tr>
-        <th class="student-table-id" data-tsorter="numeric">
-          <div>
-            <input id="inputID" v-model="filters.id" class="table-header" type="text" placeholder="#">
-            <img @click="changeSorter('id')" class="sipka sorter" :src="whichIcon('id')" alt="" srcset="">
-          </div>
-        </th>
-        <th>
-          <div>
-            <input id="inputName" v-model="filters.name" class="table-header" type="text" placeholder="Name">
-            <img @click="changeSorter('name')" class="sipka sorter" :src="whichIcon('name')" alt="" srcset="">
-          </div>
-        </th>
+  <div>
 
-        <th>
-          <div>
-            <input id="inputSurname" v-model="filters.surname" class="table-header" type="text" placeholder="Surname">
-            <img @click="changeSorter('surname')" class="sipka sorter" :src="whichIcon('surname')" alt="" srcset="">
-          </div>
-        </th>
-        <th class="student-table-email">
-          <div>
-            <input class="table-header dis" type="text" placeholder="Email" disabled>
-            <div class="placeholderDiv"></div>
-          </div>
-        </th>
-        <th class="student-table-phone">
-          <div>
-            <input class="table-header dis" type="text" placeholder="Phone" disabled>
-            <div class=""></div>
-          </div>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="student in students" :key="student.id" class="display-row">
-        <td class="student-table-id">{{ student['id'] }}</td>
-        <td>{{ student['name'] }}</td>
-        <td>{{ student['surname'] }}</td>
-        <td class="student-table-email">{{ student['email'] }}</td>
-        <td class="student-table-phone">{{ student['phone'] }}</td>
-      </tr>
-    </tbody>
-  </table>
+    <table id="tabulka" class="table sticky-header">
+      <thead class="table-header">
+        <tr>
+          <th class="student-table-id" data-tsorter="numeric">
+            <div>
+              <input id="inputID" v-model="filters.id" class="table-header" type="text" placeholder="#">
+              <img @click="changeSorter('id')" class="sipka sorter" :src="whichIcon('id')" alt="" srcset="">
+            </div>
+          </th>
+          <th>
+            <div>
+              <input id="inputName" v-model="filters.name" class="table-header" type="text" placeholder="Name">
+              <img @click="changeSorter('name')" class="sipka sorter" :src="whichIcon('name')" alt="" srcset="">
+            </div>
+          </th>
+
+          <th>
+            <div>
+              <input id="inputSurname" v-model="filters.surname" class="table-header" type="text" placeholder="Surname">
+              <img @click="changeSorter('surname')" class="sipka sorter" :src="whichIcon('surname')" alt="" srcset="">
+            </div>
+          </th>
+          <th class="student-table-email">
+            <div>
+              <input class="table-header dis" type="text" placeholder="Email" disabled>
+              <div class="placeholderDiv"></div>
+            </div>
+          </th>
+          <th class="student-table-phone">
+            <div>
+              <input class="table-header dis" type="text" placeholder="Phone" disabled>
+              <div class=""></div>
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Loader -->
+        <tr v-if="allStudents.length === 0" v-for="i in 20" :key="i" class="display-row">
+          <td class="student-table-id">
+            <span class="placeholder">{{ randomPlaceholder(2, 5) }}</span>
+          </td>
+          <td>
+            <span class="placeholder">{{ randomPlaceholder(9, 12) }}</span>
+          </td>
+          <td>
+            <span class="placeholder">{{ randomPlaceholder(9, 12) }}</span>
+          </td>
+          <td class="student-table-email">
+            <span class="placeholder">{{ randomPlaceholder(22, 26) }}</span>
+          </td>
+          <td class="student-table-phone">
+            <span class="placeholder">{{ randomPlaceholder(18, 20) }}</span>
+          </td>
+        </tr>
+        <!-- Real Values -->
+        <tr v-if="allStudents.length !== 0" v-for="student in students" :key="student.id" class="display-row">
+          <td class="student-table-id">{{ student['id'] }}</td>
+          <td>{{ student['name'] }}</td>
+          <td>{{ student['surname'] }}</td>
+          <td class="student-table-email">{{ student['email'] }}</td>
+          <td class="student-table-phone">{{ student['phone'] }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script>
@@ -70,6 +92,19 @@
       }
     },
     methods: {
+      // Generate a random number for placeholder
+      randomPlaceholder: function (min, max) {
+        // Generating the length
+        const len = Math.floor(Math.random() * (max - min + 1) + min);
+        let placeholder = '';
+
+        // Populating it
+        for (let i = 0; i < len; i++) {
+          placeholder += ' ';
+        }
+
+        return placeholder;
+      },
       // Change what we are sorting by and takes care of the order automatically
       changeSorter(by) {
         // If we are already sorting by the same value then only change the order, else it will change what value we are sorting by 
@@ -95,9 +130,15 @@
       }
     },
     computed: {
+      allStudents() {
+        return this.$store.getters.students;
+      },
       // Returns a list of studens who passed all the filters and are sorted
       students() {
-        return this.$store.state.students
+        if (this.allStudents === {}) {
+          return {};
+        }
+        return this.$store.getters.students
           // ID filter, return only exact matches 
           .filter(allFilters.filterById(this.filters.id))
           // Name filter, if the student's name starts with the value of the filter
@@ -108,7 +149,7 @@
           .sort(AoSorter(this.sorter));
       },
     },
-    mounted() {
+    updated() {
       // "Turns on" the sticky header
       $(document).ready(function () {
         $(".sticky-header").floatThead({
@@ -116,30 +157,47 @@
         });
       });
     },
-    // Fetches all the students and stores them in the central store
-    beforeRouteUpdate(to, from, next) {
-      this.axios.get(`${store.state.server}/api/student/all`)
-        .then((resp) => {
-          if (resp.data.success) {
-            store.state.students = resp.data.students.slice();
-            next();
-          } else {
-            // TODO: Display error
-            console.log(resp.message);
-            next();
-          }
-        })
-        .catch((error) => {
-          // TODO: Display the error somehow
-          console.log(error);
-          next();
-        });
-    },
+    beforeRouteEnter: (to, from, next) => {
+      console.log('Entering');
+      next(vm => {
+        vm.$store.dispatch('fetchStudents');
+      });
+    }
   }
 
 </script>
 
 <style lang="scss" scoped>
+  @keyframes placeHolderShimmer {
+    0% {
+      background-position: -468px 0
+    }
+    100% {
+      background-position: 468px 0
+    }
+  }
+
+  .placeholder {
+    animation-duration: 1.3s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background: #f6f7f8;
+    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+    background-size: 800px 104px;
+    height: 96px;
+    position: relative;
+  }
+
+
+  .placeholder {
+    margin: 0px;
+    padding: 0px;
+    color: rgb(225, 225, 225);
+    background-color: rgb(225, 225, 225);
+  }
+
   .table-header {
     border: 0;
     padding-top: 15px;
