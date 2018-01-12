@@ -6,6 +6,7 @@ import MainList from '@/components/Main/MainList';
 import StudentList from '@/components/Main/Students/StudentList';
 import ClassList from '@/components/Main/Classes/ClassList';
 import ParentList from '@/components/Main/Parents/ParentList';
+import ProfessorList from '@/components/Main/Professors/ProfessorList';
 
 Vue.use(Router);
 
@@ -65,6 +66,14 @@ export default new Router({
           component: ParentList,
           meta: {
             title: 'Parents',
+          },
+        },
+        {
+          name: 'professorsList',
+          path: 'professors',
+          component: ProfessorList,
+          meta: {
+            title: 'Professors',
           },
         },
       ],

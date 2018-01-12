@@ -20,6 +20,9 @@ export default new Vuex.Store({
     parents(state) {
       return state.parents;
     },
+    professors(state) {
+      return state.professors;
+    },
   },
   mutations: {
     // Sets user from the payload (Loggs him in)
@@ -77,11 +80,33 @@ export default new Vuex.Store({
         url = `${context.state.server}/api/parent/all`;
       }
 
-      console.log(url);
       Vue.axios.get(url)
       .then((resp) => {
         if (resp.data.success) {
           context.commit('SET_PARENTS', resp.data.parents);
+        } else {
+          showError(resp.data.message);
+        }
+      })
+      .catch((error) => {
+        showError(error);
+      });
+    },
+    // Fetches all the professors from the API
+    fetchProfessors(context, payload) {
+      let url;
+
+      // This is because first I fetch just a few parents so the loading feels instant and then I fetch the rest
+      if (payload !== undefined && 'first' in payload) {
+        url = `${context.state.server}/api/professor/all?first=${payload.first}`;
+      } else {
+        url = `${context.state.server}/api/professor/all`;
+      }
+
+      Vue.axios.get(url)
+      .then((resp) => {
+        if (resp.data.success) {
+          context.commit('SET_PROFESSORS', resp.data.professors);
         } else {
           showError(resp.data.message);
         }
