@@ -40,9 +40,13 @@ export default new Vuex.Store({
     SET_STUDENTS(state, payload) {
       state.students = payload.slice();
     },
-    // Saves the students from the passed-in payload into the global storage
+    // Saves the parents from the passed-in payload into the global storage
     SET_PARENTS(state, payload) {
       state.parents = payload.slice();
+    },
+    // Saves the parents from the passed-in payload into the global storage
+    SET_PROFESSORS(state, payload) {
+      state.professors = payload.slice();
     },
   },
   actions: {
