@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <table id="tabulka" class="table sticky-header">
       <thead class="table-header">
         <tr>
@@ -39,7 +38,7 @@
       </thead>
       <tbody>
         <!-- Loader -->
-        <tr v-if="allStudents.length === 0" v-for="i in 20" :key="i" class="display-row">
+        <tr v-if="allParents.length === 0" v-for="i in 20" :key="i" class="display-row">
           <td class="student-table-id">
             <span class="placeholder">{{ randomPlaceholder(2, 5) }}</span>
           </td>
@@ -57,12 +56,12 @@
           </td>
         </tr>
         <!-- Real Values -->
-        <tr v-if="allStudents.length !== 0" v-for="student in students" :key="student.id" class="display-row">
-          <td class="student-table-id">{{ student['id'] }}</td>
-          <td>{{ student['name'] }}</td>
-          <td>{{ student['surname'] }}</td>
-          <td class="student-table-email">{{ student['email'] }}</td>
-          <td class="student-table-phone">{{ student['phone'] }}</td>
+        <tr v-if="allParents.length !== 0" v-for="parent in parents" :key="parent.id" class="display-row">
+          <td class="student-table-id">{{ parent['id'] }}</td>
+          <td>{{ parent['name'] }}</td>
+          <td>{{ parent['surname'] }}</td>
+          <td class="student-table-email">{{ parent['email'] }}</td>
+          <td class="student-table-phone">{{ parent['phone'] }}</td>
         </tr>
       </tbody>
     </table>
@@ -73,8 +72,11 @@
   let sticky = require('@/assets/js/stickyTableHeader');
   import AoSorter from '@/assets/js/Filters_and_Sorters/arrayOfObjectsSorter';
   import allFilters from '@/assets/js/Filters_and_Sorters/filters';
+  import randomPlaceholder from '@/assets/js/randomPlaceholder.js';
+  import tableManipulationMixin from '@/assets/js/tableManipulationMixin.js';
 
   export default {
+    mixins: [tableManipulationMixin],
     data() {
       return {
         // All the filters in one object
@@ -92,53 +94,19 @@
       }
     },
     methods: {
-      // Generate a random number for placeholder
-      randomPlaceholder: function (min, max) {
-        // Generating the length
-        const len = Math.floor(Math.random() * (max - min + 1) + min);
-        let placeholder = '';
-
-        // Populating it
-        for (let i = 0; i < len; i++) {
-          placeholder += ' ';
-        }
-
-        return placeholder;
-      },
-      // Change what we are sorting by and takes care of the order automatically
-      changeSorter(by) {
-        // If we are already sorting by the same value then only change the order, else it will change what value we are sorting by 
-        if (this.sorter.by === by) {
-          if (this.sorter.order === 'asc') {
-            this.sorter.order = 'desc';
-          } else {
-            this.sorter.order = 'asc';
-          }
-        } else {
-          this.sorter.by = by;
-          this.sorter.order = 'desc';
-        }
-      },
-
-      // Will decide which icon to use based on the sorter
-      whichIcon(by) {
-        if (this.sorter.by === by) {
-          return `static/images/icons/${this.sorter.order}.png`
-        } else {
-          return 'static/images/icons/no.png';
-        }
-      }
+      randomPlaceholder,
     },
     computed: {
-      allStudents() {
-        return this.$store.getters.students;
+      allParents () {
+        return this.$store.getters.parents;
       },
       // Returns a list of studens who passed all the filters and are sorted
-      students() {
-        if (this.allStudents === {}) {
-          return {};
+      parents() {
+        if (this.allParents === []) {
+          return [];
         }
-        return this.$store.getters.students
+
+        return this.allParents
           // ID filter, return only exact matches 
           .filter(allFilters.filterById(this.filters.id))
           // Name filter, if the student's name starts with the value of the filter
@@ -157,12 +125,18 @@
         });
       });
     },
+    destroyed() {
+      // If the user navigates away it clears the student list
+      this.$store.commit('clearList', 'parents');
+    },
     beforeRouteEnter: (to, from, next) => {
-      console.log('Entering');
       next(vm => {
-        vm.$store.dispatch('fetchStudents');
+        vm.$store.dispatch('fetchParents', {
+          first: 12,
+        })
+        vm.$store.dispatch('fetchParents');
       });
-    }
+    },
   }
 
 </script>

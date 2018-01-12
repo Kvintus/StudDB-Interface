@@ -2,19 +2,20 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import store from '@/store/store';
 import Login from '@/components/Login';
-import MainList from '@/components/MainList';
-import StudentList from '@/components/Students/StudentList';
-import ClassList from '@/components/Classes/ClassList';
-import Peter from '@/components/peter';
+import MainList from '@/components/Main/MainList';
+import StudentList from '@/components/Main/Students/StudentList';
+import ClassList from '@/components/Main/Classes/ClassList';
+import ParentList from '@/components/Main/Parents/ParentList';
 
 Vue.use(Router);
 
 export default new Router({
-  routes: [
-    {
+  routes: [{
       path: '/',
       beforeEnter(to, from, next) {
-        next({ name: 'studentsList' });
+        next({
+          name: 'studentsList',
+        });
       },
     },
     {
@@ -24,7 +25,7 @@ export default new Router({
       meta: {
         title: 'Login',
       },
-      // If the user is logged in redirect him to Homepag
+      // If the user is logged in redirect him to Homepage
       beforeEnter(to, from, next) {
         if (!(Object.keys(store.state.user).length === 0)) {
           next({
@@ -56,6 +57,14 @@ export default new Router({
           component: ClassList,
           meta: {
             title: 'Classes',
+          },
+        },
+        {
+          name: 'parentsList',
+          path: 'parents',
+          component: ParentList,
+          meta: {
+            title: 'Parents',
           },
         },
       ],

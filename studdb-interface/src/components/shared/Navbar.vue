@@ -16,10 +16,10 @@
           <router-link tag="a" class="nav-link" :class="{'active': route === '/list/classes'}" :to="{name: 'classesList'}">Classes</router-link>
         </li>
         <li id="nav-professors" class="nav-item">
-          <router-link tag="a" class="nav-link" :class="{'active': route === '/list/professors'}" :to="{name: 'ProfessorsList'}">Professors</router-link>
+          <router-link tag="a" class="nav-link" :class="{'active': route === '/list/professors'}" :to="{name: 'professorsList'}">Professors</router-link>
         </li>
         <li id="nav-parents" class="nav-item">
-          <router-link tag="a" class="nav-link" :class="{'active': route === '/list/parents'}" :to="{name: 'ParentsList'}">Parents</router-link>
+          <router-link tag="a" class="nav-link" :class="{'active': route === '/list/parents'}" :to="{name: 'parentsList'}">Parents</router-link>
         </li>
         <!-- Add Button -->
         <li v-if="route.indexOf('/list') != -1" id="nav-parents" class="nav-item">
