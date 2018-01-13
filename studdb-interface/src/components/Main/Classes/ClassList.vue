@@ -32,7 +32,17 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="tempClass in classes" :key="tempClass.id" class="display-row">
+        <!-- Loader -->
+        <tr v-if="allClasses.lenght === 0" v-for="i in 20" :key="i" class="display-row">
+          <td>{{ randomPlaceholder(2, 5) }}</td>
+          <td>
+            <span class="placeholder">{{ randomPlaceholder(8, 10) }}</span>
+          </td>
+          <td><span class="placeholder">{{ randomPlaceholder(7, 7) }}</span></td>
+          <td><span class="placeholder">{{ randomPlaceholder(4, 6) }}</span></td>
+        </tr>
+        <!-- Real Values -->
+        <tr v-if="allClasses.lenght !== 0" v-for="tempClass in classes" :key="tempClass.id" class="display-row">
           <td>{{ tempClass['id'] }}</td>
           <td>
             <span v-if="'altname' in tempClass" class="class-altname">{{ 'altname' in tempClass ? tempClass.altname : '' }}</span>
@@ -43,8 +53,6 @@
         </tr>
       </tbody>
     </table>
-    <!-- The rendering was not working so I had to do this -->
-    <p v-if="false">{{ allClasses }}</p>
   </div>
 </template>
 
@@ -52,14 +60,13 @@
   let sticky = require('@/assets/js/stickyTableHeader');
   import AoSorter from '@/assets/js/Filters_and_Sorters/arrayOfObjectsSorter';
   import allFilters from '@/assets/js/Filters_and_Sorters/filters';
-  import axios from 'axios'
+  import randomPlaceholder from '@/assets/js/randomPlaceholder';
+  import tableManipulationMixin from '@/assets/js/tableManipulationMixin';
 
   export default {
+    mixins: [tableManipulationMixin],
     data() {
       return {
-        // All classes
-        allClasses: '{}',
-
         // All the filters in one object
         filters: {
           id: '',
@@ -75,62 +82,21 @@
       }
     },
     methods: {
-      // Fetch the classes 
-      fetchClasses() {
-        console.log('Fething the data');
-        axios.get(`${this.$store.state.server}/api/classes/all`)
-          .then((resp) => {
-            if (resp.data.success) {
-              console.log('Got the data');
-              // Stores the classes in the strinified format because it didn't work the normal way
-              this.allClasses = JSON.stringify(resp.data.classes);
-            } else {
-              // TODO: Display error
-              console.log(resp.message);
-            }
-          })
-          .catch((error) => {
-            // TODO: Display the error somehow
-            console.log(error);
-          });
-      },
-      // Change what we are sorting by and takes care of the order automatically
-      changeSorter(by) {
-        // If we are already sorting by the same value then only change the order, else it will change what value we are sorting by 
-        if (this.sorter.by === by) {
-          if (this.sorter.order === 'asc') {
-            this.sorter.order = 'desc';
-          } else {
-            this.sorter.order = 'asc';
-          }
-        } else {
-          this.sorter.by = by;
-          this.sorter.order = 'desc';
-        }
-      },
-
-      // Will decide which icon to use based on the sorter
-      whichIcon(by) {
-        if (this.sorter.by === by) {
-          return `static/images/icons/${this.sorter.order}.png`
-        } else {
-          return 'static/images/icons/no.png';
-        }
-      }
+      randomPlaceholder,
     },
-
     computed: {
+      allClasses() {
+        return this.$store.getters.classes
+      },
       // Returns a list of studens who passed all the filters and are sorted
       classes() {
 
         // If there are no classes loaded yet
-        if (this.allClasses === '{}') {
-          return {};
+        if (this.allClasses === []) {
+          return [];
         }
 
-        // If the classes has been loaded, filter them and return the filtered array
-        let beforeFilter = JSON.parse(this.allClasses);
-        let tempArr = beforeFilter
+        return this.allClasses
           // ID filter, return only exact matches 
           .filter(allFilters.filterById(this.filters.id))
           // Name filter, if the student's name starts with the value of the filter
@@ -139,11 +105,10 @@
           .filter(allFilters.containsByProperty(this.filters.start, 'start'))
           // Sorts the filteres array with the setting in the sorter object
           .sort(AoSorter(this.sorter));
-        return tempArr
       },
     },
-    created() {
-      this.fetchClasses();
+    destroyed() {
+      this.$store.commit('clearList', 'classes')
     },
     updated() {
       // "Turns on" the sticky header
@@ -151,14 +116,51 @@
         $(".sticky-header").floatThead({
           scrollingTop: 60
         });
-      });
-
+      })
+    },
+    beforeRouteEnter: (to, from, next) => {
+      next(vm => {
+        vm.$store.dispatch('fetchClasses', {
+          first: 12
+        });
+        vm.$store.dispatch('fetchClasses');
+      })
     }
   }
 
 </script>
 
 <style lang="scss" scoped>
+  @keyframes placeHolderShimmer {
+    0% {
+      background-position: -468px 0
+    }
+    100% {
+      background-position: 468px 0
+    }
+  }
+
+  .placeholder {
+    animation-duration: 1.3s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background: #f6f7f8;
+    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+    background-size: 800px 104px;
+    height: 96px;
+    position: relative;
+  }
+
+
+  .placeholder {
+    margin: 0px;
+    padding: 0px;
+    color: rgb(225, 225, 225);
+    background-color: rgb(225, 225, 225);
+  }
+
   .table-header {
     border: 0;
     padding-top: 15px;

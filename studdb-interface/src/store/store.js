@@ -1,6 +1,7 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
 import showError from '@/assets/js/globalError';
+import axios from 'axios';
 
 Vue.use(Vuex);
 
@@ -14,6 +15,9 @@ export default new Vuex.Store({
     professors: [],
   },
   getters: {
+    user(state) {
+      return state.user;
+    },
     students(state) {
       return state.students;
     },
@@ -22,6 +26,9 @@ export default new Vuex.Store({
     },
     professors(state) {
       return state.professors;
+    },
+    classes(state) {
+      return state.classes;
     },
   },
   mutations: {
@@ -48,6 +55,10 @@ export default new Vuex.Store({
     SET_PROFESSORS(state, payload) {
       state.professors = payload.slice();
     },
+    // Saves the classes from the passed-in payload into the global storage
+    SET_CLASSES(state, payload) {
+      state.classes = payload.slice();
+    },
   },
   actions: {
     // Fetches students from the server
@@ -61,7 +72,7 @@ export default new Vuex.Store({
         url = `${context.state.server}/api/student/all`;
       }
 
-      Vue.axios.get(url)
+      axios.get(url)
       .then((resp) => {
         if (resp.data.success) {
           context.commit('SET_STUDENTS', resp.data.students);
@@ -111,6 +122,29 @@ export default new Vuex.Store({
       .then((resp) => {
         if (resp.data.success) {
           context.commit('SET_PROFESSORS', resp.data.professors);
+        } else {
+          showError(resp.data.message);
+        }
+      })
+      .catch((error) => {
+        showError(error);
+      });
+    },
+    // Fetches all the classes from the API
+    fetchClasses(context, payload) {
+      let url;
+
+      // This is because first I fetch just a few parents so the loading feels instant and then I fetch the rest
+      if (payload !== undefined && 'first' in payload) {
+        url = `${context.state.server}/api/class/all?first=${payload.first}`;
+      } else {
+        url = `${context.state.server}/api/class/all`;
+      }
+
+      Vue.axios.get(url)
+      .then((resp) => {
+        if (resp.data.success) {
+          context.commit('SET_CLASSES', resp.data.classes);
         } else {
           showError(resp.data.message);
         }

@@ -1,7 +1,7 @@
 <template>
 <div>
     <app-navbar></app-navbar>
-    <router-view></router-view>
+    <router-view class="matop"></router-view>
 </div>
 </template>
 
@@ -15,8 +15,8 @@ export default {
 };
 </script>
 
-<style>
- body {
+<style scoped>
+ .matop {
    /* Thanks to the navbar */
    margin-top: 60px;
  }

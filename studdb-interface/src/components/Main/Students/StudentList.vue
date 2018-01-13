@@ -56,7 +56,7 @@
           </td>
         </tr>
         <!-- Real Values -->
-        <tr v-if="allStudents.length !== 0" v-for="student in students" :key="student.id" class="display-row">
+        <tr @click="displayStudent(student.id)" v-if="allStudents.length !== 0" v-for="student in students" :key="student.id" class="display-row">
           <td class="student-table-id">{{ student['id'] }}</td>
           <td>{{ student['name'] }}</td>
           <td>{{ student['surname'] }}</td>
@@ -72,8 +72,8 @@
   let sticky = require('@/assets/js/stickyTableHeader');
   import AoSorter from '@/assets/js/Filters_and_Sorters/arrayOfObjectsSorter';
   import allFilters from '@/assets/js/Filters_and_Sorters/filters';
-  import randomPlaceholder from '@/assets/js/randomPlaceholder.js';
-  import tableManipulationMixin from '@/assets/js/tableManipulationMixin.js';
+  import randomPlaceholder from '@/assets/js/randomPlaceholder';
+  import tableManipulationMixin from '@/assets/js/tableManipulationMixin';
 
   export default {
     mixins: [tableManipulationMixin],
@@ -96,6 +96,9 @@
     methods: {
       // Making the funtion one of the methods
       randomPlaceholder,
+      displayStudent(id) {
+        this.$router.push({name: 'studentView', params: { id, }});
+      }
     },
     computed: {
       allStudents() {
