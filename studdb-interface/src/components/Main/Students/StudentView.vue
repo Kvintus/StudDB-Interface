@@ -126,6 +126,7 @@
 <script>
   import isMale from '@/assets/js/isMaleMixin';
   import showError from '@/assets/js/globalError';
+  import axios from 'axios';
   export default {
     mixins: [isMale],
     data() {
@@ -135,14 +136,20 @@
         },
       };
     },
+    watch: {
+      '$route': function(val) {
+        console.log(this);
+        this.fetchStudent(val.params.id);
+      }
+    },
     methods: {
       // Fetch the student
-      fetchStudent(vm) {
-        vm.axios.get(`${vm.$store.state.server}/api/student?id=${vm.$route.params.id}`)
+      fetchStudent(id) {
+        axios.get(`${this.$store.state.server}/api/student?id=${id}`)
           .then(resp => {
             if (resp.data.success) {
               // Save the student
-              vm.student = resp.data.student;
+              this.student = resp.data.student;
               // Set the page title to students name 
               document.title = `${resp.data.student.name} ${resp.data.student.surname}`;
             } else {
@@ -163,7 +170,7 @@
     beforeRouteEnter: (to, from, next) => {
       next(vm => {
         console.log('Entergin the fucking route');
-        vm.fetchStudent(vm);
+        vm.fetchStudent(vm.$route.params.id);
       })
     }
   }
