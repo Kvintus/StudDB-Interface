@@ -138,7 +138,6 @@
     },
     watch: {
       '$route': function(val) {
-        console.log(this);
         this.fetchStudent(val.params.id);
       }
     },
