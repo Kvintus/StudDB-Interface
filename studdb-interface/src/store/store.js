@@ -8,7 +8,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     user: {},
-    server: 'http://127.0.0.1:5000',
+    // server: 'http://127.0.0.1:5000',
+    server: 'https://stud-db-api.herokuapp.com',
     students: [],
     classes: [],
     parents: [],

@@ -137,14 +137,18 @@
       };
     },
     watch: {
-      '$route': function(val) {
-        this.fetchStudent(val.params.id);
+      '$route.params.id': function(val) {
+        this.fetchStudent(val);
       }
     },
     methods: {
       // Fetch the student
       fetchStudent(id) {
-        axios.get(`${this.$store.state.server}/api/student?id=${id}`)
+        this.axios.get(`${this.$store.state.server}/api/student`, {
+          params: {
+            id,
+          }
+        })
           .then(resp => {
             if (resp.data.success) {
               // Save the student
