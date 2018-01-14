@@ -34,12 +34,12 @@
       <tbody>
         <!-- Loader -->
         <tr v-if="allClasses.lenght === 0" v-for="i in 20" :key="i" class="display-row">
-          <td>{{ randomPlaceholder(2, 5) }}</td>
+          <td><placeholder :min="2" :max="5" :loading="placeholderAnimation"></placeholder></td>
           <td>
-            <span class="placeholder">{{ randomPlaceholder(8, 10) }}</span>
+            <placeholder :min="8" :max="12" :loading="placeholderAnimation"></placeholder>
           </td>
-          <td><span class="placeholder">{{ randomPlaceholder(7, 7) }}</span></td>
-          <td><span class="placeholder">{{ randomPlaceholder(4, 6) }}</span></td>
+          <td><placeholder :min="7" :max="7" :loading="placeholderAnimation"></placeholder></td>
+          <td><placeholder :min="4" :max="6" :loading="placeholderAnimation"></placeholder></td>
         </tr>
         <!-- Real Values -->
         <tr v-if="allClasses.lenght !== 0" v-for="tempClass in classes" :key="tempClass.id" class="display-row">
@@ -62,9 +62,13 @@
   import allFilters from '@/assets/js/Filters_and_Sorters/filters';
   import randomPlaceholder from '@/assets/js/randomPlaceholder';
   import tableManipulationMixin from '@/assets/js/tableManipulationMixin';
+  import Placeholder from '@/components/shared/Placeholder';
 
   export default {
     mixins: [tableManipulationMixin],
+    components: {
+      Placeholder,
+    },
     data() {
       return {
         // All the filters in one object
@@ -79,6 +83,7 @@
           by: 'id',
           order: 'desc',
         },
+        placeholderAnimation: true,
       }
     },
     methods: {
@@ -131,36 +136,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @keyframes placeHolderShimmer {
-    0% {
-      background-position: -468px 0
-    }
-    100% {
-      background-position: 468px 0
-    }
-  }
-
-  .placeholder {
-    animation-duration: 1.3s;
-    animation-fill-mode: forwards;
-    animation-iteration-count: infinite;
-    animation-name: placeHolderShimmer;
-    animation-timing-function: linear;
-    background: #f6f7f8;
-    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
-    background-size: 800px 104px;
-    height: 96px;
-    position: relative;
-  }
-
-
-  .placeholder {
-    margin: 0px;
-    padding: 0px;
-    color: rgb(225, 225, 225);
-    background-color: rgb(225, 225, 225);
-  }
-
   .table-header {
     border: 0;
     padding-top: 15px;
