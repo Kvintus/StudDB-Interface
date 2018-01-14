@@ -1,7 +1,7 @@
 <template>
   <div class="container vs-main-con">
     <!-- Alert -->
-    <div v-if="alertMessage.length > 0 && isStudentEmpty" class="alert alert-danger">{{ alertMessage }}</div>
+    <div v-if="isError" class="alert alert-danger">{{ alertMessage }}</div>
     <div class="row">
       <h1 class="card-heading">Student:</h1>
     </div>
@@ -19,7 +19,7 @@
               </td>
               <td>
                 <p>
-                  <placeholder v-if="isStudentEmpty" :min="9" :max="12"></placeholder>
+                  <placeholder v-if="isError" :min="9" :max="12"></placeholder>
                   <span v-else>{{ student['name'] }}</span>
                 </p>
               </td>
@@ -30,7 +30,7 @@
               </td>
               <td>
                 <p>
-                  <placeholder v-if="isStudentEmpty" :min="9" :max="12"></placeholder>
+                  <placeholder v-if="isError" :min="9" :max="12"></placeholder>
                   <span v-else>{{ student['surname'] }}</span>
                 </p>
               </td>
@@ -41,7 +41,7 @@
               </td>
               <td>
                 <p class="vs-gray-info">
-                  <placeholder v-if="isStudentEmpty" :min="2" :max="4"></placeholder>
+                  <placeholder v-if="isError" :min="2" :max="4"></placeholder>
                   <span v-else>{{ student['id'] }}</span>
                 </p>
               </td>
@@ -53,7 +53,7 @@
               </td>
               <td>
                 <p class="vs-gray-info">
-                  <placeholder v-if="isStudentEmpty" :min="5" :max="5"></placeholder>
+                  <placeholder v-if="isError" :min="5" :max="5"></placeholder>
                   <span>{{ student['start'] }}</span>
                 </p>
               </td>
@@ -63,7 +63,7 @@
                 <p>Class:</p>
               </td>
               <td>
-                <p v-if="isStudentEmpty">
+                <p v-if="isError">
                   <placeholder :min="4" :max="7"></placeholder>
                 </p>
                 <div v-else>
@@ -89,7 +89,7 @@
             </td>
             <td>
               <p>
-                <placeholder v-if="isStudentEmpty" :min="10" :max="16"></placeholder>
+                <placeholder v-if="isError" :min="10" :max="16"></placeholder>
                 <span v-else>{{ student['email'] }}</span>
               </p>
             </td>
@@ -103,7 +103,7 @@
             </td>
             <td>
               <p>
-                <placeholder v-if="isStudentEmpty" :min="12" :max="18"></placeholder>
+                <placeholder v-if="isError" :min="12" :max="18"></placeholder>
                 <span v-else>{{ student['phone'] }}</span>
               </p>
             </td>
@@ -117,7 +117,7 @@
             </td>
             <td>
               <p>
-                <placeholder v-if="isStudentEmpty" :min="14" :max="20"></placeholder>
+                <placeholder v-if="isError" :min="14" :max="20"></placeholder>
                 <span v-else>{{ student['adress'] }}</span>
               </p>
             </td>
@@ -131,7 +131,7 @@
             </td>
             <td>
               <p class="no-bottom-margin">
-                <placeholder v-if="isStudentEmpty" :min="8" :max="12"></placeholder>
+                <placeholder v-if="isError" :min="8" :max="12"></placeholder>
                 <span>{{ student['birth'] }}</span>
               </p>
             </td>
@@ -143,7 +143,7 @@
           <p class="view-rel-headline">Parents</p>
           <div class="parents-con">
             <!-- Placeholder Parents -->
-            <div v-if="isStudentEmpty" style="padding: 0px;" v-for="i in 2" :key="i">
+            <div v-if="isError" style="padding: 0px;" v-for="i in 2" :key="i">
               <button class="relative-ref custom-button">
                 <placeholder :min="6" :max="8"></placeholder>
               </button>
@@ -226,6 +226,9 @@
       isStudentEmpty() {
         return Object.keys(this.student).length <= 1;
       },
+      isError() {
+        return this.isStudentEmpty && this.alertMessage.length > 0;
+      }
     },
     beforeRouteEnter: (to, from, next) => {
       next(vm => {
