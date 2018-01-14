@@ -21,6 +21,8 @@
 </template>
 
 <script>
+  import { api_server } from '@/assets/js/config'
+
   export default {
     created() {
       // Changes the window title
@@ -48,7 +50,7 @@
         // If both fiels are not empty
         if (this.username && this.password) {
             // Sends a request to a server with the parameters in the passed-in object
-            this.axios.post(this.$store.state.server + '/user', {
+            this.axios.post(api_server + '/user', {
             username: this.username,
             password: this.password,
           }).then((resp) => {
