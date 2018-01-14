@@ -6,7 +6,7 @@
       <h1 class="card-heading">Student:</h1>
     </div>
     <div class="row">
-      <div class="col prof-image-con">
+      <div v-if="!isStudentEmpty" class="col prof-image-con">
         <img v-if="!isMale && student.surname !== undefined" src="static/images/placeholder_female.jpg" alt="">
         <img v-else src="static/images/placeholder_male.jpg" alt="">
       </div>
