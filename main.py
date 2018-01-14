@@ -1,8 +1,8 @@
 from helpers import *
 from flask import request
 
-api_server = "https://stud-db-api.herokuapp.com"
-#api_server = "http://127.0.0.1:5000"
+#api_server = "https://stud-db-api.herokuapp.com"
+api_server = "http://127.0.0.1:5000"
 
 # Index
 @app.route('/')
@@ -60,10 +60,12 @@ def login():
         }
 
         # redirect user to home page
-        return redirect(url_for("index"))
+        nextt = request.args.get('next')
+        print(nextt)
+        return redirect(nextt)
     else:
         nextt = request.args.get('next')
-        return render_template("login.html", ne = nextt)
+        return render_template("login.html", next = nextt)
 
 ##########################################################
 # MAIN TABLES
