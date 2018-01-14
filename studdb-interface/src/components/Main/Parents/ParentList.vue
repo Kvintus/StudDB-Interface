@@ -75,6 +75,7 @@
   import randomPlaceholder from '@/assets/js/randomPlaceholder.js';
   import tableManipulationMixin from '@/assets/js/tableManipulationMixin.js';
   import Placeholder from '@/components/shared/Placeholder';
+  import store from '@/store/store';
 
   export default {
     mixins: [tableManipulationMixin],

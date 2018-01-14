@@ -2,14 +2,13 @@ import Vuex from 'vuex';
 import Vue from 'vue';
 import showError from '@/assets/js/globalError';
 import axios from 'axios';
+import { api_server } from '@/assets/js/config';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     user: {},
-    // server: 'http://127.0.0.1:5000',
-    server: 'https://stud-db-api.herokuapp.com',
     students: [],
     classes: [],
     parents: [],
@@ -68,9 +67,9 @@ export default new Vuex.Store({
 
       // This is because first I fetch just a few parents so the loading feels instant and then I fetch the rest
       if (payload !== undefined && 'first' in payload) {
-        url = `${context.state.server}/api/student/all?first=${payload.first}`;
+        url = `${api_server}/api/student/all?first=${payload.first}`;
       } else {
-        url = `${context.state.server}/api/student/all`;
+        url = `${api_server}/api/student/all`;
       }
 
       axios.get(url)
@@ -86,17 +85,17 @@ export default new Vuex.Store({
       });
     },
     // Fetches parents from the server
-    fetchParents(context, payload) {
+    async fetchParents(context, payload) {
       let url;
 
       // This is because first I fetch just a few parents so the loading feels instant and then I fetch the rest
       if (payload !== undefined && 'first' in payload) {
-        url = `${context.state.server}/api/parent/all?first=${payload.first}`;
+        url = `${api_server}/api/parent/all?first=${payload.first}`;
       } else {
-        url = `${context.state.server}/api/parent/all`;
+        url = `${api_server}/api/parent/all`;
       }
 
-      Vue.axios.get(url)
+      await Vue.axios.get(url)
       .then((resp) => {
         if (resp.data.success) {
           context.commit('SET_PARENTS', resp.data.parents);
@@ -114,9 +113,9 @@ export default new Vuex.Store({
 
       // This is because first I fetch just a few parents so the loading feels instant and then I fetch the rest
       if (payload !== undefined && 'first' in payload) {
-        url = `${context.state.server}/api/professor/all?first=${payload.first}`;
+        url = `${api_server}/api/professor/all?first=${payload.first}`;
       } else {
-        url = `${context.state.server}/api/professor/all`;
+        url = `${api_server}/api/professor/all`;
       }
 
       Vue.axios.get(url)
@@ -137,9 +136,9 @@ export default new Vuex.Store({
 
       // This is because first I fetch just a few parents so the loading feels instant and then I fetch the rest
       if (payload !== undefined && 'first' in payload) {
-        url = `${context.state.server}/api/class/all?first=${payload.first}`;
+        url = `${api_server}/api/class/all?first=${payload.first}`;
       } else {
-        url = `${context.state.server}/api/class/all`;
+        url = `${api_server}/api/class/all`;
       }
 
       Vue.axios.get(url)
