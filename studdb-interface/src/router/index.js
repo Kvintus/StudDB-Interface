@@ -81,7 +81,11 @@ export default new Router({
           name: 'studentView',
           path: 'student/view/:id',
           component: StudentView,
-
+        },
+        {
+          name: 'studentEdit',
+          path: 'student/edit/:id',
+          component: StudentView,
         },
       ],
     },

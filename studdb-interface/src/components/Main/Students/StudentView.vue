@@ -159,8 +159,8 @@
         </div>
       </div>
     </div>
-    <div v-if="user !== undefined && user.privilege >= 3" class="row manipulate-buttons-con">
-      <button id="editStudentButton" class="btn btn-outline-secondary">Edit</button>
+    <div v-if="user !== undefined && user.privilege >= 3 && !isStudentEmpty" class="row manipulate-buttons-con">
+      <button @click="editStudent" class="btn btn-outline-secondary">Edit</button>
     </div>
 
   </div>
@@ -195,6 +195,9 @@
       }
     },
     methods: {
+      editStudent() {
+        this.$router.push({ name: 'studentEdit', params: { id: this.student.id } })
+      },
       setPermanentAlert(message) {
         document.title = 'Error';
         this.alertMessage = message;

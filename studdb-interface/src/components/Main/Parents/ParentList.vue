@@ -138,7 +138,7 @@
     beforeRouteEnter: (to, from, next) => {
       next(vm => {
         vm.$store.dispatch('fetchParents', {
-          first: 12,
+          first: 21,
         })
         vm.$store.dispatch('fetchParents');
       });
