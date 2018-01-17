@@ -1,7 +1,7 @@
 <template>
   <div class="container vs-main-con">
     <!-- Alert -->
-    <div v-if="isError" class="alert alert-danger">{{ alertMessage }}</div>
+    <div v-if="isError || isWarning" class="alert alert-danger">{{ alertMessage }}</div>
     <div class="row">
       <h1 class="card-heading">Student:</h1>
     </div>
@@ -60,7 +60,7 @@
               </td>
               <td>
                 <div class="mb-1 col-sm-10">
-                  <input v-model="student.class.id" class="form-control" :placeholder="oldStudent.class.id" type="number">
+                  <input v-model="student.class.id" :placeholder="oldStudent.class.id" class="form-control" type="number">
                 </div>
               </td>
             </tr>
@@ -134,19 +134,21 @@
         <div>
           <p class="view-rel-headline">Parents</p>
           <div class="parents-con">
+
+            <!-- Adding Parent -->
             <div id="addParentDiv" class="col-sm-6">
-              <input v-model="newParentID" class="form-control" placeholder="Parent ID" type="text">
-              <p @click="addParent" id="add-parent-button">
-                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+              <input id="newParentIdInput" v-model="newParentID" class="form-control" placeholder="Parent ID" type="number">
+              <p id="add-parent-button">
+                <i @click="addParent" class="fa fa-plus-circle" aria-hidden="true"></i>
               </p>
             </div>
 
             <br>
 
             <!-- Listing parents -->
-            <div style="padding: 0px;" v-for="parent in oldStudent.parents" :key="parent.id">
+            <div style="padding: 0px;" v-for="parent in student.parents" :key="parent.id">
               <a class="relative-ref custom-button" href="#">{{ parent['wholeName']}}</a>
-              <i onclick="hideParent(this)" class="delete fa fa-times" aria-hidden="true"></i>
+              <i @click="removeParent(parent.id)" class="delete fa fa-times" aria-hidden="true"></i>
               <br>
             </div>
           </div>
@@ -155,7 +157,7 @@
       </div>
     </div>
     <div v-if="user !== undefined && user.privilege >= 3 && !isStudentEmpty" class="row manipulate-buttons-con">
-      <button @click="editStudent" class="btn btn-outline-secondary">Edit</button>
+      <button class="btn btn-outline-secondary">Edit</button>
     </div>
 
   </div>
@@ -175,20 +177,8 @@
     data() {
       return {
         newParentID: '',
-        student: {
-          name: '',
-          surname: '',
-          email: '',
-          phone: '',
-          adress: '',
-          birth: '',
-          start: '',
-          classID: '',
-          parents: [],
-        },
-        oldStudent: {
-          'class': {},
-        },
+        student: {},
+        oldStudent: {},
         alertMessage: '',
       };
     },
@@ -201,17 +191,62 @@
       }
     },
     methods: {
-      addParent() {
-
+      removeParent(id) {
+        this.student.parents = this.student.parents.filter(item => {
+          return item.id !== id;
+        })
       },
+      addParent() {
+        // Check if the field isn't empty
+        if (this.newParentID.length > 0) {
+          // Fetch the parrent
+          this.axios.get(`${api_server}/api/parent`, {
+              params: {
+                id: this.newParentID,
+              }
+            })
+            .then(resp => {
+              // Check if we were successful
+              if (resp.data.success) {
+                this.student.parents.unshift({
+                  id: resp.data.parent.id,
+                  wholeName: `${resp.data.parent.name} ${resp.data.parent.surname}`,
+                });
+              } else {
+                this.setTimoutError(resp.data.message)
+              }
+            })
+            .catch(err => {
+              this.setTimoutError(err);
+            })
+        } else {
+          this.setTimoutError('The ID field cannot be empty!!!');
+        }
+        // Clear the field
+        this.newParentID = '';
+      },
+
+      // Sets permanent alert
       setPermanentAlert(message) {
         document.title = 'Error';
         this.alertMessage = message;
       },
+
+      // Sets alert that timesout after 5 secs
+      setTimoutError(message) {
+        console.log(message);
+        this.alertMessage = message;
+        setTimeout(() => {
+          this.alertMessage = '';
+        }, 5000);
+      },
+
+      // Parses the data from the API and save the student
       setStudent(data) {
         if (data.success) {
           // Save the student
-          this.oldStudent = this.student = data.student;
+          this.oldStudent = JSON.parse(JSON.stringify(data.student));
+          this.student = JSON.parse(JSON.stringify(data.student));
           // Set the alert message to none if there was any
           this.alertMessage = '';
           document.title = `Edit | ${data.student.name} ${data.student.surname}`;
@@ -219,7 +254,8 @@
           this.setPermanentAlert(data.message);
         }
       },
-      // Fetch the student
+
+      // Fetches the student
       fetchStudent(id) {
         this.axios.get(`${api_server}/api/student`, {
             params: {
@@ -235,17 +271,30 @@
       }
     },
     computed: {
+      // Return the logged-in user
       user() {
         return this.$store.getters.user
       },
+
+      // Boolean if the student object id empty
       isStudentEmpty() {
         return Object.keys(this.student).length <= 1;
       },
+
+      // If the alert message is specified but the student is loaded
+      isWarning() {
+        return this.alertMessage !== undefined && this.alertMessage.length > 0;
+      },
+
+      // If the alertMessage is specified and there's no student loaded
       isError() {
         return this.isStudentEmpty && this.alertMessage.length > 0;
       }
     },
+
     beforeRouteEnter: (to, from, next) => {
+      // Fetched the student data before entering the route and setting the title
+      // Feels much faster this way instead of calling the fetchStudent method from inside the vm in the next()
       axios.get(`${api_server}/api/student`, {
         params: {
           id: to.params.id,
