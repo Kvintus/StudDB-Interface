@@ -50,10 +50,20 @@
         // If both fiels are not empty
         if (this.username && this.password) {
             // Sends a request to a server with the parameters in the passed-in object
-            this.axios.post(api_server + '/user', {
-            username: this.username,
-            password: this.password,
-          }).then((resp) => {
+            this.axios({
+              url: api_server + '/user',
+              method: 'post',
+              data: {
+                username: this.username,
+                password: this.password,
+              },
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+              },
+              withCredentials: true,
+            })
+            .then((resp) => {
             // If the login was successfull store the user in the vuex and redirect to the main page
             if (resp.data.success) {
               this.$store.commit('setUser', resp.data.user);
