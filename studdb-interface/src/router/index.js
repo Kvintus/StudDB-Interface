@@ -9,7 +9,7 @@ import ParentList from '@/components/Main/Parents/ParentList';
 import ProfessorList from '@/components/Main/Professors/ProfessorList';
 import StudentView from '@/components/Main/Students/StudentView';
 import StudentEdit from '@/components/Main/Students/StudentEdit';
-import Error from '@/components/Main/Error';
+import ErrorComp from '@/components/Error/Error';
 
 Vue.use(Router);
 
@@ -45,6 +45,12 @@ export default new Router({
       component: MainView,
       name: 'mainListDisplay',
       children: [
+        /* Error Display */
+        {
+          name: 'errorDisplay',
+          path: 'error/:which',
+          component: ErrorComp,
+        },
         /* Students List */
         {
           name: 'studentsList',
@@ -92,6 +98,16 @@ export default new Router({
           name: 'studentEdit',
           path: 'student/edit/:id',
           component: StudentEdit,
+          // Check if the user has permissions
+          beforeEnter(to, from, next) {
+            if (store.getters.user.privilege >= 3) {
+              // Proceed
+              next();
+            } else {
+              // Redirect to the error page
+              next({ name: 'errorDisplay', params: { which: 'noPermissionToEdit' } });
+            }
+          },
         },
       ],
     },

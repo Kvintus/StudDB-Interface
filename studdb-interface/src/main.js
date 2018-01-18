@@ -4,6 +4,9 @@ import VueAxios from 'vue-axios';
 import App from './App';
 import router from './router';
 import store from './store/store';
+import {
+  api_server,
+} from '@/assets/js/config';
 
 Vue.config.productionTip = false;
 Vue.use(VueAxios, axios);
@@ -11,10 +14,20 @@ Vue.use(VueAxios, axios);
 // Filter to reverse an array
 Vue.filter('reverse', value => value.slice().reverse());
 
-// To set the titles on the routes
 router.beforeEach((to, from, next) => {
-  document.title = to.meta.title;
-  next();
+  // Check if the user is logged-in
+  if (Object.keys(store.getters.user).length > 0 || to.name === 'LoginRoute') {
+    // Setting the meta title
+    document.title = to.meta.title;
+    next();
+  } else {
+    next({
+      name: 'LoginRoute',
+      query: {
+        next: to.fullPath,
+      },
+    });
+  }
 });
 
 

@@ -57,7 +57,12 @@
             // If the login was successfull store the user in the vuex and redirect to the main page
             if (resp.data.success) {
               this.$store.commit('setUser', resp.data.user);
-              this.$router.push({ name: 'studentsList' });
+              // Check if the next parameter is specified\
+              if (this.$route.query.next !== undefined) {
+                this.$router.push(this.$route.query.next)
+              } else {
+                this.$router.push({ name: 'studentsList' });
+              }
             // Else show an error from the server response
             } else {
               this.showError(resp.data.message);
