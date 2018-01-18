@@ -2,10 +2,11 @@
   <div class="container vs-main-con">
     <!-- Alert -->
     <div v-if="isError || isWarning" class="alert alert-danger">{{ alertMessage }}</div>
-    <div class="row">
+    <div v-if="!isError">
+       <div class="row">
       <h1 class="card-heading">Student:</h1>
     </div>
-    <div v-if="!isError" class="row">
+      <div class="row">
       <div class="col prof-image-con">
         <img v-if="!isMale" src="static/images/placeholder_female.jpg" alt="">
         <img v-else src="static/images/placeholder_male.jpg" alt="">
@@ -156,10 +157,18 @@
         </div>
       </div>
     </div>
-    <div v-if="user !== undefined && user.privilege >= 3 && !isStudentEmpty" class="row manipulate-buttons-con">
-      <button class="btn btn-outline-secondary">Edit</button>
+    <div class="row manipulate-buttons-con">
+      <div id="cancel-button-wrapper">
+        <button @click="goBack" id="cancelEdit" class="btn btn-outline-secondary">Cancel</button>
+      </div>
+      <button id="updateStudent" class="btn btn-outline-primary">Save</button>
+      <button @click="deleteStudent" id="deleteStudent" class="btn btn-outline-danger">
+        Delete
+      </button>
     </div>
 
+    </div>
+    
   </div>
 </template>
 
@@ -177,8 +186,8 @@
     data() {
       return {
         newParentID: '',
-        student: {},
-        oldStudent: {},
+        student: { id: '', 'class': { id: '' } },
+        oldStudent: { id: '', 'class': { id: '' }  },
         alertMessage: '',
       };
     },
@@ -191,6 +200,27 @@
       }
     },
     methods: {
+      deleteStudent() {
+        this.axios({
+          method: 'delete',
+          url: `${api_server}/api/student`,
+          data: { id: this.$route.params.id },
+          headers: {
+            'Content-Type': 'application/json',
+            'X-API-KEY': `${this.$store.getters.user.api_key}`
+            } ,
+        })
+          .then( resp => {
+            if (resp.data.succcess){
+              this.$router.push({ name: 'studentsList' });
+            } else {
+              setTimoutError('Your token has expired please logout and then login again.');
+            }
+          })
+      },
+      goBack() {
+        this.$router.push({ name: 'studentView', params: { id: this.$route.params.id } });
+      },
       removeParent(id) {
         this.student.parents = this.student.parents.filter(item => {
           return item.id !== id;
@@ -300,7 +330,9 @@
           id: to.params.id,
         }
       }).then(resp => {
-        document.title = `Edit | ${resp.data.student.name} ${resp.data.student.surname}`;
+        if (resp.data.success) {
+          document.title = `Edit | ${resp.data.student.name} ${resp.data.student.surname}`;
+        }
         next(vm => {
           vm.setStudent(resp.data);
         });
@@ -312,6 +344,22 @@
 
 <style lang="scss" scoped>
   $nice-gray: #b1b1b1;
+
+.manipulate-buttons-con {
+    justify-content: flex-end;
+    margin-top: 18px;
+    button {
+        margin-right: 12px;
+    }
+}
+
+#cancel-button-wrapper {
+    margin-right: auto;
+
+    button {
+        margin-left: 12px;
+    }
+}
 
   .delete {
     padding-left: 12px;

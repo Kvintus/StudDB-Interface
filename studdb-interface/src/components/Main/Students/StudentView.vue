@@ -245,7 +245,9 @@
               id: to.params.id,
             }
           }).then(resp => {
-            document.title = `${resp.data.student.name} ${resp.data.student.surname}`;
+            if (resp.data.success){
+              document.title = `${resp.data.student.name} ${resp.data.student.surname}`;
+            }
             next(vm => {
               vm.setStudent(resp.data);
             });
