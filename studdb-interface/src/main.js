@@ -14,7 +14,27 @@ Vue.use(VueAxios, axios);
 // Filter to reverse an array
 Vue.filter('reverse', value => value.slice().reverse());
 
-router.beforeEach((to, from, next) => {
+
+// Returns the inforantion on whether the user is logged in on the server
+// When return false there's been an error reaching out to the server\
+async function getInformationAboutTheLogin(apiServer) {
+  try {
+    const info = await Vue.axios({
+      url: `${apiServer}/user/logged`,
+      method: 'post',
+      withCredentials: true, // To make sessions work
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    return info;
+  } catch (error) {
+    return false;
+  }
+}
+
+router.beforeEach(async (to, from, next) => {
   // Check if the user is logged-in
   if (Object.keys(store.getters.user).length > 0 || to.name === 'LoginRoute') {
     // Setting the meta title
@@ -22,21 +42,18 @@ router.beforeEach((to, from, next) => {
     next();
   } else {
     // Make sure if the user is logged in on the server, if he is log him in normally else redirect to login page
-    Vue.axios({
-      url: `${api_server}/user/logged`,
-      method: 'post',
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    .then((resp) => {
-      console.log(resp.data);
-      // If the user is logged in on the server
-      if (resp.data.isLoggedIn) {
-        store.commit('setUser', resp.data.user);
+    // Get the information
+    const informationAboutLogin = await getInformationAboutTheLogin(api_server);
+
+    // Checking if the call was successfull
+    if (informationAboutLogin) {
+      // Checking if the user is loggged in
+      if (informationAboutLogin.isLoggedIn) {
+        // Storing the user in the state
+        store.commit('setUser', informationAboutLogin.user);
         next();
       } else {
+        // Redirecting to the login page if the user is not logged in
         next({
           name: 'LoginRoute',
           query: {
@@ -44,9 +61,9 @@ router.beforeEach((to, from, next) => {
           },
         });
       }
-    }).catch((err) => {
-      next({ name: 'errorDisplay', params: { which: err } });
-    });
+    } else {
+      next({ name: 'errorDisplay', params: { which: 'serverError' } });
+    }
   }
 });
 
