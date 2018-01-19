@@ -19,8 +19,8 @@
                 <p>Name:</p>
               </td>
               <td>
-                <div class="mb-1 col-sm-10">
-                  <input v-model="student.name" class="form-control" :placeholder="oldStudent.name" type="text">
+                <div class="mb-1 col-sm-10 form-group">
+                  <input :class="{'is-invalid': student.name === ''}" id="nameInput" v-model="student.name" class="form-control" :placeholder="oldStudent.name" type="text">
                 </div>
               </td>
             </tr>
@@ -30,7 +30,7 @@
               </td>
               <td>
                 <div class="mb-1 col-sm-10">
-                  <input v-model="student.surname" class="form-control" :placeholder="oldStudent.surname" type="text">
+                  <input :class="{'is-invalid': student.surname === ''}" v-model="student.surname" class="form-control" :placeholder="oldStudent.surname" type="text">
                 </div>
               </td>
             </tr>
@@ -123,7 +123,7 @@
             </td>
             <td>
               <div class="mb-1 col-sm-12">
-                <input v-model="student.birth" class="form-control" :placeholder="oldStudent.birth" type="date">
+                <input :class="{'is-invalid': student.birth === ''}" v-model="student.birth" class="form-control" :placeholder="oldStudent.birth" type="date">
               </div>
             </td>
           </tr>
@@ -161,7 +161,7 @@
       <div id="cancel-button-wrapper">
         <button @click="goBack" id="cancelEdit" class="btn btn-outline-secondary">Cancel</button>
       </div>
-      <button id="updateStudent" class="btn btn-outline-primary">Save</button>
+      <button @click="saveTheEdit" id="updateStudent" class="btn btn-outline-primary">Save</button>
       <button @click="deleteStudent" id="deleteStudent" class="btn btn-outline-danger">
         Delete
       </button>
@@ -200,23 +200,94 @@
       }
     },
     methods: {
-      deleteStudent() {
-        this.axios({
-          method: 'delete',
-          url: `${api_server}/api/student`,
-          data: { id: this.$route.params.id },
-          headers: {
-            'Content-Type': 'application/json',
-            'X-API-KEY': `${this.$store.getters.user.api_key}`
-            } ,
-        })
-          .then( resp => {
-            if (resp.data.succcess){
-              this.$router.push({ name: 'studentsList' });
-            } else {
-              setTimoutError('Your token has expired please logout and then login again.');
+      checkRequired() {
+        if (
+          this.student.name !== '' &&
+          this.student.surname !== '' &&
+          this.student.birth !== ''
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      // Trims the student object of unnecessary data
+      parseStudentToSend(student) {
+          // Copying the student object
+          const studentToSend = JSON.parse(JSON.stringify(student));
+          
+          // Map the parents (the server only cares about the ids)
+          studentToSend.parents = studentToSend.parents.map(element => element.id);
+          
+          // The server doesn't care about classnames either
+          delete studentToSend.class.altname;
+          delete studentToSend.class.name
+
+          return studentToSend
+      },
+      async commitTheUpdateToServer(where, data, key) {
+        return this.axios({
+            url: `${api_server}/api/${where}`,
+            method: 'put',
+            data: data,
+            headers: {
+              'X-API-KEY': `${key}`,
+              'Content-Type': 'application/json',
             }
           })
+      },
+      async saveTheEdit() {
+        // Do the error checking
+        if (this.checkRequired()) {
+          let studentToSend = this.parseStudentToSend(this.student);
+
+          // Try to reach out to the server
+          let response
+          try {
+            response = await this.commitTheUpdateToServer('student', studentToSend, this.$store.getters.user.api_key);
+          } catch (error) {
+            this.$router.push({ name: 'errorDisplay', params: { which: 'serverError' } });
+          }
+
+          // Check if everything went smoothly on the backend, else display error
+          if (response.data.success) {
+              this.$router.push({ name: 'studentView', params: { id: studentToSend.id } });
+            } else {
+              this.setTimoutError(response.data.message);
+            }
+        } else {
+          this.setTimoutError('Please fill in all required fields!')
+        }
+      },
+      // Deletes a database entry based on API endpoint and ID of the entry
+      // In the payload should be 
+      async deleteEntry(where, id, key) {
+        return this.axios({
+          method: 'delete',
+          url: `${api_server}/api/${where}`,
+          data: { id: id },
+          headers: {
+            'Content-Type': 'application/json',
+            'X-API-KEY': `${key}`
+            } ,
+        })
+      },
+      // Delete student from the database
+      async deleteStudent() {
+        // Reaching out to the server
+        let response;
+        try {
+          response = await this.deleteEntry('student', this.student.id, this.$store.getters.user.api_key)
+        } catch (error) {
+          this.$router.push({ name: 'errorDisplay', params: { which: 'serverError' } });
+        }
+
+        // Checking if everything went smootly on the backend
+        if (response.data.success){
+          this.$router.push({ name: 'studentsList' });
+        } else if ('expired' in response.data.message) {
+          this.setTimoutError('Your token has expired please logout and then login again.');
+        }
       },
       goBack() {
         this.$router.push({ name: 'studentView', params: { id: this.$route.params.id } });
