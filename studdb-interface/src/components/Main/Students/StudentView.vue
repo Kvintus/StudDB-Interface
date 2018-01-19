@@ -6,7 +6,7 @@
       <h1 class="card-heading">Student:</h1>
     </div>
     <div class="row">
-      <div class="col prof-image-con">
+      <div v-if="!isStudentEmpty || alertMessage.length > 0" class="col prof-image-con">
         <img v-if="!isMale && student.surname !== undefined" src="static/images/placeholder_female.jpg" alt="">
         <img v-else src="static/images/placeholder_male.jpg" alt="">
       </div>
@@ -159,8 +159,8 @@
         </div>
       </div>
     </div>
-    <div v-if="user !== undefined && user.privilege >= 3" class="row manipulate-buttons-con">
-      <button id="editStudentButton" class="btn btn-outline-secondary">Edit</button>
+    <div v-if="user !== undefined && user.privilege >= 3 && !isStudentEmpty" class="row manipulate-buttons-con">
+      <button @click="editStudent" class="btn btn-outline-secondary">Edit</button>
     </div>
 
   </div>
@@ -171,6 +171,8 @@
   import showError from '@/assets/js/globalError';
   import Placeholder from '@/components/shared/Placeholder'
   import axios from 'axios';
+  import { api_server } from '@/assets/js/config';
+
   export default {
     mixins: [isMale],
     components: {
@@ -193,26 +195,33 @@
       }
     },
     methods: {
+      editStudent() {
+        this.$router.push({ name: 'studentEdit', params: { id: this.student.id } })
+      },
       setPermanentAlert(message) {
         document.title = 'Error';
         this.alertMessage = message;
       },
+      setStudent(data) {
+        if (data.success) {
+              // Save the student
+              this.student = data.student;
+              // Set the alert message to none if there was any
+              this.alertMessage = '';
+              document.title = `${data.student.name} ${data.student.surname}`;         
+            } else {
+              this.setPermanentAlert(data.message);
+            }
+      },
       // Fetch the student
       fetchStudent(id) {
-        this.axios.get(`${this.$store.state.server}/api/student`, {
+        this.axios.get(`${api_server}/api/student`, {
             params: {
               id,
             }
           })
           .then(resp => {
-            if (resp.data.success) {
-              // Save the student
-              this.student = resp.data.student;
-              // Set the page title to students name 
-              document.title = `${resp.data.student.name} ${resp.data.student.surname}`;
-            } else {
-              this.setPermanentAlert(resp.data.message);
-            }
+            this.setStudent(resp.data);
           })
           .catch(err => {
             showError(err);
@@ -231,9 +240,18 @@
       }
     },
     beforeRouteEnter: (to, from, next) => {
-      next(vm => {
-        vm.fetchStudent(vm.$route.params.id);
-      })
+      axios.get(`${api_server}/api/student`, {
+            params: {
+              id: to.params.id,
+            }
+          }).then(resp => {
+            if (resp.data.success){
+              document.title = `${resp.data.student.name} ${resp.data.student.surname}`;
+            }
+            next(vm => {
+              vm.setStudent(resp.data);
+            });
+          });
     }
   }
 

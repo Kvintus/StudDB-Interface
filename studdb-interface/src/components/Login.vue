@@ -21,6 +21,8 @@
 </template>
 
 <script>
+  import { api_server } from '@/assets/js/config'
+
   export default {
     created() {
       // Changes the window title
@@ -48,14 +50,29 @@
         // If both fiels are not empty
         if (this.username && this.password) {
             // Sends a request to a server with the parameters in the passed-in object
-            this.axios.post(this.$store.state.server + '/user', {
-            username: this.username,
-            password: this.password,
-          }).then((resp) => {
+            this.axios({
+              url: api_server + '/user',
+              method: 'post',
+              data: {
+                username: this.username,
+                password: this.password,
+              },
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+              },
+              withCredentials: true,
+            })
+            .then((resp) => {
             // If the login was successfull store the user in the vuex and redirect to the main page
             if (resp.data.success) {
               this.$store.commit('setUser', resp.data.user);
-              this.$router.push({ name: 'studentsList' });
+              // Check if the next parameter is specified\
+              if (this.$route.query.next !== undefined) {
+                this.$router.push(this.$route.query.next)
+              } else {
+                this.$router.push({ name: 'studentsList' });
+              }
             // Else show an error from the server response
             } else {
               this.showError(resp.data.message);

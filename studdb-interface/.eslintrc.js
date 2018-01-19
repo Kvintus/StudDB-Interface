@@ -31,6 +31,7 @@ module.exports = {
     }],
     'no-unused-vars': 0,
     'no-unresolved': 0,
+    'camelcase': 0,
     'indent': 0,
     // disallow reassignment of function parameters
     // disallow parameter object manipulation except for specific exclusions

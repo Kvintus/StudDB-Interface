@@ -75,6 +75,7 @@
   import randomPlaceholder from '@/assets/js/randomPlaceholder.js';
   import tableManipulationMixin from '@/assets/js/tableManipulationMixin.js';
   import Placeholder from '@/components/shared/Placeholder';
+  import store from '@/store/store';
 
   export default {
     mixins: [tableManipulationMixin],
@@ -137,7 +138,7 @@
     beforeRouteEnter: (to, from, next) => {
       next(vm => {
         vm.$store.dispatch('fetchParents', {
-          first: 12,
+          first: 21,
         })
         vm.$store.dispatch('fetchParents');
       });
