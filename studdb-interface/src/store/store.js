@@ -37,7 +37,7 @@ export default new Vuex.Store({
       state.user = Object.assign({}, payload);
     },
     // Logs user out from the vuex session
-    logUserOut(state) {
+    LOG_USER_OUT(state) {
       state.user = {};
     },
     clearList(state, which) {
@@ -61,6 +61,17 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    // Logs user out from the server and from the instance
+    logUserOut(context) {
+      axios({
+        url: `${api_server}/user/logout`,
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      }).then(context.commit('LOG_USER_OUT'));
+    },
     // Fetches students from the server
     fetchStudents(context, payload) {
       let url;

@@ -21,11 +21,31 @@ router.beforeEach((to, from, next) => {
     document.title = to.meta.title;
     next();
   } else {
-    next({
-      name: 'LoginRoute',
-      query: {
-        next: to.fullPath,
+    // Make sure if the user is logged in on the server, if he is log him in normally else redirect to login page
+    Vue.axios({
+      url: `${api_server}/user/logged`,
+      method: 'post',
+      withCredentials: true,
+      headers: {
+        'Content-Type': 'application/json',
       },
+    })
+    .then((resp) => {
+      console.log(resp.data);
+      // If the user is logged in on the server
+      if (resp.data.isLoggedIn) {
+        store.commit('setUser', resp.data.user);
+        next();
+      } else {
+        next({
+          name: 'LoginRoute',
+          query: {
+            next: to.fullPath,
+          },
+        });
+      }
+    }).catch((err) => {
+      next({ name: 'errorDisplay', params: { which: err } });
     });
   }
 });

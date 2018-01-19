@@ -73,7 +73,7 @@
     },
     methods: {
       logout() {
-        this.$store.commit('logUserOut');
+        this.$store.dispatch('logUserOut');
         this.$router.push({
           name: 'LoginRoute'
         });
