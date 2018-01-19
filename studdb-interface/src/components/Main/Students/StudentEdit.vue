@@ -174,7 +174,7 @@
 
 <script>
   import isMale from '@/assets/js/isMaleMixin';
-  import showError from '@/assets/js/globalError';
+  import { logError } from '@/assets/js/errors';
   import {
     api_server
   } from '@/assets/js/config';
@@ -367,7 +367,7 @@
             this.setStudent(resp.data);
           })
           .catch(err => {
-            showError(err);
+            logError(err);
           });
       }
     },
