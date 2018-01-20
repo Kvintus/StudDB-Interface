@@ -1,5 +1,6 @@
 import permissionRequired from '../helpers/permissionRequired';
 import ProfessorView from '@/components/Main/Professors/ProfessorView';
+import ProfessorEdit from '@/components/Main/Professors/ProfessorEdit';
 
 export default [
     /* Professor View */
@@ -9,7 +10,7 @@ export default [
         component: ProfessorView,
       },
       /* Student Edit */
-/*       {
+      {
         name: 'professorEdit',
         path: 'professor/edit/:id',
         component: ProfessorEdit,
@@ -17,7 +18,7 @@ export default [
         beforeEnter(to, from, next) {
           permissionRequired(3, next);
         },
-      }, */
+      },
       /* Professor Add */
 /*       {
         name: 'professorAdd',

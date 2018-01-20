@@ -7,18 +7,15 @@ import {
 
 export default {
     methods: {
-        async addChild() {
+        async addClass() {
             // Check if the field isn't empty
-            if (this.newChildID.length > 0) {
+            if (this.newClassID.length > 0) {
               // Fetch the parrent
-              const response = await fetchSingle('student', this.newChildID);
+              const response = await fetchSingle('class', this.newClassID);
               if (response) {
                 if (response.success) {
-                  this.parent.children.unshift(
-                    {
-                      id: response.student.id,
-                      wholeName: `${response.student.name} ${response.student.surname}`,
-                    },
+                  this.professor.classes.unshift(
+                      response.rclass,
                     );
                 } else {
                   this.setTimoutError(response.message);
@@ -30,11 +27,11 @@ export default {
               this.setTimoutError('The ID field cannot be empty!!!');
             }
             // Clear the field
-            this.newChildID = '';
+            this.newClassID = '';
           },
           // Removes the parent from the parent list
-          removeChild(id) {
-            this.parent.children = this.parent.children.filter(item => item.id !== id);
+          removeClass(id) {
+            this.professor.classes = this.professor.classes.filter(item => item.id !== id);
           },
     },
 };
