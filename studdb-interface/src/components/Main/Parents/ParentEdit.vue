@@ -99,7 +99,7 @@
           </table>
         </div>
 
-        <!-- Parents -->
+        <!-- Children -->
         <div class="col main-parent-con">
           <div>
             <p class="view-rel-headline">Children</p>
