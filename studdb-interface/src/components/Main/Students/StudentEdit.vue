@@ -186,7 +186,8 @@
   } from '@/assets/js/config';
   import {
     deleteEntry,
-    fetchSingle
+    fetchSingle,
+    commitTheUpdateToServer
   } from '@/assets/js/comunication';
 
   export default {
@@ -265,7 +266,7 @@
           // Try to reach out to the server
           let response
           try {
-            response = await this.commitTheUpdateToServer('student', studentToSend, this.$store.getters.user.api_key);
+            response = await commitTheUpdateToServer('student', studentToSend, this.$store.getters.user.api_key);
           } catch (error) {
             serverErrorRedirect();
             return;
