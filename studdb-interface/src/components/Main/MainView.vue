@@ -18,7 +18,7 @@ export default {
 <style scoped>
  .matop {
    /* Thanks to the navbar */
-   margin-top: 60px;
+   margin-top: 100px;
  }
 </style>
 

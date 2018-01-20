@@ -78,8 +78,9 @@
     </div>
     <hr>
     <div class="row">
-      <div style="margin-left: 20px; display:flex;align-items: center;" class="col">
-        <table>
+      <div style="margin-left: 20px;" class="col">
+        <p class="view-rel-headline">Info</p>
+        <table style="margin-left: 20px;">
           <!-- Email -->
           <tr>
             <td style="padding-right: 50px;" class="vs-table-info">
@@ -252,128 +253,5 @@
 
 </script>
 
-<style lang="scss" scoped>
-  $nice-gray: #b1b1b1;
-  .card-heading {
-    margin-left: 50px;
-    font-size: 50px;
-    font-family: sans-serif;
-    color: #cccccc;
-    margin-bottom: 12px;
-  }
-
-  .vs-main-con {
-    margin-top: 100px;
-    width: 60%;
-    min-width: 367px;
-    max-width: 865px;
-    padding: 20px;
-    background-color: rgba(255, 252, 252, 0.1);
-    box-shadow: 0px 1px 12px 2px rgba(140, 140, 140, 0.75);
-    -webkit-box-shadow: 0px 1px 12px 2px rgba(140, 140, 140, 0.75);
-    -moz-box-shadow: 0px 1px 12px 2px rgba(140, 140, 140, 0.75);
-
-    @media screen and (max-width: 600px) {
-      width: 100%;
-    }
-    @media screen and (max-width: 906px) {
-      padding-bottom: 20px;
-      margin-bottom: 20px;
-      min-width: 0px;
-    }
-
-    hr {
-      margin-bottom: 1.7rem;
-    }
-  }
-
-  .prof-image-con {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 18px;
-
-    img {
-      border-radius: 50%;
-      width: 230px;
-    }
-  }
-
-  .vs-table-info {
-    color: gray;
-  }
-
-  .vs-gray-info {
-    color: $nice-gray;
-  }
-
-  #vs-info-wrap {
-    text-align: right;
-  }
-
-  .main-parent-con {
-    @media screen and (max-width: 875px) {
-      margin-top: 32px;
-    }
-  }
-
-  .vs-text-con {
-    font-size: 22px;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-  }
-
-  .view-rel-headline {
-    display: inline-block;
-    color: gray;
-    font-size: 26px;
-    margin-bottom: 5px;
-  }
-
-  .custom-button {
-    margin-bottom: 0px;
-    display: inline-block;
-    color: #5a5a5a;
-    padding: 6px;
-    width: 160px;
-    background-color: #f5f5f5;
-    border: 1px solid gray;
-    border-radius: 5px;
-    transition: 200ms ease;
-    &:hover {
-      text-decoration: none;
-      color: #5a5a5a;
-      background-color: #eaeaea;
-    }
-  }
-
-  .manipulate-buttons-con {
-    justify-content: flex-end;
-    margin-top: 18px;
-    button {
-      margin-right: 12px;
-    }
-  }
-
-  .class-ref {
-    margin-bottom: 1rem;
-    display: block;
-    color: $nice-gray;
-    font-weight: 500;
-    transition: 200ms ease;
-    &:hover {
-      text-decoration: none;
-      color: #808080;
-    }
-  }
-
-  .relative-ref {
-    display: block;
-  }
-
-  .parents-con {
-    margin-left: 20px;
-  }
-
+<style lang="scss">
 </style>
