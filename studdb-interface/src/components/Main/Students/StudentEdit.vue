@@ -177,7 +177,7 @@
 
 <script>
   import isMale from '@/assets/js/isMaleMixin';
-  import cardErrors from '@/assets/js/Mixins/cardErrorsMixin';
+  import { setPermanentAlert, setTimeoutAlert } from '@/assets/js/Mixins/cardErrorMixins';
   import {
     logError, serverErrorRedirect
   } from '@/assets/js/errors';
@@ -189,10 +189,8 @@
     fetchSingle
   } from '@/assets/js/comunication';
 
-  import axios from 'axios';
-
   export default {
-    mixins: [isMale, cardErrors],
+    mixins: [isMale, setPermanentAlert, setTimeoutAlert],
     data() {
       return {
         newParentID: '',
@@ -259,17 +257,6 @@
 
         return studentToSend
       },
-      async commitTheUpdateToServer(where, data, key) {
-        return this.axios({
-          url: `${api_server}/api/${where}`,
-          method: 'put',
-          data: data,
-          headers: {
-            'X-API-KEY': `${key}`,
-            'Content-Type': 'application/json',
-          }
-        })
-      },
       async saveTheEdit() {
         // Do the error checking
         if (this.checkRequiredAndSetError() && this.checkRegexAndSetError()) {
@@ -302,7 +289,6 @@
         // Reaching out to the server
         let response = await deleteEntry('student', this.student.id, this.$store.getters.user.api_key);
         if (response) {
-
           // Checking if everything went smootly on the backend
           if (response.success) {
             this.$router.push({

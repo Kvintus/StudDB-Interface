@@ -168,13 +168,15 @@
 
 <script>
   import isMale from '@/assets/js/isMaleMixin';
-  import { logError } from '@/assets/js/errors';
+  import { logError, serverErrorRedirect } from '@/assets/js/errors';
   import Placeholder from '@/components/shared/Placeholder'
   import axios from 'axios';
   import { api_server } from '@/assets/js/config';
+  import { fetchSingle } from '@/assets/js/comunication';
+  import { setPermanentAlert } from '@/assets/js/Mixins/cardErrorMixins';
 
   export default {
-    mixins: [isMale],
+    mixins: [isMale, setPermanentAlert],
     components: {
       Placeholder
     },
@@ -198,10 +200,6 @@
       editStudent() {
         this.$router.push({ name: 'studentEdit', params: { id: this.student.id } })
       },
-      setPermanentAlert(message) {
-        document.title = 'Error';
-        this.alertMessage = message;
-      },
       setStudent(data) {
         if (data.success) {
               // Save the student
@@ -214,18 +212,14 @@
             }
       },
       // Fetch the student
-      fetchStudent(id) {
-        this.axios.get(`${api_server}/api/student`, {
-            params: {
-              id,
-            }
-          })
-          .then(resp => {
-            this.setStudent(resp.data);
-          })
-          .catch(err => {
-            logError(err);
-          });
+      async fetchStudent(id) {
+        const response = await fetchSingle('student', id);
+
+        if (response) {
+          this.setStudent(response);
+        } else {
+          serverErrorRedirect()
+        }
       }
     },
     computed: {
@@ -239,19 +233,20 @@
         return this.isStudentEmpty && this.alertMessage.length > 0;
       }
     },
-    beforeRouteEnter: (to, from, next) => {
-      axios.get(`${api_server}/api/student`, {
-            params: {
-              id: to.params.id,
-            }
-          }).then(resp => {
-            if (resp.data.success){
-              document.title = `${resp.data.student.name} ${resp.data.student.surname}`;
-            }
-            next(vm => {
-              vm.setStudent(resp.data);
-            });
-          });
+    beforeRouteEnter: async (to, from, next) => {
+      const response = await fetchSingle('student', to.params.id);
+
+      if (!response) {
+        serverErrorRedirect();
+        return;
+      }
+
+      if (response.success) {
+        document.title = `${response.student.name} ${response.student.surname}`;
+      }
+      next(vm => {
+        vm.setStudent(response);
+      });
     }
   }
 
