@@ -169,6 +169,7 @@
 .relative-ref {
   display: inline-block;
   margin-bottom: 1rem;
+  cursor: pointer;
 }
 
 .parents-con {

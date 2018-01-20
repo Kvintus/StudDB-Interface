@@ -20,6 +20,7 @@ export default [
           permissionRequired(3, next);
         },
       },
+      /* Student Add */
       {
         name: 'studentAdd',
         path: 'student/add',

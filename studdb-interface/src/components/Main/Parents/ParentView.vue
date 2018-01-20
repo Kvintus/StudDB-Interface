@@ -4,11 +4,11 @@
     <!-- Alert -->
     <div v-if="isError" class="alert alert-danger">{{ alertMessage }}</div>
     <div class="row">
-      <h1 class="card-heading">Student:</h1>
+      <h1 class="card-heading">Parent:</h1>
     </div>
     <div class="row">
-      <div v-if="!isStudentEmpty || alertMessage.length > 0" class="col prof-image-con">
-        <img v-if="!isMale('student') && student.surname !== undefined" src="static/images/placeholder_female.jpg" alt="">
+      <div v-if="!isParentEmpty || alertMessage.length > 0" class="col prof-image-con">
+        <img v-if="!isMale('parent') && parent.surname !== undefined" src="static/images/placeholder_female.jpg" alt="">
         <img v-else src="static/images/placeholder_male.jpg" alt="">
       </div>
       <div class="col vs-text-con">
@@ -21,7 +21,7 @@
               <td>
                 <p>
                   <placeholder v-if="isError" :min="9" :max="12"></placeholder>
-                  <span v-else>{{ student['name'] }}</span>
+                  <span v-else>{{ parent['name'] }}</span>
                 </p>
               </td>
             </tr>
@@ -32,7 +32,7 @@
               <td>
                 <p>
                   <placeholder v-if="isError" :min="9" :max="12"></placeholder>
-                  <span v-else>{{ student['surname'] }}</span>
+                  <span v-else>{{ parent['surname'] }}</span>
                 </p>
               </td>
             </tr>
@@ -43,34 +43,8 @@
               <td>
                 <p class="vs-gray-info">
                   <placeholder v-if="isError" :min="2" :max="4"></placeholder>
-                  <span v-else>{{ student['id'] }}</span>
+                  <span v-else>{{ parent['id'] }}</span>
                 </p>
-              </td>
-            </tr>
-
-            <tr>
-              <td class="vs-table-info">
-                <p>Start:</p>
-              </td>
-              <td>
-                <p class="vs-gray-info">
-                  <placeholder v-if="isError" :min="5" :max="5"></placeholder>
-                  <span>{{ student['start'] }}</span>
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <td class="vs-table-info">
-                <p>Class:</p>
-              </td>
-              <td>
-                <p v-if="isError">
-                  <placeholder :min="4" :max="7"></placeholder>
-                </p>
-                <div v-else>
-                  <a v-if="'altname' in student.class" class="class-ref" href="#">{{ student['class']['altname'] }}</a>
-                  <a v-else class="class-ref" href="#">{{ student['class']['name'] }}</a>
-                </div>
               </td>
             </tr>
           </table>
@@ -92,7 +66,7 @@
             <td>
               <p>
                 <placeholder v-if="isError" :min="10" :max="16"></placeholder>
-                <span v-else>{{ student['email'] }}</span>
+                <span v-else>{{ parent['email'] }}</span>
               </p>
             </td>
           </tr>
@@ -106,7 +80,7 @@
             <td>
               <p>
                 <placeholder v-if="isError" :min="12" :max="18"></placeholder>
-                <span v-else>{{ student['phone'] }}</span>
+                <span v-else>{{ parent['phone'] }}</span>
               </p>
             </td>
           </tr>
@@ -120,21 +94,7 @@
             <td>
               <p>
                 <placeholder v-if="isError" :min="14" :max="20"></placeholder>
-                <span v-else>{{ student['adress'] }}</span>
-              </p>
-            </td>
-          </tr>
-          <!-- Birthday -->
-          <tr>
-            <td class="vs-table-info">
-              <p class="no-bottom-margin">
-                <i class="fa fa-birthday-cake" aria-hidden="true"></i>
-              </p>
-            </td>
-            <td>
-              <p class="no-bottom-margin">
-                <placeholder v-if="isError" :min="8" :max="12"></placeholder>
-                <span>{{ student['birth'] }}</span>
+                <span v-else>{{ parent['adress'] }}</span>
               </p>
             </td>
           </tr>
@@ -142,18 +102,18 @@
       </div>
       <div class="col main-parent-con">
         <div>
-          <p class="view-rel-headline">Parents</p>
+          <p class="view-rel-headline">Children</p>
           <div class="parents-con">
-            <!-- Placeholder Parents -->
+            <!-- Placeholder Children -->
             <div v-if="isError" style="padding: 0px;" v-for="i in 2" :key="i">
               <button class="relative-ref custom-button">
                 <placeholder :min="6" :max="8"></placeholder>
               </button>
               <br>
             </div>
-            <!-- Normal Parents -->
-            <div style="padding: 0px;" v-for="parent in student.parents" :key="parent.id">
-              <a class="relative-ref custom-button" @click="$router.push({name: 'parentView', params: { id: parent.id }})">{{ parent['wholeName']}}</a>
+            <!-- Normal Children -->
+            <div style="padding: 0px;" v-for="child in parent.children" :key="child.id">
+              <a class="relative-ref custom-button" @click="$router.push({name: 'studentView', params: { id: child.id }})">{{ child['wholeName']}}</a>
               <br>
             </div>
           </div>
@@ -161,8 +121,8 @@
         </div>
       </div>
     </div>
-    <div v-if="user !== undefined && user.privilege >= 3 && !isStudentEmpty" class="row manipulate-buttons-con">
-      <button @click="editStudent" class="btn btn-outline-secondary">Edit</button>
+    <div v-if="user !== undefined && user.privilege >= 3 && !isParentEmpty" class="row manipulate-buttons-con">
+      <button @click="editParent" class="btn btn-outline-secondary">Edit</button>
     </div>
 
   </div>
@@ -183,41 +143,38 @@
     },
     data() {
       return {
-        student: {
-          'class': {},
+        parent: {
         },
         alertMessage: '',
       };
     },
     watch: {
       '$route.params.id': function (val) {
-        this.student = {
-          'class': {}
-        };
-        this.fetchStudent(val);
+        this.parent = {};
+        this.fetchParent(val);
       }
     },
     methods: {
-      editStudent() {
-        this.$router.push({ name: 'studentEdit', params: { id: this.student.id } })
+      editParent() {
+        this.$router.push({ name: 'parentEdit', params: { id: this.parent.id } })
       },
-      setStudent(data) {
+      setParent(data) {
         if (data.success) {
               // Save the student
-              this.student = data.student;
+              this.parent = data.parent;
               // Set the alert message to none if there was any
               this.alertMessage = '';
-              document.title = `${data.student.name} ${data.student.surname}`;         
+              document.title = `${data.parent.name} ${data.parent.surname}`;         
             } else {
               this.setPermanentAlert(data.message);
             }
       },
       // Fetch the student
-      async fetchStudent(id) {
-        const response = await fetchSingle('student', id);
+      async fetchParent(id) {
+        const response = await fetchSingle('parent', id);
 
         if (response) {
-          this.setStudent(response);
+          this.setParent(response);
         } else {
           serverErrorRedirect()
         }
@@ -227,15 +184,15 @@
       user() {
         return this.$store.getters.user
       },
-      isStudentEmpty() {
-        return Object.keys(this.student).length <= 1;
+      isParentEmpty() {
+        return Object.keys(this.parent).length <= 1;
       },
       isError() {
-        return this.isStudentEmpty && this.alertMessage.length > 0;
+        return this.isParentEmpty && this.alertMessage.length > 0;
       }
     },
     beforeRouteEnter: async (to, from, next) => {
-      const response = await fetchSingle('student', to.params.id);
+      const response = await fetchSingle('parent', to.params.id);
 
       if (!response) {
         serverErrorRedirect();
@@ -243,10 +200,10 @@
       }
 
       if (response.success) {
-        document.title = `${response.student.name} ${response.student.surname}`;
+        document.title = `${response.parent.name} ${response.parent.surname}`;
       }
       next(vm => {
-        vm.setStudent(response);
+        vm.setParent(response);
       });
     }
   }
