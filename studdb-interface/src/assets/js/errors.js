@@ -7,3 +7,7 @@ export const logError = (message) => {
 export const serverErrorRedirect = () => {
     router.push({ name: 'errorDisplay', params: { which: 'serverError' } });
 };
+
+export const noPermissionRedirect = () => {
+    router.push({ name: 'errorDisplay', params: { which: 'noPermissionToEdit' } });
+};
