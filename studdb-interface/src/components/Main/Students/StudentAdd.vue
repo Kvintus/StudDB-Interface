@@ -2,8 +2,8 @@
 <div>
 <div class="container vs-main-con">
     <!-- Alert -->
-    <div v-if="isError || isWarning" class="alert alert-danger">{{ alertMessage }}</div>
-    <div v-if="!isError">
+    <div v-if=" isWarning" class="alert alert-danger">{{ alertMessage }}</div>
+    <div>
       <div class="row">
         <h1 class="card-heading">Student:</h1>
       </div>
@@ -21,7 +21,7 @@
                 </td>
                 <td>
                   <div class="mb-1 col-sm-10 form-group">
-                    <input :class="{'is-invalid': student.name === ''}" id="nameInput" v-model="student.name" class="form-control" type="text">
+                    <input :class="{'is-invalid': (student.name === undefined || student.name === '')}" id="nameInput" v-model="student.name" class="form-control" type="text">
                   </div>
                 </td>
               </tr>
@@ -31,7 +31,7 @@
                 </td>
                 <td>
                   <div class="mb-1 col-sm-10">
-                    <input :class="{'is-invalid': student.surname === ''}" v-model="student.surname" class="form-control" 
+                    <input :class="{'is-invalid': (student.surname === undefined || student.surname === '')}" v-model="student.surname" class="form-control" 
                       type="text">
                   </div>
                 </td>
@@ -43,7 +43,7 @@
                 </td>
                 <td>
                   <div class="mb-1 col-sm-10">
-                    <input v-model="student.start" class="form-control" type="number">
+                    <input :class="{'is-invalid': (student.start === undefined || student.start === '')}" v-model="student.start" class="form-control" type="number">
                   </div>
                 </td>
               </tr>
@@ -115,7 +115,7 @@
               </td>
               <td>
                 <div class="mb-1 col-sm-12">
-                  <input :class="{'is-invalid': student.birth === ''}" v-model="student.birth" class="form-control"
+                  <input :class="{'is-invalid': (student.birth === undefined || student.birth === '')}" v-model="student.birth" class="form-control"
                     type="date">
                 </div>
               </td>
@@ -154,7 +154,7 @@
         <div id="cancel-button-wrapper">
           <button @click="goBack" id="cancelEdit" class="btn btn-outline-secondary">Cancel</button>
         </div>
-        <button @click="saveTheEdit" id="updateStudent" class="btn btn-outline-primary">Save</button>
+        <button @click="uploadStudent" id="updateStudent" class="btn btn-outline-primary">Save</button>
       </div>
 
     </div>
@@ -167,17 +167,18 @@
   import isMale from '@/assets/js/isMaleMixin';
   import { setTimeoutAlert } from '@/assets/js/Mixins/cardErrorMixins';
   import {
-    logError, serverErrorRedirect
+    serverErrorRedirect
   } from '@/assets/js/errors';
   import {
-    api_server
-  } from '@/assets/js/config';
-  import {
     fetchSingle,
+    uploadToTheServer,
   } from '@/assets/js/comunication';
+  import parentManipulationMixin from './Mixins/parentManipulationMixin';
+  import checksMixin from './Mixins/checksMixin';
+  import parseStudentMixin from './Mixins/parseStudentMixin';
 
   export default {
-    mixins: [isMale, setTimeoutAlert],
+    mixins: [isMale, setTimeoutAlert, parentManipulationMixin, checksMixin, parseStudentMixin],
     data() {
       return {
         newParentID: '',
@@ -185,52 +186,14 @@
           id: '',
           'class': {
             id: ''
-          }
+          },
+          parents: [],
         },
         alertMessage: '',
       };
     },
     methods: {
-      checkRegexAndSetError() {
-        const phoneReg =  /^\+([0-9]{3})\x20([0-9]{3})\x20([0-9]{3})\x20([0-9]{3})$/;
-        const emailReg = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-
-        if (this.student.email !== '' && !emailReg.test(this.student.email)) {
-          this.setTimoutError('Invalid email format! Example: jondoe@gmail.com');
-          return false;
-        } else if (this.student.phone !== '' && !phoneReg.test(this.student.phone)) {
-          this.setTimoutError('Invalid phone number format! Example: +421 512 451 541');
-          return false;
-        }
-        return true;
-      },
-      checkRequiredAndSetError() {
-        if (
-          this.student.name !== '' &&
-          this.student.surname !== '' &&
-          this.student.birth !== ''
-        ) {
-          return true;
-        } else {
-          return false;
-          this.setTimoutError('Please fill in all required fields.');
-        }
-      },
-      // Trims the student object of unnecessary data
-      parseStudentToSend(student) {
-        // Copying the student object
-        const studentToSend = JSON.parse(JSON.stringify(student));
-
-        // Map the parents (the server only cares about the ids)
-        studentToSend.parents = studentToSend.parents.map(element => element.id);
-
-        // The server doesn't care about classnames either
-        delete studentToSend.class.altname;
-        delete studentToSend.class.name
-
-        return studentToSend
-      },
-      async saveTheEdit() {
+      async uploadStudent() {
         // Do the error checking
         if (this.checkRequiredAndSetError() && this.checkRegexAndSetError()) {
           let studentToSend = this.parseStudentToSend(this.student);
@@ -238,7 +201,7 @@
           // Try to reach out to the server
           let response
           try {
-            response = await commitTheUpdateToServer('student', studentToSend, this.$store.getters.user.api_key);
+            response = await uploadToTheServer('student', studentToSend, this.$store.getters.user.api_key);
           } catch (error) {
             serverErrorRedirect();
             return;
@@ -249,7 +212,7 @@
             this.$router.push({
               name: 'studentView',
               params: {
-                id: studentToSend.id
+                id: response.data.studentID,
               }
             });
           } else {
@@ -264,34 +227,6 @@
             id: this.$route.params.id
           }
         });
-      },
-      removeParent(id) {
-        this.student.parents = this.student.parents.filter(item => {
-          return item.id !== id;
-        })
-      },
-      async addParent() {
-        // Check if the field isn't empty
-        if (this.newParentID.length > 0) {
-          // Fetch the parrent
-          const response = await fetchSingle('parent', this.newParentID);
-          if (response) {
-            if (response.success) {
-              this.student.parents.unshift({
-                  id: response.parent.id,
-                  wholeName: `${response.parent.name} ${response.parent.surname}`,
-                });
-            } else {
-              this.setTimoutError(response.message)
-            }
-          } else {
-            serverErrorRedirect();
-          }
-        } else {
-          this.setTimoutError('The ID field cannot be empty!!!');
-        }
-        // Clear the field
-        this.newParentID = '';
       },
     },
     computed: {

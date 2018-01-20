@@ -24,5 +24,8 @@ export default [
         name: 'studentAdd',
         path: 'student/add',
         component: StudentAdd,
+        beforeEnter(to, from, next) {
+          permissionRequired(3, next);
+        },
       },
 ];

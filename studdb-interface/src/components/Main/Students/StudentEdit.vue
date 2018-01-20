@@ -191,9 +191,12 @@
     fetchSingle,
     commitTheUpdateToServer
   } from '@/assets/js/comunication';
+  import parentManipulationMixin from './Mixins/parentManipulationMixin';
+  import checksMixin from './Mixins/checksMixin';
+  import parseStudentMixin from './Mixins/parseStudentMixin';
 
   export default {
-    mixins: [isMale, setPermanentAlert, setTimeoutAlert],
+    mixins: [isMale, setPermanentAlert, setTimeoutAlert, parentManipulationMixin, checksMixin, parseStudentMixin],
     data() {
       return {
         newParentID: '',
@@ -221,31 +224,6 @@
       }
     },
     methods: {
-      checkRegexAndSetError() {
-        const phoneReg =  /^\+([0-9]{3})\x20([0-9]{3})\x20([0-9]{3})\x20([0-9]{3})$/;
-        const emailReg = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-
-        if (this.student.email !== '' && !emailReg.test(this.student.email)) {
-          this.setTimoutError('Invalid email format! Example: jondoe@gmail.com');
-          return false;
-        } else if (this.student.phone !== '' && !phoneReg.test(this.student.phone)) {
-          this.setTimoutError('Invalid phone number format! Example: +421 512 451 541');
-          return false;
-        }
-        return true;
-      },
-      checkRequiredAndSetError() {
-        if (
-          this.student.name !== '' &&
-          this.student.surname !== '' &&
-          this.student.birth !== ''
-        ) {
-          return true;
-        } else {
-          return false;
-          this.setTimoutError('Please fill in all required fields.');
-        }
-      },
       // Trims the student object of unnecessary data
       parseStudentToSend(student) {
         // Copying the student object
@@ -313,34 +291,6 @@
             id: this.$route.params.id
           }
         });
-      },
-      removeParent(id) {
-        this.student.parents = this.student.parents.filter(item => {
-          return item.id !== id;
-        })
-      },
-      async addParent() {
-        // Check if the field isn't empty
-        if (this.newParentID.length > 0) {
-          // Fetch the parrent
-          const response = await fetchSingle('parent', this.newParentID);
-          if (response) {
-            if (response.success) {
-              this.student.parents.unshift({
-                  id: response.parent.id,
-                  wholeName: `${response.parent.name} ${response.parent.surname}`,
-                });
-            } else {
-              this.setTimoutError(response.message)
-            }
-          } else {
-            serverErrorRedirect();
-          }
-        } else {
-          this.setTimoutError('The ID field cannot be empty!!!');
-        }
-        // Clear the field
-        this.newParentID = '';
       },
       // Parses the data from the API and save the student
       setStudent(data) {
