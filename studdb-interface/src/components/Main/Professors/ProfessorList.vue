@@ -44,7 +44,7 @@
       </thead>
       <tbody>
         <!-- Loader -->
-        <tr v-if="allProfessors.length === 0" v-for="i in 20" :key="i" class="display-row">
+        <tr v-if="allProfessors.length === 0" v-for="i in 20" :key="i"  class="display-row">
           <td class="student-table-id">
             <placeholder :min="2" :max="5" :loading="placeholderAnimation"></placeholder>
           </td>
@@ -65,7 +65,7 @@
           </td>
         </tr>
         <!-- Real Values -->
-        <tr v-if="allProfessors.length !== 0" v-for="professor in professors" :key="professor.id" class="display-row">
+        <tr v-if="allProfessors.length !== 0" v-for="professor in professors" :key="professor.id" @click="displayProfessor(professor.id)" class="display-row">
           <td class="student-table-id">{{ professor['id'] }}</td>
           <td >{{ professor['title'] }}</td>
           <td>{{ professor['name'] }}</td>
@@ -110,6 +110,9 @@
       }
     },
     methods: {
+      displayProfessor(id) {
+        this.$router.push({ name: 'professorView', params: { id, } })
+      },
       randomPlaceholder,
     },
     computed: {
