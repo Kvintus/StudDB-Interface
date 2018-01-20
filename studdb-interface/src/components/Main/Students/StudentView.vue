@@ -1,5 +1,6 @@
 <template>
-  <div class="container vs-main-con">
+<div>
+    <div class="container vs-main-con">
     <!-- Alert -->
     <div v-if="isError" class="alert alert-danger">{{ alertMessage }}</div>
     <div class="row">
@@ -165,6 +166,7 @@
     </div>
 
   </div>
+</div>
 </template>
 
 <script>

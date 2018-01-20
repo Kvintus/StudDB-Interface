@@ -1,5 +1,6 @@
 <template>
-  <div class="container vs-main-con">
+<div>
+<div class="container vs-main-con">
     <!-- Alert -->
     <div v-if="isError || isWarning" class="alert alert-danger">{{ alertMessage }}</div>
     <div v-if="!isError">
@@ -173,6 +174,7 @@
     </div>
 
   </div>
+</div>
 </template>
 
 <script>
