@@ -1,6 +1,7 @@
 import StudentView from '@/components/Main/Students/StudentView';
 import StudentEdit from '@/components/Main/Students/StudentEdit';
-import store from '@/store/store';
+import StudentAdd from '@/components/Main/Students/StudentAdd';
+import permissionRequired from '../helpers/permissionRequired';
 
 export default [
     /* Student View */
@@ -16,13 +17,12 @@ export default [
         component: StudentEdit,
         // Check if the user has permissions
         beforeEnter(to, from, next) {
-          if (store.getters.user.privilege >= 3) {
-            // Proceed
-            next();
-          } else {
-            // Redirect to the error page
-            next({ name: 'errorDisplay', params: { which: 'noPermissionToEdit' } });
-          }
+          permissionRequired(3, next);
         },
+      },
+      {
+        name: 'studentAdd',
+        path: 'student/add',
+        component: StudentAdd,
       },
 ];
