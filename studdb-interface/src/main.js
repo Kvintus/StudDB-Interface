@@ -7,6 +7,7 @@ import store from './store/store';
 import {
   api_server,
 } from '@/assets/js/config';
+import { getInformationAboutTheLogin } from '@/assets/js/comunication';
 
 Vue.config.productionTip = false;
 Vue.use(VueAxios, axios);
@@ -14,25 +15,6 @@ Vue.use(VueAxios, axios);
 // Filter to reverse an array
 Vue.filter('reverse', value => value.slice().reverse());
 
-
-// Returns the inforantion on whether the user is logged in on the server
-// When return false there's been an error reaching out to the server\
-async function getInformationAboutTheLogin(apiServer) {
-  try {
-    const info = await Vue.axios({
-      url: `${apiServer}/user/logged`,
-      method: 'post',
-      withCredentials: true, // To make sessions work
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    return info;
-  } catch (error) {
-    return false;
-  }
-}
 
 router.beforeEach(async (to, from, next) => {
   // Check if the user is logged-in
@@ -44,6 +26,7 @@ router.beforeEach(async (to, from, next) => {
     // Make sure if the user is logged in on the server, if he is log him in normally else redirect to login page
     // Get the information
     const informationAboutLogin = await getInformationAboutTheLogin(api_server);
+    console.log(informationAboutLogin);
 
     // Checking if the call was successfull
     if (informationAboutLogin) {

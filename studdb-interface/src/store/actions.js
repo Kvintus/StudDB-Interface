@@ -1,4 +1,6 @@
-import { apiError, logError } from '@/assets/js/errors';
+import {
+  logError, serverErrorRedirect,
+} from '@/assets/js/errors';
 import { api_server } from '@/assets/js/config';
 import axios from 'axios';
 
