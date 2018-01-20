@@ -222,7 +222,6 @@
     },
     beforeRouteEnter: async (to, from, next) => {
       const response = await fetchSingle('professor', to.params.id);
-      console.log(response);
       if (!response) {
         serverErrorRedirect();
         return;
