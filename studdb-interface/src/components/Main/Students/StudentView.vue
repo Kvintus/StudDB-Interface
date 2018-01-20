@@ -153,7 +153,7 @@
             </div>
             <!-- Normal Parents -->
             <div style="padding: 0px;" v-for="parent in student.parents" :key="parent.id">
-              <a class="relative-ref custom-button" href="#">{{ parent['wholeName']}}</a>
+              <a class="relative-ref custom-button" @click="$router.push({name: 'parentView', params: { id: parent.id }})">{{ parent['wholeName']}}</a>
               <br>
             </div>
           </div>

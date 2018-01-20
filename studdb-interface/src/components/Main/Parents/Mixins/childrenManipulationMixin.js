@@ -7,17 +7,17 @@ import {
 
 export default {
     methods: {
-        async addParent() {
+        async addChild() {
             // Check if the field isn't empty
-            if (this.newParentID.length > 0) {
+            if (this.newChildID.length > 0) {
               // Fetch the parrent
-              const response = await fetchSingle('parent', this.newParentID);
+              const response = await fetchSingle('student', this.newChildID);
               if (response) {
                 if (response.success) {
-                  this.student.parents.unshift(
+                  this.parent.children.unshift(
                     {
-                      id: response.parent.id,
-                      wholeName: `${response.parent.name} ${response.parent.surname}`,
+                      id: response.student.id,
+                      wholeName: `${response.student.name} ${response.student.surname}`,
                     },
                     );
                 } else {
@@ -33,8 +33,8 @@ export default {
             this.newParentID = '';
           },
           // Removes the parent from the parent list
-          removeParent(id) {
-            this.student.parents = this.student.parents.filter((item) => item.id !== id);
+          removeChild(id) {
+            this.parent.children = this.parent.children.filter(item => item.id !== id);
           },
     },
 };
