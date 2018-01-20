@@ -23,7 +23,7 @@
         </li>
         <!-- Add Button -->
         <li v-if="route.indexOf('/list') != -1" id="nav-parents" class="nav-item">
-          <router-link tag="a" class="add-menu-button btn btn-outline-success" :to="{name: `add${whatToAdd}`}">Add {{ whatToAdd }}</router-link>
+          <router-link tag="a" class="add-menu-button btn btn-outline-success" :to="{name: `${whatToAdd}Add`}">Add {{ whatToAdd }}</router-link>
         </li>
       </ul>
       <ul class="navbar-nav navbar-right">

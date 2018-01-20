@@ -65,3 +65,13 @@ export const commitTheUpdateToServer = async (where, data, key) => axios({
       'Content-Type': 'application/json',
     },
   });
+
+  export const uploadToTheServer = async (where, data, key) => axios({
+    url: `${api_server}/api/${where}`,
+    method: 'post',
+    data,
+    headers: {
+      'X-API-KEY': `${key}`,
+      'Content-Type': 'application/json',
+    },
+  });
