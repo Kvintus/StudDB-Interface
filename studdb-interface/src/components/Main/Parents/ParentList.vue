@@ -56,7 +56,7 @@
           </td>
         </tr>
         <!-- Real Values -->
-        <tr v-if="allParents.length !== 0" v-for="parent in parents" :key="parent.id" class="display-row">
+        <tr v-if="allParents.length !== 0" v-for="parent in parents" :key="parent.id" @click="displayParent(parent.id)" class="display-row">
           <td class="student-table-id">{{ parent['id'] }}</td>
           <td>{{ parent['name'] }}</td>
           <td>{{ parent['surname'] }}</td>
@@ -100,6 +100,9 @@
       }
     },
     methods: {
+      displayParent(id) {
+        this.$router.push({name: 'parentView', params: { id, }})
+      },
       randomPlaceholder,
     },
     computed: {

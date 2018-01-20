@@ -1,6 +1,7 @@
 import MainView from '@/components/Main/MainView';
 import Lists from './listRoutes';
 import StudentRoutes from './studentRoutes';
+import ParentRoutes from './parentRoutes';
 import MainViewRoute from './MainRoute';
 import ErrorComp from '@/components/Error/Error';
 
@@ -13,6 +14,7 @@ export default {
     // Unpacks all the routes
     ...Lists,
     ...StudentRoutes,
+    ...ParentRoutes,
     /* Error Display */
     {
       name: 'errorDisplay',
