@@ -24,6 +24,9 @@ export default [
         name: 'parentAdd',
         path: 'parent/add',
         component: ParentAdd,
+        meta: {
+            title: 'Add Parent',
+        },
         beforeEnter(to, from, next) {
             permissionRequired(3, next);
         },
