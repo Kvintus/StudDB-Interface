@@ -25,6 +25,9 @@ export default [
         name: 'studentAdd',
         path: 'student/add',
         component: StudentAdd,
+        meta: {
+          title: 'Add Student',
+        },
         beforeEnter(to, from, next) {
           permissionRequired(3, next);
         },

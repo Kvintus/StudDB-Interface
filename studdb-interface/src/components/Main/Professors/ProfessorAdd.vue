@@ -2,10 +2,10 @@
   <div>
     <div class="container vs-main-con">
       <!-- Alert -->
-      <div v-if="isError || isWarning" class="alert alert-danger">{{ alertMessage }}</div>
-      <div v-if="!isError">
+      <div v-if="isWarning" class="alert alert-danger">{{ alertMessage }}</div>
+      <div>
         <div class="row">
-          <h1 class="card-heading">Professor:</h1>
+          <h1 class="card-heading">Add Professor:</h1>
         </div>
         <div class="row">
           <div class="col prof-image-con">
@@ -21,7 +21,7 @@
                   </td>
                   <td>
                     <div class="mb-1 col-sm-10 form-group">
-                      <input id="titleInput" v-model="professor.title" class="form-control" :placeholder="oldProfessor.title" type="text">
+                      <input id="titleInput" v-model="professor.title" class="form-control" type="text">
                     </div>
                   </td>
                 </tr>
@@ -31,7 +31,7 @@
                   </td>
                   <td>
                     <div class="mb-1 col-sm-10 form-group">
-                      <input :class="{'is-invalid': professor.name === ''}" id="nameInput" v-model="professor.name" class="form-control" :placeholder="oldProfessor.name"
+                      <input :class="{'is-invalid': professor.name === ''}" id="nameInput" v-model="professor.name" class="form-control" 
                         type="text">
                     </div>
                   </td>
@@ -42,29 +42,18 @@
                   </td>
                   <td>
                     <div class="mb-1 col-sm-10">
-                      <input :class="{'is-invalid': professor.surname === ''}" v-model="professor.surname" class="form-control" :placeholder="oldProfessor.surname"
+                      <input :class="{'is-invalid': professor.surname === ''}" v-model="professor.surname" class="form-control" 
                         type="text">
                     </div>
                   </td>
                 </tr>
                 <tr>
                   <td class="vs-table-info">
-                    <p>ID:</p>
-                  </td>
-                  <td>
-                    <p class="vs-gray-info">
-                      <span>{{ oldProfessor['id'] }}</span>
-                    </p>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td class="vs-table-info">
                     <p>Location:</p>
                   </td>
                   <td>
                     <div class="mb-1 col-sm-10">
-                      <input v-model="professor.loc" class="form-control" :placeholder="oldProfessor.loc" type="text">
+                      <input v-model="professor.loc" class="form-control" type="text">
                     </div>
                   </td>
                 </tr>
@@ -87,7 +76,7 @@
                 </td>
                 <td>
                   <div class="mb-1 col-sm-12">
-                    <input :class="{'is-invalid': professor.email === ''}" v-model="professor.email" class="form-control" :placeholder="oldProfessor.email"
+                    <input :class="{'is-invalid': professor.email === ''}" v-model="professor.email" class="form-control" 
                       type="text">
                   </div>
                 </td>
@@ -101,7 +90,7 @@
                 </td>
                 <td>
                   <div class="mb-1 col-sm-12">
-                    <input :class="{'is-invalid': professor.phone === ''}" v-model="professor.phone" class="form-control" :placeholder="oldProfessor.phone"
+                    <input :class="{'is-invalid': professor.phone === ''}" v-model="professor.phone" class="form-control"
                       type="text">
                   </div>
                 </td>
@@ -115,7 +104,7 @@
                 </td>
                 <td>
                   <div class="mb-1 col-sm-12">
-                    <input v-model="professor.adress" class="form-control" :placeholder="oldProfessor.adress" type="text">
+                    <input v-model="professor.adress" class="form-control" type="text">
                   </div>
                 </td>
               </tr>
@@ -156,10 +145,7 @@
           <div id="cancel-button-wrapper">
             <button @click="goBack" id="cancelEdit" class="btn btn-outline-secondary">Cancel</button>
           </div>
-          <button @click="saveTheEdit" id="updateStudent" class="btn btn-outline-primary">Save</button>
-          <button @click="deleteProfessor" id="deleteStudent" class="btn btn-outline-danger">
-            Delete
-          </button>
+          <button @click="uploadProfessor" id="updateStudent" class="btn btn-outline-primary">Save</button>
         </div>
 
       </div>
@@ -171,58 +157,57 @@
 <script>
   import isMale from '@/assets/js/isMaleMixin';
   import {
-    setPermanentAlert,
     setTimeoutAlert
   } from '@/assets/js/Mixins/cardErrorMixins';
   import {
     serverErrorRedirect
   } from '@/assets/js/errors';
   import {
-    deleteEntry,
     fetchSingle,
-    commitTheUpdateToServer
+    uploadToTheServer
   } from '@/assets/js/comunication';
   import classManipulationMixin from './Mixins/classManipulationMixin';
   import checksMixin from './Mixins/checksMixin';
   import parseProfessorMixin from './Mixins/parseProfessorMixin';
 
   export default {
-    mixins: [isMale, setPermanentAlert, setTimeoutAlert, classManipulationMixin, checksMixin, parseProfessorMixin],
+    mixins: [isMale, setTimeoutAlert, classManipulationMixin, checksMixin, parseProfessorMixin],
     data() {
       return {
         newClassID: '',
-        professor: {},
-        oldProfessor: {},
+        professor: {
+          name: '',
+          surname: '',
+          email: '',
+          phone: '',
+          classes: [],
+        },
         alertMessage: '',
       };
     },
-    watch: {
-      '$route.params.id': function (val) {
-        this.professor = {};
-        this.fetchAndSetProfessor(val);
-      }
-    },
     methods: {
-      async saveTheEdit() {
+      async uploadProfessor() {
         // Do the error checking
         if (this.checkRequiredAndSetError() && this.checkRegexAndSetError()) {
           let professorToSend = this.parseProfessorToSend(this.professor);
-
+          
           // Try to reach out to the server
           let response
           try {
-            response = await commitTheUpdateToServer('professor', professorToSend, this.$store.getters.user.api_key);
+            response = await uploadToTheServer('professor', professorToSend, this.$store.getters.user.api_key);
           } catch (error) {
             serverErrorRedirect();
             return;
           }
+
+          console.log(response);
 
           // Check if everything went smoothly on the backend, else display error
           if (response.data.success) {
             this.$router.push({
               name: 'professorView',
               params: {
-                id: professorToSend.id
+                id: response.data.professorID
               }
             });
           } else {
@@ -230,58 +215,11 @@
           }
         }
       },
-      // Delete professor from the database
-      async deleteProfessor() {
-        // Reaching out to the server
-        let response = await deleteEntry('professor', this.professor.id, this.$store.getters.user.api_key);
-        if (response) {
-          // Checking if everything went smootly on the backend
-          if (response.success) {
-            this.$router.push({
-              name: 'professorsList'
-            });
-            // If the token has expired show the expired error
-          } else if ('expired' in response.message) {
-            this.setTimoutError('Your token has expired please logout and then login again.');
-          }
-
-        } else {
-          serverErrorRedirect();
-        }
-      },
       goBack() {
         this.$router.push({
-          name: 'professorView',
-          params: {
-            id: this.oldProfessor,
-          }
+          name: 'professorsList',
         });
       },
-      // Parses the data from the API and save the student
-      setProfessor(data) {
-        if (data.success) {
-          // Save the student
-          this.oldProfessor = JSON.parse(JSON.stringify(data.professor));
-          this.professor = JSON.parse(JSON.stringify(data.professor));
-
-          // Set the alert message to none in case there was one there before
-          this.alertMessage = '';
-          document.title = `Edit | ${data.professor.name} ${data.professor.surname}`;
-        } else {
-          this.setPermanentAlert(data.message);
-        }
-      },
-
-      // Fetches the student
-      async fetchAndSetProfessor(id) {
-        const response = await fetchSingle('professor', id);
-
-        if (response) {
-          this.setProfessor(response);
-        } else {
-          serverErrorRedirect();
-        }
-      }
     },
     computed: {
       // Return the logged-in user
@@ -289,39 +227,11 @@
         return this.$store.getters.user
       },
 
-      // Boolean if the student object id empty
-      isProfessorEmpty() {
-        return Object.keys(this.professor).length <= 1;
-      },
-
       // If the alert message is specified but the student is loaded
       isWarning() {
         return this.alertMessage !== undefined && this.alertMessage.length > 0;
       },
-
-      // If the alertMessage is specified and there's no student loaded
-      isError() {
-        return this.isProfessorEmpty && this.alertMessage.length > 0;
-      }
     },
-
-    beforeRouteEnter: async(to, from, next) => {
-      // Fetches the student data before entering the route and setting the title
-      // Feels much faster this way instead of calling the fetchStudent method from inside the vm in the next()
-      let response = await fetchSingle('professor', to.params.id);
-
-      if (response) {
-        // Set the title to the students name if the fetch was successful
-        if (response.success) {
-          document.title = `Edit | ${response.professor.name} ${response.professor.surname}`;
-        }
-        next(vm => {
-          vm.setProfessor(response);
-        });
-      } else {
-        serverErrorRedirect();
-      }
-    }
   }
 
 </script>

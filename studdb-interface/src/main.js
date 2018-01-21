@@ -26,7 +26,6 @@ router.beforeEach(async (to, from, next) => {
     // Make sure if the user is logged in on the server, if he is log him in normally else redirect to login page
     // Get the information
     const informationAboutLogin = await getInformationAboutTheLogin(api_server);
-    console.log(informationAboutLogin);
 
     // Checking if the call was successfull
     if (informationAboutLogin) {
