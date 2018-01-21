@@ -10,7 +10,7 @@ export default [
         path: 'professor/view/:id',
         component: ProfessorView,
       },
-      /* Student Edit */
+      /* Professor Edit */
       {
         name: 'professorEdit',
         path: 'professor/edit/:id',
