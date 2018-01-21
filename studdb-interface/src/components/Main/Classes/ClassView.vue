@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div v-if="isError" class="alert alert-danger">{{ alertMessage }}</div>
     <div style="padding-left: 50px;" class="container vs-main-con">
+    <div style="margin-left: -25px;" v-if="isError" class="alert alert-danger">{{ alertMessage }}</div>
       <div style="margin-bottom: 2rem;" class="row">
         <h1 style="margin-left: 0;" class="card-heading">Class: {{ 'altname' in rclass ? `${rclass.altname} | ${rclass.name}` : rclass.name}}</h1>
       </div>
@@ -28,11 +28,13 @@
                   <p>Class teacher:</p>
                 </td>
                 <td>
-                  <placeholder v-if="isError" :min="8" :max="12"></placeholder>
-                  <div>
-                    <router-link v-if="rclass.professors.length > 0" class="teacher-ref" :to="{ name: 'professorView', params: { id: rclass.professors[0].id } }">{{ rclass['professors'][0]['wholeName'] }}</router-link>
-                    <p v-else>No teacher yet</p>
-                  </div>
+                  <p v-if="isError" >
+                    <placeholder :min="8" :max="12"></placeholder>
+                  </p>
+                    <div style="display: inline-block" v-else>
+                      <router-link v-if="rclass.professors.length > 0" class="teacher-ref" :to="{ name: 'professorView', params: { id: rclass.professors[0].id } }">{{ rclass['professors'][0]['wholeName'] }}</router-link>
+                      <p v-else>No teacher yet</p>
+                    </div>
                 </td>
               </tr>
 
@@ -85,8 +87,8 @@
             <div v-if="isError" style="margin-left: 50px" class="parents-con">
               <div v-for="i in 12" :key="i">
                 <a class="relative-ref custom-button" href="#">
-                  <placeholder :min="8" :max="12"></placeholder>
-                  <placeholder :min="8" :max="12"></placeholder>
+                  <placeholder :min="6" :max="8"></placeholder>
+                  <placeholder :min="6" :max="8"></placeholder>
                 </a>
                 <br>
               </div>
@@ -105,7 +107,7 @@
       </div>
 
       <!-- Edit Button -->
-      <div v-if="user.privilege >= 3" class="row manipulate-buttons-con">
+      <div v-if="user.privilege >= 3 && !isError" class="row manipulate-buttons-con">
         <button @click="editClass" id="editClassButton" class="btn btn-outline-secondary">Edit</button>
       </div>
     </div>
@@ -134,6 +136,7 @@
       return {
         rclass: {
           pupils: [],
+          professors: [],
         },
         alertMessage: '',
       }
@@ -142,6 +145,7 @@
       '$route.params.id': function (val) {
         this.rclass = {
           pupils: [],
+          professors: [],
         };
         this.fetchClass(val);
       }
@@ -161,7 +165,7 @@
           this.rclass = data.rclass;
           // Set the alert message to none if there was any
           this.alertMessage = '';
-          document.title = 'altname' in this.rclass ? `${rclass.altname} (${rclass.name})` : this.rclass.name;
+          document.title = 'altname' in this.rclass ? `${this.rclass.altname} (${this.rclass.name})` : this.rclass.name;
         } else {
           this.setPermanentAlert(data.message);
         }
@@ -182,7 +186,7 @@
         return this.$store.getters.user;
       },
       isClassEmpty() {
-        return Object.keys(this.rclass).length <= 1;
+        return Object.keys(this.rclass).length <= 2;
       },
       isError() {
         return this.isClassEmpty && this.alertMessage.length > 0;
@@ -191,15 +195,14 @@
     beforeRouteEnter: async(to, from, next) => {
       const response = await fetchSingle('class', to.params.id);
 
-      console.log(response);
-
       if (!response) {
         serverErrorRedirect();
         return;
       }
 
       if (response.success) {
-        document.title = 'altname' in response.rclass ? `${response.rclass.altname} (${response.rclass.name})` : response.rclass.name;
+        document.title = 'altname' in response.rclass ? `${response.rclass.altname} (${response.rclass.name})` :
+          response.rclass.name;
       }
       next(vm => {
         vm.setClass(response);
@@ -210,16 +213,16 @@
 </script>
 
 <style lang="scss" scoped>
-.teacher-ref {
+  .teacher-ref {
     padding-bottom: 1rem;
     font-size: 18px;
     color: gray;
     display: block;
 
     &:hover {
-        text-decoration: none;
-        color: rgb(87, 87, 87);
+      text-decoration: none;
+      color: rgb(87, 87, 87);
     }
-}
-</style>
+  }
 
+</style>
