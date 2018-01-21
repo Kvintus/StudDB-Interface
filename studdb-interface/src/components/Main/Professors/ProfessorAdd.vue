@@ -200,8 +200,6 @@
             return;
           }
 
-          console.log(response);
-
           // Check if everything went smoothly on the backend, else display error
           if (response.data.success) {
             this.$router.push({
