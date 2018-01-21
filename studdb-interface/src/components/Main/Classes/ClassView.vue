@@ -1,9 +1,14 @@
 <template>
   <div>
     <div style="padding-left: 50px;" class="container vs-main-con">
-    <div style="margin-left: -25px;" v-if="isError" class="alert alert-danger">{{ alertMessage }}</div>
+      <div style="margin-left: -25px;" v-if="isError" class="alert alert-danger">{{ alertMessage }}</div>
       <div style="margin-bottom: 2rem;" class="row">
         <h1 style="margin-left: 0;" class="card-heading">Class: {{ 'altname' in rclass ? `${rclass.altname} | ${rclass.name}` : rclass.name}}</h1>
+        <!-- Edit Button -->
+        <div class="edit-button-con">
+          <button v-if="user.privilege >= 3 && !isError" @click="editClass" id="editClassButton"
+            class="btn btn-outline-secondary">Edit</button>
+        </div>
       </div>
       <div class="row">
         <div style="align-items: flex-start; " class="col">
@@ -28,13 +33,13 @@
                   <p>Class teacher:</p>
                 </td>
                 <td>
-                  <p v-if="isError" >
+                  <p v-if="isError">
                     <placeholder :min="8" :max="12"></placeholder>
                   </p>
-                    <div style="display: inline-block" v-else>
-                      <router-link v-if="rclass.professors.length > 0" class="teacher-ref" :to="{ name: 'professorView', params: { id: rclass.professors[0].id } }">{{ rclass['professors'][0]['wholeName'] }}</router-link>
-                      <p v-else>No teacher yet</p>
-                    </div>
+                  <div style="display: inline-block" v-else>
+                    <router-link v-if="rclass.professors.length > 0" class="teacher-ref" :to="{ name: 'professorView', params: { id: rclass.professors[0].id } }">{{ rclass['professors'][0]['wholeName'] }}</router-link>
+                    <p v-else>No teacher yet</p>
+                  </div>
                 </td>
               </tr>
 
@@ -104,11 +109,6 @@
 
           </div>
         </div>
-      </div>
-
-      <!-- Edit Button -->
-      <div v-if="user.privilege >= 3 && !isError" class="row manipulate-buttons-con">
-        <button @click="editClass" id="editClassButton" class="btn btn-outline-secondary">Edit</button>
       </div>
     </div>
   </div>
@@ -213,6 +213,17 @@
 </script>
 
 <style lang="scss" scoped>
+  .edit-button-con {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+  }
+
+  #editClassButton {
+    margin-right: 30px;
+    height: 2.5rem;
+  }
+
   .teacher-ref {
     padding-bottom: 1rem;
     font-size: 18px;
