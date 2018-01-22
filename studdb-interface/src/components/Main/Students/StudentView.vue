@@ -68,8 +68,8 @@
                   <placeholder :min="4" :max="7"></placeholder>
                 </p>
                 <div v-else>
-                  <a v-if="'altname' in student.class" class="class-ref" href="#">{{ student['class']['altname'] }}</a>
-                  <a v-else class="class-ref" href="#">{{ student['class']['name'] }}</a>
+                  <router-link v-if="'altname' in student.class" class="class-ref" :to="{ name: 'classView', params: { id: student['class']['id'] } }">{{ student['class']['altname'] }}</router-link>
+                  <router-link v-else class="class-ref" :to="{ name: 'classView', params: { id: student['class']['id'] } }">{{ student['class']['name'] }}</router-link>
                 </div>
               </td>
             </tr>
@@ -134,7 +134,7 @@
             <td>
               <p class="no-bottom-margin">
                 <placeholder v-if="isError" :min="8" :max="12"></placeholder>
-                <span>{{ student['birth'] }}</span>
+                <span v-else >{{ student['birth'] }}</span>
               </p>
             </td>
           </tr>
@@ -171,8 +171,8 @@
 
 <script>
   import isMale from '@/assets/js/isMaleMixin';
-  import { logError, serverErrorRedirect } from '@/assets/js/errors';
-  import Placeholder from '@/components/shared/Placeholder'
+  import { serverErrorRedirect } from '@/assets/js/errors';
+  import Placeholder from '@/components/shared/Placeholder';
   import { fetchSingle } from '@/assets/js/comunication';
   import { setPermanentAlert } from '@/assets/js/Mixins/cardErrorMixins';
 

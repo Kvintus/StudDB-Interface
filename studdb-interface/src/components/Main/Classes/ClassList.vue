@@ -42,7 +42,7 @@
           <td><placeholder :min="4" :max="6" :loading="placeholderAnimation"></placeholder></td>
         </tr>
         <!-- Real Values -->
-        <tr v-if="allClasses.lenght !== 0" v-for="tempClass in classes" :key="tempClass.id" class="display-row">
+        <tr v-if="allClasses.lenght !== 0" v-for="tempClass in classes" :key="tempClass.id" @click="displayClass(tempClass.id)" class="display-row">
           <td>{{ tempClass['id'] }}</td>
           <td>
             <span v-if="'altname' in tempClass" class="class-altname">{{ 'altname' in tempClass ? tempClass.altname : '' }}</span>
@@ -88,6 +88,10 @@
     },
     methods: {
       randomPlaceholder,
+      displayClass(id) {
+
+        this.$router.push({ name: 'classView', params: { id, } });
+      },
     },
     computed: {
       allClasses() {
