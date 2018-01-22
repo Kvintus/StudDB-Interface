@@ -8,7 +8,7 @@ export default {
       // Map the pupils (the server only cares about the ids)
       classToSend.pupils = classToSend.pupils.map(element => element.id);
 
-      classToSend.professors = classToSend.professors.map((el) => el.id);
+      classToSend.professors = classToSend.professors.map(el => el.id);
 
       delete classToSend.altname;
       delete classToSend.name;

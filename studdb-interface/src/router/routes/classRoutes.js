@@ -1,7 +1,7 @@
-import permissionRequired from '../helpers/permissionRequired';
 import ClassView from '@/components/Main/Classes/ClassView';
 import ClassEdit from '@/components/Main/Classes/ClassEdit';
 import ClassAdd from '@/components/Main/Classes/ClassAdd';
+import permissionRequired from '../helpers/permissionRequired';
 
 export default [
     /* Class View */
