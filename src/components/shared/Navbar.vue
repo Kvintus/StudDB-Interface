@@ -33,10 +33,6 @@
             <i class="fa fa-user user-icon" aria-hidden="true"></i>
           </div>
           <div class="dropdown-menu drp" aria-labelledby="navbarDropdownMenuLink">
-            <div v-if="user.privilege >= 3">
-              <a style="color: #6f6f6f" class="dropdown-item" href="%% url_for('register') %%">Register</a>
-              <div class="dropdown-divider"></div>
-            </div>
             <a @click="logout" class="logout">
               <div class="dropdown-item logout-con">
                 <i class="fa fa-sign-out" aria-hidden="true"></i>
