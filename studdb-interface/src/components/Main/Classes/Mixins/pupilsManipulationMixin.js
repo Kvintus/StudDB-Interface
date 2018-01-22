@@ -14,7 +14,6 @@ export default {
         const response = await fetchSingle('student', this.newPupilID);
         if (response) {
           if (response.success) {
-            console.log(response);
             this.rclass.pupils.unshift({
               id: response.student.id,
               name: response.student.name,

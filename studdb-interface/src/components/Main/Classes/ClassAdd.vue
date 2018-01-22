@@ -2,16 +2,13 @@
   <div>
     <div style="padding-left: 50px;" class="container vs-main-con">
       <div style="margin-left: -25px;" v-if="isError" class="alert alert-danger">{{ alertMessage }}</div>
-      <div v-if="!isClassEmpty">
+      <div>
         <div style="margin-bottom: 2rem;" class="row">
-          <h1 style="margin-left: 0;" class="card-heading">Class: {{ rclass.name}}</h1>
+          <h1 style="margin-left: 0;" class="card-heading">Add Class</h1>
+
           <!-- Edit Button -->
           <div class="edit-button-con">
-            <button v-if="user.privilege >= 3 && !isError" @click="$router.push({ name: 'classesList' })" id="editClassButton" class="btn btn-outline-secondary mr-3">Cancel</button>
-            <button @click="saveTheEdit" id="updateStudent" class="btn btn-outline-primary mr-3">Save</button>
-            <button @click="deleteClass" id="deleteStudent" class="btn btn-outline-danger">
-              Delete
-            </button>
+            <button @click="uploadTheClass" id="updateStudent" class="btn btn-outline-primary mr-3">Save</button>
           </div>
         </div>
         <div class="row">
@@ -26,8 +23,7 @@
                   </td>
                   <td>
                     <p>
-                      <input :class="{'is-invalid': rclass.letter === ''}" class="form-control" v-model="rclass['letter']" :placeholder="oldRclass.letter"
-                        type="text">
+                      <input :class="{'is-invalid': rclass.letter === '' || rclass.letter === undefined}" class="form-control" v-model="rclass['letter']" type="text">
                     </p>
                   </td>
                 </tr>
@@ -38,8 +34,7 @@
                   </td>
                   <td>
                     <p>
-                      <input class="form-control" v-model="rclass.professors[0]['id']" :placeholder="oldRclass.professors > 0 && oldRclass.professors[0] !== undefined ? oldRclass.professors[0]['id'] : ''"
-                        type="number">
+                      <input class="form-control" v-model="rclass.professors[0]['id']" type="number">
                     </p>
                   </td>
                 </tr>
@@ -50,8 +45,7 @@
                   </td>
                   <td>
                     <p>
-                      <input :class="{'is-invalid': rclass.room === ''}" class="form-control" v-model="rclass.room" :placeholder="oldRclass.room"
-                        type="text">
+                      <input :class="{'is-invalid': rclass.room === '' || rclass.room === undefined}" class="form-control" v-model="rclass.room" type="text">
                     </p>
                   </td>
                 </tr>
@@ -62,8 +56,7 @@
                   </td>
                   <td>
                     <p>
-                      <input :class="{'is-invalid': rclass.start === ''}" class="form-control" v-model="rclass.start" :placeholder="oldRclass.start"
-                        type="number">
+                      <input :class="{'is-invalid': rclass.start === '' || rclass.start === undefined}" class="form-control" v-model="rclass.start" type="number">
                     </p>
                   </td>
                 </tr>
@@ -79,7 +72,7 @@
 
               <!-- Adding Pupils -->
               <div style="margin-left: 50px; margin-bottom: 20px;" id="addParentDiv" class="col-sm-6">
-                <input id="newChildIdInput" v-model="newPupilID" class="form-control" placeholder="Pupil ID" type="number">
+                <input @keyup.enter.native="addPupil" id="newChildIdInput" v-model="newPupilID" class="form-control" placeholder="Pupil ID" type="number">
                 <p id="add-parent-button">
                   <i @click="addPupil" class="fa fa-plus-circle" aria-hidden="true"></i>
                 </p>
@@ -107,8 +100,7 @@
 <script>
   import {
     fetchSingle,
-    deleteEntry,
-    commitTheUpdateToServer,
+    uploadToTheServer,
   } from '@/assets/js/comunication';
   import {
     setPermanentAlert,
@@ -128,26 +120,15 @@
         newPupilID: undefined,
         rclass: {
           pupils: [],
-          professors: [{id: undefined}],
-        },
-        oldRclass: {
-          pupils: [],
-          professors: [],
+          professors: [{
+            id: undefined
+          }],
         },
         alertMessage: '',
       }
     },
-    watch: {
-      '$route.params.id': function (val) {
-        this.rclass = {
-          pupils: [],
-          professors: [],
-        };
-        this.fetchClass(val);
-      }
-    },
     methods: {
-      async saveTheEdit() {
+      async uploadTheClass() {
         // Do the error checking
         if (this.checkRequiredAndSetError()) {
           let classToSend = this.parseClassToSend(this.rclass);
@@ -155,7 +136,7 @@
           // Try to reach out to the server
           let response
           try {
-            response = await commitTheUpdateToServer('class', classToSend, this.$store.getters.user.api_key);
+            response = await uploadToTheServer('class', classToSend, this.$store.getters.user.api_key);
           } catch (error) {
             serverErrorRedirect();
             return;
@@ -166,82 +147,23 @@
             this.$router.push({
               name: 'classView',
               params: {
-                id: classToSend.id
+                id: response.data.classID
               }
             });
           } else {
             this.setTimoutError(response.data.message);
           }
         }
-      },
-      async deleteClass() {
-        // Reaching out to the server
-        let response = await deleteEntry('class', this.rclass.id, this.$store.getters.user.api_key);
-        if (response) {
-          // Checking if everything went smootly on the backend
-          if (response.success) {
-            this.$router.push({
-              name: 'classesList'
-            });
-            // If the token has expired show the expired error
-          } else if ('expired' in response.message) {
-            this.setTimoutError('Your token has expired please logout and then login again.');
-          }
-
-        } else {
-          serverErrorRedirect();
-        }
-      },
-      setClass(data) {
-        if (data.success) {
-          // Save the student
-          this.rclass = data.rclass;
-          this.oldRclass = JSON.parse(JSON.stringify(data.rclass))
-          // Set the alert message to none if there was any
-          this.alertMessage = '';
-          document.title = 'altname' in this.rclass ? `${this.rclass.altname} (${this.rclass.name})` : this.rclass.name;
-        } else {
-          this.setPermanentAlert(data.message);
-        }
-      },
-      // Fetch the class
-      async fetchClass(id) {
-        const response = await fetchSingle('class', id);
-
-        if (response) {
-          this.setClass(response);
-        } else {
-          serverErrorRedirect()
-        }
-      },
+      }
     },
     computed: {
       user() {
         return this.$store.getters.user;
       },
-      isClassEmpty() {
-        return Object.keys(this.rclass).length <= 2;
-      },
       isError() {
-        return this.isClassEmpty && this.alertMessage.length > 0;
+        return this.alertMessage.length > 0;
       }
     },
-    beforeRouteEnter: async(to, from, next) => {
-      const response = await fetchSingle('class', to.params.id);
-
-      if (!response) {
-        serverErrorRedirect();
-        return;
-      }
-
-      if (response.success) {
-        document.title = 'altname' in response.rclass ? `${response.rclass.altname} (${response.rclass.name})` :
-          response.rclass.name;
-      }
-      next(vm => {
-        vm.setClass(response);
-      });
-    }
   }
 
 </script>
