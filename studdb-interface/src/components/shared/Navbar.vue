@@ -22,7 +22,7 @@
           <router-link tag="a" class="nav-link" :class="{'active': route === '/list/parents'}" :to="{name: 'parentsList'}">Parents</router-link>
         </li>
         <!-- Add Button -->
-        <li v-if="route.indexOf('/list') != -1" id="nav-parents" class="nav-item">
+        <li v-if="route.indexOf('/list') != -1 && user.privilege >=3" id="nav-parents" class="nav-item">
           <router-link tag="a" class="add-menu-button btn btn-outline-success" :to="{name: `${whatToAdd}Add`}">Add {{ whatToAdd }}</router-link>
         </li>
       </ul>

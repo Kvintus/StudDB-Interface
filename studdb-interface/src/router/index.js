@@ -4,11 +4,13 @@ import store from '@/store/store';
 
 import MainViewRoute from './routes/MainRoute';
 import LoginRoute from './routes/login';
+import NotFound from '@/components/shared/NotFound';
 
 Vue.use(Router);
 
 export default new Router({
-  routes: [{
+  routes: [
+    {
       path: '/',
       beforeEnter(to, from, next) {
         next({
@@ -18,5 +20,10 @@ export default new Router({
     },
     LoginRoute,
     MainViewRoute,
+    // Error route
+    {
+      path: '*',
+      component: NotFound,
+    },
   ],
 });
