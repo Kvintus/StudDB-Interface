@@ -38,7 +38,7 @@
                   </td>
                   <td>
                     <p>
-                      <input class="form-control" v-model="rclass.professors[0].id" :placeholder="oldRclass.professors.length > 0 ? oldRclass.professors[0].id : ''"
+                      <input class="form-control" v-model="rclass.professors[0]['id']" :placeholder="oldRclass.professors > 0 && oldRclass.professors[0] !== undefined ? oldRclass.professors[0]['id'] : ''"
                         type="number">
                     </p>
                   </td>
@@ -128,7 +128,7 @@
         newPupilID: undefined,
         rclass: {
           pupils: [],
-          professors: [],
+          professors: [{id: undefined}],
         },
         oldRclass: {
           pupils: [],
