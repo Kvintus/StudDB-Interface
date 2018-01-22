@@ -17,9 +17,9 @@ export default {
      // Will decide which icon to use based on the sorter
      whichIcon(by) {
       if (this.sorter.by === by) {
-        return `static/images/icons/${this.sorter.order}.png`;
+        return `/static/images/icons/${this.sorter.order}.png`;
       }
-        return 'static/images/icons/no.png';
+        return '/static/images/icons/no.png';
     },
   },
 };
