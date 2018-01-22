@@ -1,7 +1,7 @@
 import permissionRequired from '../helpers/permissionRequired';
 import ClassView from '@/components/Main/Classes/ClassView';
-/* import ClassEdit from '@/components/Main/Classes/ClassEdit';
-import ClassAdd from '@/components/Main/Classes/ClassAdd'; */
+import ClassEdit from '@/components/Main/Classes/ClassEdit';
+/* import ClassAdd from '@/components/Main/Classes/ClassAdd'; */
 
 export default [
     /* Class View */
@@ -11,7 +11,7 @@ export default [
         component: ClassView,
       },
       /* Class Edit */
-/*       {
+      {
         name: 'classEdit',
         path: 'class/edit/:id',
         component: ClassEdit,
@@ -19,7 +19,7 @@ export default [
         beforeEnter(to, from, next) {
           permissionRequired(3, next);
         },
-      }, */
+      },
       /* Class Add */
 /*       {
         name: 'classAdd',
