@@ -1,9 +1,0 @@
-Flask
-gunicorn
-flask_sqlalchemy
-bs4
-passlib
-pyicu
-flask_session
-setuptools
-requests
