@@ -1,41 +1,41 @@
-var nameFilter = '';
-var surnameFilter = '';
+let nameFilter = '';
+let surnameFilter = '';
 
 function mainFilter() {
-    var td;
-    var table = document.getElementById('tabulka');
-    tr = table.getElementsByTagName('tr');
+    let td;
+    const table = document.getElementById('tabulka');
+    const tr = table.getElementsByTagName('tr');
 
-    for (var i = 0; i < tr.length; i++) {
-        nameCol = tr[i].getElementsByTagName('td')[1];
-        surnameCol = tr[i].getElementsByTagName('td')[2];
+    for (let i = 0; i < tr.length; i++) {
+        const nameCol = tr[i].getElementsByTagName('td')[1];
+        const surnameCol = tr[i].getElementsByTagName('td')[2];
 
-        //Checks if both column are populted
+        // Checks if both column are populted
         if (nameCol && surnameCol) {
             if (nameCol.innerHTML.toUpperCase().indexOf(nameFilter) > -1 && surnameCol.innerHTML.toUpperCase().indexOf(surnameFilter) > -1) {
-                tr[i].style.display = "";
+                tr[i].style.display = '';
             } else {
-                tr[i].style.display = "none";
+                tr[i].style.display = 'none';
             }
         }
     }
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
 }
 
 function filterByID() {
-    var td;
-    var table = document.getElementById('tabulka');
-    filterID = document.getElementById('inputID').value.toUpperCase();
-    tr = table.getElementsByTagName('tr');
+    let td;
+    const table = document.getElementById('tabulka');
+    const filterID = document.getElementById('inputID').value.toUpperCase();
+    const tr = table.getElementsByTagName('tr');
 
-    for (var i = 0; i < tr.length; i++) {
-        id_Col = tr[i].getElementsByTagName('td')[0];
+    for (let i = 0; i < tr.length; i++) {
+        const idCol = tr[i].getElementsByTagName('td')[0];
 
-        if (id_Col) {
-            if (id_Col.innerHTML.toUpperCase() == filterID || filterID == "") {
-                tr[i].style.display = "";
+        if (idCol) {
+            if (idCol.innerHTML.toUpperCase() === filterID || filterID === '') {
+                tr[i].style.display = '';
             } else {
-                tr[i].style.display = "none";
+                tr[i].style.display = 'none';
             }
         }
     }
@@ -43,7 +43,7 @@ function filterByID() {
 
 
 function deleteIDFilter() {
-    document.getElementById('inputID').value = "";
+    document.getElementById('inputID').value = '';
 }
 
 function menaFilter() {
