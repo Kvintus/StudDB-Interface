@@ -9,8 +9,8 @@
       </div>
       <div class="row">
         <div class="col prof-image-con">
-          <img v-if="!isMale('parent')" src="static/images/placeholder_female.jpg" alt="">
-          <img v-else src="static/images/placeholder_male.jpg" alt="">
+          <img v-if="!isMale('parent')" src="/static/images/placeholder_female.jpg" alt="">
+          <img v-else src="/static/images/placeholder_male.jpg" alt="">
         </div>
         <div class="col vs-text-con">
           <div>

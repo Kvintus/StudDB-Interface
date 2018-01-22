@@ -2,7 +2,7 @@
   <div id="wrapper">
     <div class="container">
       <div style="width: auto;text-align:center;" class="card card-container vcenter">
-        <img id="profile-img" class="profile-img-card" src="static/images/logo.png" />
+        <img id="profile-img" class="profile-img-card" src="/static/images/logo.png" />
         <div>
           <div id="errorCon" class="alert alert-danger" style="display: none;"></div>
           <form @submit.prevent="login" class="form-signin">
